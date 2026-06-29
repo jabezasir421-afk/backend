@@ -1,0 +1,2218 @@
+Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)
+Maven home: /opt/homebrew/Cellar/maven/3.9.16/libexec
+Java version: 21.0.11, vendor: Homebrew, runtime: /opt/homebrew/Cellar/openjdk@21/21.0.11/libexec/openjdk.jdk/Contents/Home
+Default locale: en_IN, platform encoding: UTF-8
+OS name: "mac os x", version: "26.5.1", arch: "aarch64", family: "mac"
+[DEBUG] Created new class realm maven.api
+[DEBUG] Importing foreign packages into class realm maven.api
+[DEBUG]   Imported: javax.annotation.* < plexus.core
+[DEBUG]   Imported: javax.annotation.security.* < plexus.core
+[DEBUG]   Imported: javax.inject.* < plexus.core
+[DEBUG]   Imported: org.apache.maven.* < plexus.core
+[DEBUG]   Imported: org.apache.maven.artifact < plexus.core
+[DEBUG]   Imported: org.apache.maven.classrealm < plexus.core
+[DEBUG]   Imported: org.apache.maven.cli < plexus.core
+[DEBUG]   Imported: org.apache.maven.configuration < plexus.core
+[DEBUG]   Imported: org.apache.maven.exception < plexus.core
+[DEBUG]   Imported: org.apache.maven.execution < plexus.core
+[DEBUG]   Imported: org.apache.maven.execution.scope < plexus.core
+[DEBUG]   Imported: org.apache.maven.graph < plexus.core
+[DEBUG]   Imported: org.apache.maven.lifecycle < plexus.core
+[DEBUG]   Imported: org.apache.maven.model < plexus.core
+[DEBUG]   Imported: org.apache.maven.monitor < plexus.core
+[DEBUG]   Imported: org.apache.maven.plugin < plexus.core
+[DEBUG]   Imported: org.apache.maven.profiles < plexus.core
+[DEBUG]   Imported: org.apache.maven.project < plexus.core
+[DEBUG]   Imported: org.apache.maven.reporting < plexus.core
+[DEBUG]   Imported: org.apache.maven.repository < plexus.core
+[DEBUG]   Imported: org.apache.maven.rtinfo < plexus.core
+[DEBUG]   Imported: org.apache.maven.settings < plexus.core
+[DEBUG]   Imported: org.apache.maven.toolchain < plexus.core
+[DEBUG]   Imported: org.apache.maven.usability < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.* < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.authentication < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.authorization < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.events < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.observers < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.proxy < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.repository < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.resource < plexus.core
+[DEBUG]   Imported: org.codehaus.classworlds < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.* < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.classworlds < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.component < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.configuration < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.container < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.context < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.lifecycle < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.logging < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.personality < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.util.xml.Xpp3Dom < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.util.xml.pull.XmlPullParser < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.util.xml.pull.XmlPullParserException < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.util.xml.pull.XmlSerializer < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.* < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.artifact < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.collection < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.deployment < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.graph < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.impl < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.installation < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.internal.impl < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.metadata < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.repository < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.resolution < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.spi < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.transfer < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.util < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.version < plexus.core
+[DEBUG]   Imported: org.fusesource.jansi.* < plexus.core
+[DEBUG]   Imported: org.slf4j.* < plexus.core
+[DEBUG]   Imported: org.slf4j.event.* < plexus.core
+[DEBUG]   Imported: org.slf4j.helpers.* < plexus.core
+[DEBUG]   Imported: org.slf4j.spi.* < plexus.core
+[DEBUG] Populating class realm maven.api
+[DEBUG] Created adapter factory; available factories [file-lock, rwlock-local, semaphore-local, noop]; available name mappers [discriminating, file-gaecv, file-gav, file-hgaecv, file-hgav, file-static, gaecv, gav, static]
+[INFO] Error stacktraces are turned on.
+[DEBUG] Message scheme: color
+[DEBUG] Message styles: debug info warning error success failure strong mojo project
+[DEBUG] Reading global settings from /opt/homebrew/Cellar/maven/3.9.16/libexec/conf/settings.xml
+[DEBUG] Reading user settings from /Users/jabezasir/.m2/settings.xml
+[DEBUG] Reading global toolchains from /opt/homebrew/Cellar/maven/3.9.16/libexec/conf/toolchains.xml
+[DEBUG] Reading user toolchains from /Users/jabezasir/.m2/toolchains.xml
+[DEBUG] Using local repository at /Users/jabezasir/.m2/repository
+[DEBUG] Using manager EnhancedLocalRepositoryManager with priority 10.0 for /Users/jabezasir/.m2/repository
+[INFO] Scanning for projects...
+[DEBUG] Creating adapter using nameMapper 'gaecv' and factory 'rwlock-local'
+[DEBUG] Extension realms for project com.BlueCollar:backend:jar:0.0.1-SNAPSHOT: (none)
+[DEBUG] Looking up lifecycle mappings for packaging jar from ClassRealm[plexus.core, parent: null]
+[DEBUG] Extension realms for project org.springframework.boot:spring-boot-starter-parent:pom:4.0.7: (none)
+[DEBUG] Looking up lifecycle mappings for packaging pom from ClassRealm[plexus.core, parent: null]
+[DEBUG] Extension realms for project org.springframework.boot:spring-boot-dependencies:pom:4.0.7: (none)
+[DEBUG] Looking up lifecycle mappings for packaging pom from ClassRealm[plexus.core, parent: null]
+[DEBUG] Resolving plugin prefix dependency-check from [org.apache.maven.plugins, org.codehaus.mojo]
+[DEBUG] Resolved plugin prefix dependency-check to org.owasp:dependency-check-maven from repository null
+[DEBUG] === REACTOR BUILD PLAN ================================================
+[DEBUG] Project: com.BlueCollar:backend:jar:0.0.1-SNAPSHOT
+[DEBUG] Tasks:   [dependency-check:check]
+[DEBUG] Style:   Regular
+[DEBUG] =======================================================================
+[INFO] 
+[INFO] -----------------------< com.BlueCollar:backend >-----------------------
+[INFO] Building  0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[DEBUG] Resolving plugin prefix dependency-check from [org.apache.maven.plugins, org.codehaus.mojo]
+[DEBUG] Resolved plugin prefix dependency-check to org.owasp:dependency-check-maven from repository null
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] === PROJECT BUILD PLAN ================================================
+[DEBUG] Project:       com.BlueCollar:backend:0.0.1-SNAPSHOT
+[DEBUG] Dependencies (collect): []
+[DEBUG] Dependencies (resolve): [compile+runtime]
+[DEBUG] Repositories (dependencies): [central (https://repo.maven.apache.org/maven2, default, releases)]
+[DEBUG] Repositories (plugins)     : [central (https://repo.maven.apache.org/maven2, default, releases)]
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.owasp:dependency-check-maven:12.1.3:check (default-cli)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <archiveAnalyzerEnabled>${archiveAnalyzerEnabled}</archiveAnalyzerEnabled>
+  <artifactoryAnalyzerApiToken>${artifactoryAnalyzerApiToken}</artifactoryAnalyzerApiToken>
+  <artifactoryAnalyzerBearerToken>${artifactoryAnalyzerBearerToken}</artifactoryAnalyzerBearerToken>
+  <artifactoryAnalyzerEnabled>${artifactoryAnalyzerEnabled}</artifactoryAnalyzerEnabled>
+  <artifactoryAnalyzerParallelAnalysis default-value="true">${artifactoryAnalyzerParallelAnalysis}</artifactoryAnalyzerParallelAnalysis>
+  <artifactoryAnalyzerServerId>${artifactoryAnalyzerServerId}</artifactoryAnalyzerServerId>
+  <artifactoryAnalyzerUrl>${artifactoryAnalyzerUrl}</artifactoryAnalyzerUrl>
+  <artifactoryAnalyzerUseProxy>${artifactoryAnalyzerUseProxy}</artifactoryAnalyzerUseProxy>
+  <artifactoryAnalyzerUsername>${artifactoryAnalyzerUsername}</artifactoryAnalyzerUsername>
+  <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+  <autoUpdate>${autoUpdate}</autoUpdate>
+  <autoconfAnalyzerEnabled>${autoconfAnalyzerEnabled}</autoconfAnalyzerEnabled>
+  <bundleAuditAnalyzerEnabled>false</bundleAuditAnalyzerEnabled>
+  <bundleAuditPath>${bundleAuditPath}</bundleAuditPath>
+  <bundleAuditWorkingDirectory>${bundleAuditWorkingDirectory}</bundleAuditWorkingDirectory>
+  <carthageAnalyzerEnabled>${carthageAnalyzerEnabled}</carthageAnalyzerEnabled>
+  <centralAnalyzerEnabled>${centralAnalyzerEnabled}</centralAnalyzerEnabled>
+  <centralAnalyzerUseCache>${centralAnalyzerUseCache}</centralAnalyzerUseCache>
+  <cmakeAnalyzerEnabled>${cmakeAnalyzerEnabled}</cmakeAnalyzerEnabled>
+  <cocoapodsAnalyzerEnabled>false</cocoapodsAnalyzerEnabled>
+  <composerAnalyzerEnabled>false</composerAnalyzerEnabled>
+  <composerAnalyzerSkipDev>${composerAnalyzerSkipDev}</composerAnalyzerSkipDev>
+  <connectionString>${connectionString}</connectionString>
+  <connectionTimeout>${connectionTimeout}</connectionTimeout>
+  <cpanfileAnalyzerEnabled>${cpanfileAnalyzerEnabled}</cpanfileAnalyzerEnabled>
+  <dartAnalyzerEnabled>false</dartAnalyzerEnabled>
+  <dataDirectory>${dataDirectory}</dataDirectory>
+  <databaseDriverName>${databaseDriverName}</databaseDriverName>
+  <databaseDriverPath>${databaseDriverPath}</databaseDriverPath>
+  <databasePassword>${databasePassword}</databasePassword>
+  <databaseUser>${databaseUser}</databaseUser>
+  <dbFilename>${dbFilename}</dbFilename>
+  <enableExperimental>${enableExperimental}</enableExperimental>
+  <enableRetired>${enableRetired}</enableRetired>
+  <excludes>${odc.excludes}</excludes>
+  <failBuildOnAnyVulnerability default-value="false">${failBuildOnAnyVulnerability}</failBuildOnAnyVulnerability>
+  <failBuildOnCVSS default-value="11">8</failBuildOnCVSS>
+  <failBuildOnUnusedSuppressionRule default-value="false">${failBuildOnUnusedSuppressionRule}</failBuildOnUnusedSuppressionRule>
+  <failOnError default-value="true">${failOnError}</failOnError>
+  <format default-value="HTML">${format}</format>
+  <formats>
+    <format>HTML</format>
+    <format>JSON</format>${formats}</formats>
+  <golangDepEnabled>false</golangDepEnabled>
+  <golangModEnabled>${golangModEnabled}</golangModEnabled>
+  <hintsFile>${hintsFile}</hintsFile>
+  <hostedSuppressionsBearerToken>${hostedSuppressionsBearerToken}</hostedSuppressionsBearerToken>
+  <hostedSuppressionsEnabled>${hostedSuppressionsEnabled}</hostedSuppressionsEnabled>
+  <hostedSuppressionsForceUpdate>${hostedSuppressionsForceUpdate}</hostedSuppressionsForceUpdate>
+  <hostedSuppressionsPassword>${hostedSuppressionsPassword}</hostedSuppressionsPassword>
+  <hostedSuppressionsServerId>${hostedSuppressionsServerId}</hostedSuppressionsServerId>
+  <hostedSuppressionsUrl>${hostedSuppressionsUrl}</hostedSuppressionsUrl>
+  <hostedSuppressionsUser>${hostedSuppressionsUser}</hostedSuppressionsUser>
+  <hostedSuppressionsValidForHours>${hostedSuppressionsValidForHours}</hostedSuppressionsValidForHours>
+  <jarAnalyzerEnabled>${jarAnalyzerEnabled}</jarAnalyzerEnabled>
+  <junitFailOnCVSS default-value="0">${junitFailOnCVSS}</junitFailOnCVSS>
+  <knownExploitedBearerToken>${knownExploitedBearerToken}</knownExploitedBearerToken>
+  <knownExploitedEnabled>${knownExploitedEnabled}</knownExploitedEnabled>
+  <knownExploitedPassword>${knownExploitedPassword}</knownExploitedPassword>
+  <knownExploitedServerId>${knownExploitedServerId}</knownExploitedServerId>
+  <knownExploitedUrl>${knownExploitedUrl}</knownExploitedUrl>
+  <knownExploitedUser>${knownExploitedUser}</knownExploitedUser>
+  <libmanAnalyzerEnabled>${libmanAnalyzerEnabled}</libmanAnalyzerEnabled>
+  <mavenInstallAnalyzerEnabled>${mavenInstallAnalyzerEnabled}</mavenInstallAnalyzerEnabled>
+  <mavenSettings default-value="${settings}">${mavenSettings}</mavenSettings>
+  <mavenSettingsProxyId>${mavenSettingsProxyId}</mavenSettingsProxyId>
+  <mixAuditAnalyzerEnabled>${mixAuditAnalyzerEnabled}</mixAuditAnalyzerEnabled>
+  <mixAuditPath>${mixAuditPath}</mixAuditPath>
+  <msbuildAnalyzerEnabled>${msbuildAnalyzerEnabled}</msbuildAnalyzerEnabled>
+  <name default-value="dependency-check">${name}</name>
+  <nexusAnalyzerEnabled>${nexusAnalyzerEnabled}</nexusAnalyzerEnabled>
+  <nexusServerId>${nexusServerId}</nexusServerId>
+  <nexusUrl>${nexusUrl}</nexusUrl>
+  <nexusUsesProxy>${nexusUsesProxy}</nexusUsesProxy>
+  <nodeAnalyzerEnabled>${nodeAnalyzerEnabled}</nodeAnalyzerEnabled>
+  <nodeAuditAnalyzerEnabled>false</nodeAuditAnalyzerEnabled>
+  <nodeAuditAnalyzerUrl>${nodeAuditAnalyzerUrl}</nodeAuditAnalyzerUrl>
+  <nodeAuditAnalyzerUseCache>${nodeAuditAnalyzerUseCache}</nodeAuditAnalyzerUseCache>
+  <nodeAuditSkipDevDependencies>${nodeAuditSkipDevDependencies}</nodeAuditSkipDevDependencies>
+  <nodePackageSkipDevDependencies>${nodePackageSkipDevDependencies}</nodePackageSkipDevDependencies>
+  <nugetconfAnalyzerEnabled>${nugetconfAnalyzerEnabled}</nugetconfAnalyzerEnabled>
+  <nuspecAnalyzerEnabled>${nuspecAnalyzerEnabled}</nuspecAnalyzerEnabled>
+  <nvdApiDelay>${nvdApiDelay}</nvdApiDelay>
+  <nvdApiEndpoint>${nvdApiEndpoint}</nvdApiEndpoint>
+  <nvdApiKey>79EB7750-2173-F111-836F-0EBF96DE670D</nvdApiKey>
+  <nvdApiKeyEnvironmentVariable>${nvdApiKeyEnvironmentVariable}</nvdApiKeyEnvironmentVariable>
+  <nvdApiResultsPerPage>${nvdApiResultsPerPage}</nvdApiResultsPerPage>
+  <nvdApiServerId>${nvdApiServerId}</nvdApiServerId>
+  <nvdBearerToken>${nvdBearerToken}</nvdBearerToken>
+  <nvdDatafeedServerId>${nvdDatafeedServerId}</nvdDatafeedServerId>
+  <nvdDatafeedUrl>${nvdDatafeedUrl}</nvdDatafeedUrl>
+  <nvdMaxRetryCount>${nvdMaxRetryCount}</nvdMaxRetryCount>
+  <nvdPassword>${nvdPassword}</nvdPassword>
+  <nvdUser>${nvdUser}</nvdUser>
+  <nvdValidForHours>${nvdValidForHours}</nvdValidForHours>
+  <opensslAnalyzerEnabled>${opensslAnalyzerEnabled}</opensslAnalyzerEnabled>
+  <ossIndexPassword>${ossIndexPassword}</ossIndexPassword>
+  <ossIndexServerId>${ossIndexServerId}</ossIndexServerId>
+  <ossIndexUsername>${ossIndexUsername}</ossIndexUsername>
+  <ossIndexWarnOnlyOnRemoteErrors>${ossIndexWarnOnlyOnRemoteErrors}</ossIndexWarnOnlyOnRemoteErrors>
+  <ossindexAnalyzerEnabled>${ossindexAnalyzerEnabled}</ossindexAnalyzerEnabled>
+  <ossindexAnalyzerUrl>${ossindexAnalyzerUrl}</ossindexAnalyzerUrl>
+  <ossindexAnalyzerUseCache>${ossindexAnalyzerUseCache}</ossindexAnalyzerUseCache>
+  <outputDirectory default-value="${project.build.directory}">${odc.outputDirectory}</outputDirectory>
+  <pathToCore>${pathToCore}</pathToCore>
+  <pathToGo>${pathToGo}</pathToGo>
+  <pathToPnpm>${pathToPnpm}</pathToPnpm>
+  <pathToYarn>${pathToYarn}</pathToYarn>
+  <pipAnalyzerEnabled>${pipAnalyzerEnabled}</pipAnalyzerEnabled>
+  <pipfileAnalyzerEnabled>${pipfileAnalyzerEnabled}</pipfileAnalyzerEnabled>
+  <pnpmAuditAnalyzerEnabled>${pnpmAuditAnalyzerEnabled}</pnpmAuditAnalyzerEnabled>
+  <poetryAnalyzerEnabled>${poetryAnalyzerEnabled}</poetryAnalyzerEnabled>
+  <prettyPrint>${prettyPrint}</prettyPrint>
+  <project>${project}</project>
+  <pyDistributionAnalyzerEnabled>${pyDistributionAnalyzerEnabled}</pyDistributionAnalyzerEnabled>
+  <pyPackageAnalyzerEnabled>${pyPackageAnalyzerEnabled}</pyPackageAnalyzerEnabled>
+  <reactorProjects>${reactorProjects}</reactorProjects>
+  <readTimeout>${readTimeout}</readTimeout>
+  <reportOutputDirectory>${project.reporting.outputDirectory}</reportOutputDirectory>
+  <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
+  <retireJsBearerToken>${retireJsBearerToken}</retireJsBearerToken>
+  <retireJsForceUpdate>${retireJsForceUpdate}</retireJsForceUpdate>
+  <retireJsPassword>${retireJsPassword}</retireJsPassword>
+  <retireJsUrl>${retireJsUrl}</retireJsUrl>
+  <retireJsUrlServerId>${retireJsUrlServerId}</retireJsUrlServerId>
+  <retireJsUser>${retireJsUser}</retireJsUser>
+  <retirejs>${retirejs}</retirejs>
+  <rubygemsAnalyzerEnabled>${rubygemsAnalyzerEnabled}</rubygemsAnalyzerEnabled>
+  <scanDependencies default-value="true">${odc.dependencies.scan}</scanDependencies>
+  <scanDirectory>${scanDirectory}</scanDirectory>
+  <scanPlugins default-value="false">${odc.plugins.scan}</scanPlugins>
+  <serverId>${serverId}</serverId>
+  <session default-value="${session}"/>
+  <settingsXml default-value="${settings}"/>
+  <showSummary default-value="true">${showSummary}</showSummary>
+  <skip default-value="false">${dependency-check.skip}</skip>
+  <skipArtifactType>${skipArtifactType}</skipArtifactType>
+  <skipDependencyManagement default-value="true">${skipDependencyManagement}</skipDependencyManagement>
+  <skipProvidedScope default-value="false">true</skipProvidedScope>
+  <skipRuntimeScope default-value="false">${skipRuntimeScope}</skipRuntimeScope>
+  <skipSystemScope default-value="false">${skipSystemScope}</skipSystemScope>
+  <skipTestScope default-value="true">true</skipTestScope>
+  <suppressionFile>${suppressionFile}</suppressionFile>
+  <suppressionFileBearerToken>${suppressionFileBearerToken}</suppressionFileBearerToken>
+  <suppressionFilePassword>${suppressionFilePassword}</suppressionFilePassword>
+  <suppressionFileServerId>${suppressionFileServerId}</suppressionFileServerId>
+  <suppressionFileUser>${suppressionFileUser}</suppressionFileUser>
+  <suppressionFiles>${suppressionFiles}</suppressionFiles>
+  <swiftPackageManagerAnalyzerEnabled>${swiftPackageManagerAnalyzerEnabled}</swiftPackageManagerAnalyzerEnabled>
+  <swiftPackageResolvedAnalyzerEnabled>${swiftPackageResolvedAnalyzerEnabled}</swiftPackageResolvedAnalyzerEnabled>
+  <versionCheckEnabled default-value="true">${versionCheckEnabled}</versionCheckEnabled>
+  <virtualSnapshotsFromReactor default-value="true">${dependency-check.virtualSnapshotsFromReactor}</virtualSnapshotsFromReactor>
+  <yarnAuditAnalyzerEnabled>${yarnAuditAnalyzerEnabled}</yarnAuditAnalyzerEnabled>
+  <zipExtensions>${zipExtensions}</zipExtensions>
+</configuration>
+[DEBUG] =======================================================================
+[DEBUG] Using mirror maven-default-http-blocker (http://0.0.0.0/) for vaadin-snapshots (http://oss.sonatype.org/content/repositories/vaadin-snapshots/).
+[DEBUG] Using mirror maven-default-http-blocker (http://0.0.0.0/) for vaadin-releases (http://oss.sonatype.org/content/repositories/vaadin-releases/).
+[DEBUG] Using mirror maven-default-http-blocker (http://0.0.0.0/) for apache.snapshots (http://repository.apache.org/snapshots).
+[DEBUG] Using mirror maven-default-http-blocker (http://0.0.0.0/) for apache.snapshots (http://people.apache.org/repo/m2-snapshot-repository).
+[DEBUG] Dependency collection stats {ConflictMarker.analyzeTime=1091459, ConflictMarker.markTime=279041, ConflictMarker.nodeCount=508, ConflictIdSorter.graphTime=662625, ConflictIdSorter.topsortTime=216125, ConflictIdSorter.conflictIdCount=196, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=15675500, ConflictResolver.conflictItemCount=440, DfDependencyCollector.collectTime=248898167, DfDependencyCollector.transformTime=18795750}
+[DEBUG] com.BlueCollar:backend:jar:0.0.1-SNAPSHOT
+[DEBUG]    org.springframework.boot:spring-boot-starter-data-jpa:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-starter:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-starter-logging:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             ch.qos.logback:logback-classic:jar:1.5.34:compile (version managed from 1.5.34)
+[DEBUG]                ch.qos.logback:logback-core:jar:1.5.34:compile (version managed from 1.5.34)
+[DEBUG]             org.apache.logging.log4j:log4j-to-slf4j:jar:2.25.4:compile (version managed from 2.25.4)
+[DEBUG]                org.apache.logging.log4j:log4j-api:jar:2.25.4:compile (version managed from 2.25.4)
+[DEBUG]             org.slf4j:jul-to-slf4j:jar:2.0.18:compile (version managed from 2.0.18)
+[DEBUG]          jakarta.annotation:jakarta.annotation-api:jar:3.0.0:compile (version managed from 3.0.0)
+[DEBUG]          org.yaml:snakeyaml:jar:2.5:compile (version managed from 2.5)
+[DEBUG]       org.springframework.boot:spring-boot-starter-jdbc:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          com.zaxxer:HikariCP:jar:7.0.2:compile (version managed from 7.0.2)
+[DEBUG]       org.springframework.boot:spring-boot-data-jpa:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-data-commons:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             org.springframework.boot:spring-boot-persistence:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             org.springframework.data:spring-data-commons:jar:4.0.6:compile (version managed from 4.0.6)
+[DEBUG]          org.springframework.boot:spring-boot-hibernate:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             org.springframework.boot:spring-boot-jpa:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]                jakarta.persistence:jakarta.persistence-api:jar:3.2.0:compile (version managed from 3.2.0)
+[DEBUG]             org.hibernate.orm:hibernate-core:jar:7.2.19.Final:compile (version managed from 7.2.19.Final)
+[DEBUG]                jakarta.transaction:jakarta.transaction-api:jar:2.0.1:compile (version managed from 2.0.1)
+[DEBUG]                org.hibernate.models:hibernate-models:jar:1.0.1:runtime
+[DEBUG]                org.glassfish.jaxb:jaxb-runtime:jar:4.0.9:runtime (version managed from 4.0.6)
+[DEBUG]                   org.glassfish.jaxb:jaxb-core:jar:4.0.9:runtime (version managed from 4.0.9)
+[DEBUG]                      org.glassfish.jaxb:txw2:jar:4.0.9:runtime (version managed from 4.0.9)
+[DEBUG]                      com.sun.istack:istack-commons-runtime:jar:4.1.2:runtime
+[DEBUG]                jakarta.inject:jakarta.inject-api:jar:2.0.1:runtime (version managed from 2.0.1)
+[DEBUG]             org.springframework:spring-orm:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]          org.springframework.data:spring-data-jpa:jar:4.0.6:compile (version managed from 4.0.6)
+[DEBUG]             org.springframework:spring-tx:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]             org.antlr:antlr4-runtime:jar:4.13.2:compile
+[DEBUG]          org.springframework:spring-aspects:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]             org.aspectj:aspectjweaver:jar:1.9.25.1:compile (version managed from 1.9.25)
+[DEBUG]       org.springframework.boot:spring-boot-jdbc:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-sql:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-transaction:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-jdbc:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]    org.springframework.boot:spring-boot-starter-flyway:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-flyway:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]    org.springframework.boot:spring-boot-starter-mail:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-mail:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-context-support:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]          jakarta.mail:jakarta.mail-api:jar:2.1.5:compile (version managed from 2.1.5)
+[DEBUG]          org.eclipse.angus:angus-mail:jar:2.0.5:runtime (version managed from 2.0.5)
+[DEBUG]             org.eclipse.angus:angus-activation:jar:2.0.3:runtime
+[DEBUG]    org.springframework.boot:spring-boot-starter-validation:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-validation:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.apache.tomcat.embed:tomcat-embed-el:jar:11.0.22:compile (version managed from 11.0.22)
+[DEBUG]          org.hibernate.validator:hibernate-validator:jar:9.0.1.Final:compile (version managed from 9.0.1.Final)
+[DEBUG]             jakarta.validation:jakarta.validation-api:jar:3.1.1:compile (version managed from 3.1.1)
+[DEBUG]             org.jboss.logging:jboss-logging:jar:3.6.3.Final:compile (version managed from 3.6.1.Final)
+[DEBUG]             com.fasterxml:classmate:jar:1.7.3:compile (version managed from 1.7.0)
+[DEBUG]    org.springframework.boot:spring-boot-starter-security:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-security:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.security:spring-security-config:jar:7.0.6:compile (version managed from 7.0.6)
+[DEBUG]       org.springframework:spring-aop:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]          org.springframework:spring-beans:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]    org.springframework.boot:spring-boot-starter-webmvc:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-starter-jackson:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-jackson:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             tools.jackson.core:jackson-databind:jar:3.1.4:compile (version managed from 3.1.4)
+[DEBUG]                tools.jackson.core:jackson-core:jar:3.1.4:compile (version managed from 3.1.4)
+[DEBUG]       org.springframework.boot:spring-boot-starter-tomcat:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-starter-tomcat-runtime:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             org.apache.tomcat.embed:tomcat-embed-core:jar:11.0.22:compile (version managed from 11.0.22)
+[DEBUG]             org.apache.tomcat.embed:tomcat-embed-websocket:jar:11.0.22:compile (version managed from 11.0.22)
+[DEBUG]          org.springframework.boot:spring-boot-tomcat:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-http-converter:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-web:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]       org.springframework.boot:spring-boot-webmvc:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-servlet:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-webmvc:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]    org.springframework.boot:spring-boot-starter-websocket:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-websocket:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-messaging:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]          org.springframework:spring-websocket:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]    org.springframework.boot:spring-boot-starter-cache:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-cache:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]    org.springframework.boot:spring-boot-starter-actuator:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-starter-micrometer-metrics:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-micrometer-metrics:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             org.springframework.boot:spring-boot-micrometer-observation:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-actuator-autoconfigure:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-actuator:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-health:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]       io.micrometer:micrometer-observation:jar:1.16.6:compile (version managed from 1.16.6)
+[DEBUG]          io.micrometer:micrometer-commons:jar:1.16.6:compile (version managed from 1.16.6)
+[DEBUG]       io.micrometer:micrometer-jakarta9:jar:1.16.6:compile (version managed from 1.16.6)
+[DEBUG]          io.micrometer:micrometer-core:jar:1.16.6:compile (version managed from 1.16.6)
+[DEBUG]             org.hdrhistogram:HdrHistogram:jar:2.2.2:runtime
+[DEBUG]             org.latencyutils:LatencyUtils:jar:2.0.3:runtime
+[DEBUG]    com.github.ben-manes.caffeine:caffeine:jar:3.2.4:compile
+[DEBUG]       org.jspecify:jspecify:jar:1.0.0:compile (version managed from 1.0.0)
+[DEBUG]       com.google.errorprone:error_prone_annotations:jar:2.49.0:compile
+[DEBUG]    io.jsonwebtoken:jjwt-api:jar:0.12.6:compile
+[DEBUG]    io.jsonwebtoken:jjwt-impl:jar:0.12.6:runtime
+[DEBUG]    io.jsonwebtoken:jjwt-jackson:jar:0.12.6:runtime
+[DEBUG]       com.fasterxml.jackson.core:jackson-databind:jar:2.21.4:compile (version managed from 2.12.7.1)
+[DEBUG]          com.fasterxml.jackson.core:jackson-annotations:jar:2.21:compile (version managed from 2.21)
+[DEBUG]          com.fasterxml.jackson.core:jackson-core:jar:2.21.4:compile (version managed from 2.21.4)
+[DEBUG]    org.flywaydb:flyway-database-postgresql:jar:11.14.1:compile
+[DEBUG]       org.flywaydb:flyway-core:jar:11.14.1:compile (version managed from 11.14.1)
+[DEBUG]    org.springdoc:springdoc-openapi-starter-webmvc-ui:jar:3.0.2:compile
+[DEBUG]       org.springdoc:springdoc-openapi-starter-webmvc-api:jar:3.0.2:compile
+[DEBUG]          org.springdoc:springdoc-openapi-starter-common:jar:3.0.2:compile
+[DEBUG]             io.swagger.core.v3:swagger-core-jakarta:jar:2.2.43:compile
+[DEBUG]                io.swagger.core.v3:swagger-annotations-jakarta:jar:2.2.43:compile
+[DEBUG]                io.swagger.core.v3:swagger-models-jakarta:jar:2.2.43:compile
+[DEBUG]                com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.21.4:compile (version managed from 2.19.2)
+[DEBUG]                com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.21.4:compile (version managed from 2.19.2)
+[DEBUG]          org.springframework.boot:spring-boot-web-server:jar:4.0.7:compile (version managed from 4.0.3)
+[DEBUG]       org.webjars:swagger-ui:jar:5.32.0:compile
+[DEBUG]       org.webjars:webjars-locator-lite:jar:1.1.3:compile (version managed from 1.1.3)
+[DEBUG]    org.springframework.boot:spring-boot-devtools:jar:4.0.7:runtime (optional)
+[DEBUG]       org.springframework.boot:spring-boot:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-context:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]       org.springframework.boot:spring-boot-autoconfigure:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]    org.postgresql:postgresql:jar:42.7.11:runtime
+[DEBUG]    org.projectlombok:lombok:jar:1.18.46:compile (optional)
+[DEBUG]    org.springframework.boot:spring-boot-starter-test:jar:4.0.7:test
+[DEBUG]       org.springframework.boot:spring-boot-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-test-autoconfigure:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]       com.jayway.jsonpath:json-path:jar:2.10.0:test (version managed from 2.10.0)
+[DEBUG]          org.slf4j:slf4j-api:jar:2.0.18:compile (version managed from 2.0.17)
+[DEBUG]       jakarta.xml.bind:jakarta.xml.bind-api:jar:4.0.5:compile (version managed from 4.0.5)
+[DEBUG]          jakarta.activation:jakarta.activation-api:jar:2.1.4:compile (version managed from 2.1.4)
+[DEBUG]       net.minidev:json-smart:jar:2.6.0:test (version managed from 2.6.0)
+[DEBUG]          net.minidev:accessors-smart:jar:2.6.0:test
+[DEBUG]       org.assertj:assertj-core:jar:3.27.7:test (version managed from 3.27.7)
+[DEBUG]          net.bytebuddy:byte-buddy:jar:1.17.8:runtime (version managed from 1.18.3)
+[DEBUG]       org.awaitility:awaitility:jar:4.3.0:test (version managed from 4.3.0)
+[DEBUG]       org.hamcrest:hamcrest:jar:3.0:test (version managed from 3.0)
+[DEBUG]       org.junit.jupiter:junit-jupiter:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]          org.junit.jupiter:junit-jupiter-api:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]             org.opentest4j:opentest4j:jar:1.3.0:test
+[DEBUG]             org.junit.platform:junit-platform-commons:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]             org.apiguardian:apiguardian-api:jar:1.1.2:test
+[DEBUG]          org.junit.jupiter:junit-jupiter-params:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]          org.junit.jupiter:junit-jupiter-engine:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]             org.junit.platform:junit-platform-engine:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]       org.mockito:mockito-core:jar:5.20.0:test (version managed from 5.20.0)
+[DEBUG]          net.bytebuddy:byte-buddy-agent:jar:1.17.8:test (version managed from 1.17.7)
+[DEBUG]          org.objenesis:objenesis:jar:3.3:test
+[DEBUG]       org.mockito:mockito-junit-jupiter:jar:5.20.0:test (version managed from 5.20.0)
+[DEBUG]       org.skyscreamer:jsonassert:jar:1.5.3:test (version managed from 1.5.3)
+[DEBUG]          com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1:test
+[DEBUG]       org.springframework:spring-core:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]          commons-logging:commons-logging:jar:1.3.6:compile (version managed from 1.3.5)
+[DEBUG]       org.springframework:spring-test:jar:7.0.8:test (version managed from 7.0.8)
+[DEBUG]       org.xmlunit:xmlunit-core:jar:2.10.4:test (version managed from 2.10.4)
+[DEBUG]    org.springframework.security:spring-security-test:jar:7.0.6:test
+[DEBUG]       org.springframework.security:spring-security-core:jar:7.0.6:compile (version managed from 7.0.6)
+[DEBUG]          org.springframework.security:spring-security-crypto:jar:7.0.6:compile (version managed from 7.0.6)
+[DEBUG]          org.springframework:spring-expression:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]       org.springframework.security:spring-security-web:jar:7.0.6:compile (version managed from 7.0.6)
+[DEBUG]    org.springframework.boot:spring-boot-starter-data-jpa-test:jar:4.0.7:test
+[DEBUG]       org.springframework.boot:spring-boot-starter-jdbc-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-jdbc-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-data-jpa-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-jpa-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]    org.springframework.boot:spring-boot-starter-flyway-test:jar:4.0.7:test
+[DEBUG]    org.springframework.boot:spring-boot-starter-mail-test:jar:4.0.7:test
+[DEBUG]    org.springframework.boot:spring-boot-starter-validation-test:jar:4.0.7:test
+[DEBUG]    org.springframework.boot:spring-boot-starter-webmvc-test:jar:4.0.7:test
+[DEBUG]       org.springframework.boot:spring-boot-starter-jackson-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-webmvc-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-resttestclient:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]    org.testcontainers:junit-jupiter:jar:1.20.4:test
+[DEBUG]       org.testcontainers:testcontainers:jar:2.0.5:test (version managed from 1.20.4)
+[DEBUG]          org.apache.commons:commons-compress:jar:1.28.0:test
+[DEBUG]             commons-codec:commons-codec:jar:1.19.0:test (version managed from 1.19.0)
+[DEBUG]             org.apache.commons:commons-lang3:jar:3.19.0:compile (version managed from 3.18.0)
+[DEBUG]          org.rnorth.duct-tape:duct-tape:jar:1.0.8:test
+[DEBUG]             org.jetbrains:annotations:jar:17.0.0:test
+[DEBUG]          com.github.docker-java:docker-java-api:jar:3.7.1:test
+[DEBUG]          com.github.docker-java:docker-java-transport-zerodep:jar:3.7.1:test
+[DEBUG]             com.github.docker-java:docker-java-transport:jar:3.7.1:test
+[DEBUG]             net.java.dev.jna:jna:jar:5.18.1:test
+[DEBUG]    org.testcontainers:postgresql:jar:1.20.4:test
+[DEBUG]       org.testcontainers:jdbc:jar:1.20.4:test
+[DEBUG]          org.testcontainers:database-commons:jar:1.20.4:test
+[DEBUG]    com.h2database:h2:jar:2.4.240:test
+[DEBUG]    org.jacoco:jacoco-maven-plugin:jar:0.8.14:compile
+[DEBUG]       org.codehaus.plexus:plexus-utils:jar:3.0.24:compile
+[DEBUG]       org.apache.maven.shared:file-management:jar:3.2.0:compile
+[DEBUG]          commons-io:commons-io:jar:2.19.0:compile
+[DEBUG]       org.apache.maven.reporting:maven-reporting-api:jar:3.0:compile
+[DEBUG]          org.apache.maven.doxia:doxia-sink-api:jar:1.0:compile
+[DEBUG]       org.jacoco:org.jacoco.agent:jar:runtime:0.8.14:compile
+[DEBUG]       org.jacoco:org.jacoco.core:jar:0.8.14:compile
+[DEBUG]          org.ow2.asm:asm:jar:9.9:compile
+[DEBUG]          org.ow2.asm:asm-commons:jar:9.9:compile
+[DEBUG]          org.ow2.asm:asm-tree:jar:9.9:compile
+[DEBUG]       org.jacoco:org.jacoco.report:jar:0.8.14:compile
+[DEBUG]    com.github.spotbugs:spotbugs-annotations:jar:4.9.8:provided
+[DEBUG]       com.google.code.findbugs:jsr305:jar:3.0.2:provided
+[INFO] 
+[INFO] --- dependency-check:12.1.3:check (default-cli) @ backend ---
+[DEBUG] Using mirror maven-default-http-blocker (http://0.0.0.0/) for repository.jboss.org (http://repository.jboss.org/maven2).
+[DEBUG] Using mirror maven-default-http-blocker (http://0.0.0.0/) for snapshots.jboss.org (http://snapshots.jboss.org/maven2).
+[DEBUG] Using mirror maven-default-http-blocker (http://0.0.0.0/) for oss.sonatype.org/jboss-snapshots (http://oss.sonatype.org/content/repositories/jboss-snapshots).
+[DEBUG] Dependency collection stats {ConflictMarker.analyzeTime=186750, ConflictMarker.markTime=67958, ConflictMarker.nodeCount=252, ConflictIdSorter.graphTime=60417, ConflictIdSorter.topsortTime=57542, ConflictIdSorter.conflictIdCount=110, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=1466417, ConflictResolver.conflictItemCount=235, DfDependencyCollector.collectTime=131391459, DfDependencyCollector.transformTime=1871291}
+[DEBUG] org.owasp:dependency-check-maven:jar:12.1.3
+[DEBUG]    org.owasp:dependency-check-core:jar:12.1.3:compile
+[DEBUG]       org.anarres.jdiagnostics:jdiagnostics:jar:1.0.7:compile (version managed from default)
+[DEBUG]       org.whitesource:pecoff4j:jar:0.0.2.1:compile (version managed from default)
+[DEBUG]       org.apache.commons:commons-jcs3-core:jar:3.2.1:compile (version managed from default)
+[DEBUG]       us.springett:cpe-parser:jar:3.0.0:compile (version managed from default)
+[DEBUG]       org.semver4j:semver4j:jar:5.7.1:compile (version managed from default)
+[DEBUG]       org.slf4j:slf4j-api:jar:1.7.36:compile (version managed from default)
+[DEBUG]       org.apache.commons:commons-collections4:jar:4.5.0:compile (version managed from default)
+[DEBUG]       org.apache.commons:commons-compress:jar:1.27.1:compile (version managed from default)
+[DEBUG]          commons-codec:commons-codec:jar:1.18.0:compile (version managed from default)
+[DEBUG]       commons-io:commons-io:jar:2.19.0:compile (version managed from default)
+[DEBUG]       org.apache.commons:commons-text:jar:1.13.1:compile (version managed from default)
+[DEBUG]       org.apache.commons:commons-dbcp2:jar:2.13.0:compile (version managed from default)
+[DEBUG]          org.apache.commons:commons-pool2:jar:2.12.0:compile
+[DEBUG]          commons-logging:commons-logging:jar:1.3.4:compile
+[DEBUG]          jakarta.transaction:jakarta.transaction-api:jar:1.3.3:compile
+[DEBUG]       org.apache.lucene:lucene-core:jar:9.12.0:compile (version managed from default)
+[DEBUG]       org.apache.lucene:lucene-analysis-common:jar:9.12.0:compile (version managed from default)
+[DEBUG]       org.apache.lucene:lucene-queryparser:jar:9.12.0:compile (version managed from default)
+[DEBUG]          org.apache.lucene:lucene-queries:jar:9.12.0:compile
+[DEBUG]          org.apache.lucene:lucene-sandbox:jar:9.12.0:compile
+[DEBUG]             org.apache.lucene:lucene-facet:jar:9.12.0:compile
+[DEBUG]       org.apache.velocity:velocity-engine-core:jar:2.4.1:compile (version managed from default)
+[DEBUG]       com.h2database:h2:jar:2.3.232:compile (version managed from default)
+[DEBUG]       org.glassfish:jakarta.json:jar:2.0.1:compile (version managed from default)
+[DEBUG]       org.jsoup:jsoup:jar:1.20.1:compile (version managed from default)
+[DEBUG]       com.fasterxml.jackson.core:jackson-databind:jar:2.19.0:compile (version managed from default)
+[DEBUG]       com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.19.0:compile (version managed from default)
+[DEBUG]       com.fasterxml.jackson.module:jackson-module-blackbird:jar:2.19.0:compile (version managed from default)
+[DEBUG]       com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.19.0:compile (version managed from default)
+[DEBUG]          org.yaml:snakeyaml:jar:2.4:compile
+[DEBUG]       com.h3xstream.retirejs:retirejs-core:jar:3.0.4:compile (version managed from default)
+[DEBUG]          com.github.spullara.mustache.java:compiler:jar:0.9.6:compile
+[DEBUG]       org.sonatype.ossindex:ossindex-service-client:jar:1.8.2:compile (version managed from default) (exclusions managed from default)
+[DEBUG]          javax.inject:javax.inject:jar:1:compile (version managed from default)
+[DEBUG]          com.google.code.gson:gson:jar:2.9.0:compile
+[DEBUG]          javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[DEBUG]             javax.activation:javax.activation-api:jar:1.2.0:compile
+[DEBUG]       com.google.guava:guava:jar:33.4.8-jre:compile (version managed from default)
+[DEBUG]          com.google.guava:failureaccess:jar:1.0.3:compile
+[DEBUG]          com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[DEBUG]          com.google.errorprone:error_prone_annotations:jar:2.36.0:compile
+[DEBUG]          com.google.j2objc:j2objc-annotations:jar:3.0.0:compile
+[DEBUG]       com.moandjiezana.toml:toml4j:jar:0.7.2:compile
+[DEBUG]       com.hankcs:aho-corasick-double-array-trie:jar:1.2.3:compile (version managed from default)
+[DEBUG]       commons-validator:commons-validator:jar:1.9.0:compile (version managed from default) (exclusions managed from default)
+[DEBUG]          commons-digester:commons-digester:jar:2.1:compile
+[DEBUG]          commons-collections:commons-collections:jar:3.2.2:compile
+[DEBUG]       org.eclipse.packager:packager-rpm:jar:0.21.0:compile (version managed from default) (exclusions managed from default)
+[DEBUG]          org.eclipse.packager:packager-core:jar:0.21.0:compile
+[DEBUG]             org.bouncycastle:bcprov-jdk18on:jar:1.78:compile
+[DEBUG]             org.bouncycastle:bcpg-jdk18on:jar:1.78:compile
+[DEBUG]          org.tukaani:xz:jar:1.9:compile
+[DEBUG]       org.apache.httpcomponents.core5:httpcore5:jar:5.3.4:compile (version managed from default)
+[DEBUG]       org.apache.httpcomponents.client5:httpclient5:jar:5.5:compile (version managed from default)
+[DEBUG]          org.apache.httpcomponents.core5:httpcore5-h2:jar:5.3.4:compile
+[DEBUG]       com.fasterxml.jackson.core:jackson-core:jar:2.19.0:compile (version managed from default)
+[DEBUG]       com.fasterxml.jackson.core:jackson-annotations:jar:2.19.0:compile (version managed from default)
+[DEBUG]       org.sonatype.goodies:package-url-java:jar:1.2.0:compile
+[DEBUG]       joda-time:joda-time:jar:2.14.0:compile
+[DEBUG]       org.sonatype.ossindex:ossindex-service-api:jar:1.8.2:compile
+[DEBUG]          javax.ws.rs:javax.ws.rs-api:jar:2.0.1:compile
+[DEBUG]       com.esotericsoftware:minlog:jar:1.3.1:compile
+[DEBUG]       com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1:compile
+[DEBUG]    org.owasp:dependency-check-utils:jar:12.1.3:compile
+[DEBUG]    io.github.jeremylong:jcs3-slf4j:jar:1.0.5:compile
+[DEBUG]    org.apache.maven.doxia:doxia-sink-api:jar:2.0.0:compile
+[DEBUG]    org.apache.maven.shared:file-management:jar:3.2.0:compile
+[DEBUG]    org.codehaus.plexus:plexus-utils:jar:4.0.2:compile
+[DEBUG]    org.codehaus.plexus:plexus-xml:jar:3.0.1:compile
+[DEBUG]    org.apache.maven.reporting:maven-reporting-api:jar:4.0.0:compile
+[DEBUG]    org.apache.maven.shared:maven-dependency-tree:jar:3.3.0:compile
+[DEBUG]       org.apache.maven.resolver:maven-resolver-util:jar:1.4.1:compile (version managed from default)
+[DEBUG]          org.apache.maven.resolver:maven-resolver-api:jar:1.4.1:compile (version managed from default)
+[DEBUG]    org.apache.maven.shared:maven-artifact-transfer:jar:0.13.1:compile
+[DEBUG]       org.apache.maven:maven-core:jar:3.6.3:compile (version managed from default)
+[DEBUG]          org.apache.maven:maven-model:jar:3.6.3:provided (scope managed from default) (version managed from default)
+[DEBUG]          org.apache.maven:maven-settings:jar:3.6.3:compile (version managed from default)
+[DEBUG]          org.apache.maven:maven-settings-builder:jar:3.6.3:provided (scope managed from default) (version managed from default)
+[DEBUG]             org.codehaus.plexus:plexus-interpolation:jar:1.25:compile (version managed from default)
+[DEBUG]             org.sonatype.plexus:plexus-sec-dispatcher:jar:1.4:provided (version managed from default)
+[DEBUG]                org.sonatype.plexus:plexus-cipher:jar:1.7:provided (version managed from default)
+[DEBUG]          org.apache.maven:maven-builder-support:jar:3.6.3:compile (version managed from default)
+[DEBUG]          org.apache.maven:maven-repository-metadata:jar:3.6.3:compile (version managed from default)
+[DEBUG]          org.apache.maven:maven-plugin-api:jar:3.6.3:compile (version managed from default)
+[DEBUG]          org.apache.maven:maven-model-builder:jar:3.6.3:compile (version managed from default)
+[DEBUG]          org.apache.maven:maven-resolver-provider:jar:3.6.3:compile (version managed from default)
+[DEBUG]          org.apache.maven.resolver:maven-resolver-impl:jar:1.4.1:compile (version managed from default)
+[DEBUG]          org.apache.maven.resolver:maven-resolver-spi:jar:1.4.1:compile (version managed from default)
+[DEBUG]          org.apache.maven.shared:maven-shared-utils:jar:3.4.2:compile (version managed from default)
+[DEBUG]          org.eclipse.sisu:org.eclipse.sisu.plexus:jar:0.3.4:compile (version managed from default)
+[DEBUG]             javax.enterprise:cdi-api:jar:1.0:compile
+[DEBUG]                javax.annotation:jsr250-api:jar:1.0:compile (version managed from default)
+[DEBUG]          org.eclipse.sisu:org.eclipse.sisu.inject:jar:0.3.4:compile (version managed from default)
+[DEBUG]          com.google.inject:guice:jar:no_aop:4.2.1:compile (version managed from default)
+[DEBUG]             aopalliance:aopalliance:jar:1.0:compile
+[DEBUG]          org.codehaus.plexus:plexus-classworlds:jar:2.6.0:compile (version managed from default)
+[DEBUG]       org.apache.maven:maven-artifact:jar:3.6.3:provided (scope managed from default) (version managed from default)
+[DEBUG]       org.codehaus.plexus:plexus-component-annotations:jar:2.1.0:compile (version managed from default) (exclusions managed from default)
+[DEBUG]    org.apache.maven.shared:maven-common-artifact-filters:jar:3.4.0:compile
+[DEBUG]    org.apache.commons:commons-lang3:jar:3.17.0:compile
+[DEBUG]    io.github.jeremylong:open-vulnerability-clients:jar:7.3.2:compile
+[DEBUG]       org.jspecify:jspecify:jar:1.0.0:compile
+[DEBUG]       org.apache.httpcomponents.client5:httpclient5-cache:jar:5.4.3:runtime
+[DEBUG]       com.samskivert:jmustache:jar:1.16:runtime
+[DEBUG]    com.github.package-url:packageurl-java:jar:1.5.0:compile
+[DEBUG]    org.jetbrains:annotations:jar:26.0.2:compile (optional)
+[DEBUG]    com.github.spotbugs:spotbugs-annotations:jar:4.9.3:compile (optional)
+[DEBUG]       com.google.code.findbugs:jsr305:jar:3.0.2:compile (optional)
+[DEBUG] Created new class realm plugin>org.owasp:dependency-check-maven:12.1.3
+[DEBUG] Importing foreign packages into class realm plugin>org.owasp:dependency-check-maven:12.1.3
+[DEBUG]   Imported:  < maven.api
+[DEBUG] Populating class realm plugin>org.owasp:dependency-check-maven:12.1.3
+[DEBUG]   Included: org.owasp:dependency-check-maven:jar:12.1.3
+[DEBUG]   Included: org.owasp:dependency-check-core:jar:12.1.3
+[DEBUG]   Included: org.anarres.jdiagnostics:jdiagnostics:jar:1.0.7
+[DEBUG]   Included: org.whitesource:pecoff4j:jar:0.0.2.1
+[DEBUG]   Included: org.apache.commons:commons-jcs3-core:jar:3.2.1
+[DEBUG]   Included: us.springett:cpe-parser:jar:3.0.0
+[DEBUG]   Included: org.semver4j:semver4j:jar:5.7.1
+[DEBUG]   Included: org.apache.commons:commons-collections4:jar:4.5.0
+[DEBUG]   Included: org.apache.commons:commons-compress:jar:1.27.1
+[DEBUG]   Included: commons-codec:commons-codec:jar:1.18.0
+[DEBUG]   Included: commons-io:commons-io:jar:2.19.0
+[DEBUG]   Included: org.apache.commons:commons-text:jar:1.13.1
+[DEBUG]   Included: org.apache.commons:commons-dbcp2:jar:2.13.0
+[DEBUG]   Included: org.apache.commons:commons-pool2:jar:2.12.0
+[DEBUG]   Included: commons-logging:commons-logging:jar:1.3.4
+[DEBUG]   Included: jakarta.transaction:jakarta.transaction-api:jar:1.3.3
+[DEBUG]   Included: org.apache.lucene:lucene-core:jar:9.12.0
+[DEBUG]   Included: org.apache.lucene:lucene-analysis-common:jar:9.12.0
+[DEBUG]   Included: org.apache.lucene:lucene-queryparser:jar:9.12.0
+[DEBUG]   Included: org.apache.lucene:lucene-queries:jar:9.12.0
+[DEBUG]   Included: org.apache.lucene:lucene-sandbox:jar:9.12.0
+[DEBUG]   Included: org.apache.lucene:lucene-facet:jar:9.12.0
+[DEBUG]   Included: org.apache.velocity:velocity-engine-core:jar:2.4.1
+[DEBUG]   Included: com.h2database:h2:jar:2.3.232
+[DEBUG]   Included: org.glassfish:jakarta.json:jar:2.0.1
+[DEBUG]   Included: org.jsoup:jsoup:jar:1.20.1
+[DEBUG]   Included: com.fasterxml.jackson.core:jackson-databind:jar:2.19.0
+[DEBUG]   Included: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.19.0
+[DEBUG]   Included: com.fasterxml.jackson.module:jackson-module-blackbird:jar:2.19.0
+[DEBUG]   Included: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.19.0
+[DEBUG]   Included: org.yaml:snakeyaml:jar:2.4
+[DEBUG]   Included: com.h3xstream.retirejs:retirejs-core:jar:3.0.4
+[DEBUG]   Included: com.github.spullara.mustache.java:compiler:jar:0.9.6
+[DEBUG]   Included: org.sonatype.ossindex:ossindex-service-client:jar:1.8.2
+[DEBUG]   Included: com.google.code.gson:gson:jar:2.9.0
+[DEBUG]   Included: javax.xml.bind:jaxb-api:jar:2.3.1
+[DEBUG]   Included: javax.activation:javax.activation-api:jar:1.2.0
+[DEBUG]   Included: com.google.guava:guava:jar:33.4.8-jre
+[DEBUG]   Included: com.google.guava:failureaccess:jar:1.0.3
+[DEBUG]   Included: com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava
+[DEBUG]   Included: com.google.errorprone:error_prone_annotations:jar:2.36.0
+[DEBUG]   Included: com.google.j2objc:j2objc-annotations:jar:3.0.0
+[DEBUG]   Included: com.moandjiezana.toml:toml4j:jar:0.7.2
+[DEBUG]   Included: com.hankcs:aho-corasick-double-array-trie:jar:1.2.3
+[DEBUG]   Included: commons-validator:commons-validator:jar:1.9.0
+[DEBUG]   Included: commons-digester:commons-digester:jar:2.1
+[DEBUG]   Included: commons-collections:commons-collections:jar:3.2.2
+[DEBUG]   Included: org.eclipse.packager:packager-rpm:jar:0.21.0
+[DEBUG]   Included: org.eclipse.packager:packager-core:jar:0.21.0
+[DEBUG]   Included: org.bouncycastle:bcprov-jdk18on:jar:1.78
+[DEBUG]   Included: org.bouncycastle:bcpg-jdk18on:jar:1.78
+[DEBUG]   Included: org.tukaani:xz:jar:1.9
+[DEBUG]   Included: org.apache.httpcomponents.core5:httpcore5:jar:5.3.4
+[DEBUG]   Included: org.apache.httpcomponents.client5:httpclient5:jar:5.5
+[DEBUG]   Included: org.apache.httpcomponents.core5:httpcore5-h2:jar:5.3.4
+[DEBUG]   Included: com.fasterxml.jackson.core:jackson-core:jar:2.19.0
+[DEBUG]   Included: com.fasterxml.jackson.core:jackson-annotations:jar:2.19.0
+[DEBUG]   Included: org.sonatype.goodies:package-url-java:jar:1.2.0
+[DEBUG]   Included: joda-time:joda-time:jar:2.14.0
+[DEBUG]   Included: org.sonatype.ossindex:ossindex-service-api:jar:1.8.2
+[DEBUG]   Included: javax.ws.rs:javax.ws.rs-api:jar:2.0.1
+[DEBUG]   Included: com.esotericsoftware:minlog:jar:1.3.1
+[DEBUG]   Included: com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1
+[DEBUG]   Included: org.owasp:dependency-check-utils:jar:12.1.3
+[DEBUG]   Included: io.github.jeremylong:jcs3-slf4j:jar:1.0.5
+[DEBUG]   Included: org.apache.maven.doxia:doxia-sink-api:jar:2.0.0
+[DEBUG]   Included: org.apache.maven.shared:file-management:jar:3.2.0
+[DEBUG]   Included: org.codehaus.plexus:plexus-utils:jar:4.0.2
+[DEBUG]   Included: org.codehaus.plexus:plexus-xml:jar:3.0.1
+[DEBUG]   Included: org.apache.maven.reporting:maven-reporting-api:jar:4.0.0
+[DEBUG]   Included: org.apache.maven.shared:maven-dependency-tree:jar:3.3.0
+[DEBUG]   Included: org.apache.maven.shared:maven-artifact-transfer:jar:0.13.1
+[DEBUG]   Included: org.codehaus.plexus:plexus-interpolation:jar:1.25
+[DEBUG]   Included: org.apache.maven:maven-builder-support:jar:3.6.3
+[DEBUG]   Included: org.apache.maven.shared:maven-shared-utils:jar:3.4.2
+[DEBUG]   Included: javax.enterprise:cdi-api:jar:1.0
+[DEBUG]   Included: javax.annotation:jsr250-api:jar:1.0
+[DEBUG]   Included: org.eclipse.sisu:org.eclipse.sisu.inject:jar:0.3.4
+[DEBUG]   Included: com.google.inject:guice:jar:no_aop:4.2.1
+[DEBUG]   Included: aopalliance:aopalliance:jar:1.0
+[DEBUG]   Included: org.codehaus.plexus:plexus-component-annotations:jar:2.1.0
+[DEBUG]   Included: org.apache.maven.shared:maven-common-artifact-filters:jar:3.4.0
+[DEBUG]   Included: org.apache.commons:commons-lang3:jar:3.17.0
+[DEBUG]   Included: io.github.jeremylong:open-vulnerability-clients:jar:7.3.2
+[DEBUG]   Included: org.jspecify:jspecify:jar:1.0.0
+[DEBUG]   Included: org.apache.httpcomponents.client5:httpclient5-cache:jar:5.4.3
+[DEBUG]   Included: com.samskivert:jmustache:jar:1.16
+[DEBUG]   Included: com.github.package-url:packageurl-java:jar:1.5.0
+[DEBUG]   Included: org.jetbrains:annotations:jar:26.0.2
+[DEBUG]   Included: com.github.spotbugs:spotbugs-annotations:jar:4.9.3
+[DEBUG]   Included: com.google.code.findbugs:jsr305:jar:3.0.2
+[DEBUG] Loading mojo org.owasp:dependency-check-maven:12.1.3:check from plugin realm ClassRealm[plugin>org.owasp:dependency-check-maven:12.1.3, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@c387f44]
+[DEBUG] Configuring mojo execution 'org.owasp:dependency-check-maven:12.1.3:check:default-cli' with basic configurator -->
+[DEBUG]   (f) artifactoryAnalyzerParallelAnalysis = true
+[DEBUG]   (f) assemblyAnalyzerEnabled = false
+[DEBUG]   (f) bundleAuditAnalyzerEnabled = false
+[DEBUG]   (f) cocoapodsAnalyzerEnabled = false
+[DEBUG]   (f) composerAnalyzerEnabled = false
+[DEBUG]   (f) dartAnalyzerEnabled = false
+[DEBUG]   (f) excludes = []
+[DEBUG]   (f) failBuildOnAnyVulnerability = false
+[DEBUG]   (f) failBuildOnCVSS = 8.0
+[DEBUG]   (f) failBuildOnUnusedSuppressionRule = false
+[DEBUG]   (f) failOnError = true
+[DEBUG]   (f) format = HTML
+[DEBUG]   (f) formats = [HTML, JSON]
+[DEBUG]   (f) golangDepEnabled = false
+[DEBUG]   (f) junitFailOnCVSS = 0.0
+[DEBUG]   (f) mavenSettings = org.apache.maven.execution.SettingsAdapter@5b000fe6
+[DEBUG]   (f) name = dependency-check
+[DEBUG]   (f) nodeAuditAnalyzerEnabled = false
+[DEBUG]   (f) nvdApiKey = 79EB7750-2173-F111-836F-0EBF96DE670D
+[DEBUG]   (f) outputDirectory = /Users/jabezasir/IdeaProjects/backend/target
+[DEBUG]   (f) project = MavenProject: com.BlueCollar:backend:0.0.1-SNAPSHOT @ /Users/jabezasir/IdeaProjects/backend/pom.xml
+[DEBUG]   (f) reactorProjects = [MavenProject: com.BlueCollar:backend:0.0.1-SNAPSHOT @ /Users/jabezasir/IdeaProjects/backend/pom.xml]
+[DEBUG]   (s) reportOutputDirectory = /Users/jabezasir/IdeaProjects/backend/target/site
+[DEBUG]   (f) retireJsAnalyzerEnabled = false
+[DEBUG]   (f) retirejs = org.owasp.dependencycheck.maven.Retirejs@ea04cab
+[DEBUG]   (f) scanDependencies = true
+[DEBUG]   (f) scanDirectory = []
+[DEBUG]   (f) scanPlugins = false
+[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@134f8ef6
+[DEBUG]   (f) settingsXml = org.apache.maven.execution.SettingsAdapter@5b000fe6
+[DEBUG]   (f) showSummary = true
+[DEBUG]   (f) skip = false
+[DEBUG]   (f) skipDependencyManagement = true
+[DEBUG]   (f) skipProvidedScope = true
+[DEBUG]   (f) skipRuntimeScope = false
+[DEBUG]   (f) skipSystemScope = false
+[DEBUG]   (f) skipTestScope = true
+[DEBUG]   (f) suppressionFiles = []
+[DEBUG]   (f) versionCheckEnabled = true
+[DEBUG]   (f) virtualSnapshotsFromReactor = true
+[DEBUG] -- end configuration --
+[DEBUG] Properties loaded:
+
+analyzer.cocoapods.enabled='true'
+proxy.disableSchemas='true'
+analyzer.dependencybundling.enabled='true'
+odc.ecosystem.maxquerylimit.native='1000'
+data.connection_string='jdbc:h2:file:%s;AUTOCOMMIT=ON;CACHE_SIZE=65536;RETENTION_TIME=1000;MAX_COMPACT_TIME=10000;'
+archive.scan.depth='3'
+analyzer.cmake.enabled='true'
+analyzer.pipfile.enabled='true'
+odc.application.name='Dependency-Check Core'
+analyzer.retirejs.repo.validforhours='24'
+analyzer.node.package.enabled='true'
+analyzer.central.url='https://search.maven.org/solrsearch/select'
+analyzer.pe.enabled='true'
+analyzer.poetry.enabled='true'
+downloader.quick.query.timestamp='true'
+analyzer.archive.enabled='true'
+analyzer.retirejs.repo.js.url='https://raw.githubusercontent.com/Retirejs/retire.js/master/repository/jsrepository.json'
+analyzer.swift.package.resolved.enabled='true'
+cpe.url='https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz'
+analyzer.ossindex.url='https://ossindex.sonatype.org'
+analyzer.nvdcve.enabled='true'
+analyzer.jar.enabled='true'
+analyzer.cpe.enabled='true'
+analyzer.knownexploited.enabled='true'
+nvd.api.check.validforhours='4'
+analyzer.cpanfile.enabled='true'
+data.writelock.shutdownhook='org.owasp.dependencycheck.utils.WriteLockCleanupHook'
+analyzer.central.query='%s?q=1:%s&wt=xml'
+analyzer.bundle.audit.enabled='true'
+analyzer.node.audit.use.cache='true'
+odc.settings.mask='.*password.*,.*token.*,.*api.key.*'
+analyzer.dependencymerging.enabled='true'
+cpe.validfordays='30'
+analyzer.pnpm.audit.enabled='true'
+junit.fail.on.cvss='0'
+central.content.url='https://search.maven.org/remotecontent?filepath='
+analyzer.node.audit.url='https://registry.npmjs.org/-/npm/v1/security/audits'
+odc.application.version='12.1.3'
+analyzer.msbuildproject.enabled='true'
+data.user='dcuser'
+engine.version.url='https://dependency-check.github.io/DependencyCheck/current.txt'
+odc.autoupdate='true'
+analyzer.autoconf.enabled='true'
+analyzer.cpesuppression.enabled='true'
+nvd.api.max.retry.count='30'
+analyzer.retirejs.enabled='true'
+hosted.suppressions.validforhours='2'
+analyzer.versionfilter.enabled='true'
+analyzer.assembly.enabled='true'
+cve.cpe.startswith.filter='cpe:2.3:a:'
+analyzer.golang.dep.enabled='true'
+odc.analysis.timeout='180'
+analyzer.nexus.url='https://repository.sonatype.org/service/local/'
+analyzer.hint.enabled='true'
+analyzer.dart.enabled='true'
+hosted.suppressions.enabled='true'
+analyzer.retired.enabled='false'
+database.batchinsert.enabled='true'
+analyzer.openssl.enabled='true'
+analyzer.swift.package.manager.enabled='true'
+analyzer.nuspec.enabled='true'
+analyzer.central.retry.count='7'
+analyzer.central.use.cache='true'
+updater.nvdcve.enabled='true'
+analyzer.mix.audit.enabled='true'
+max.download.threads='1'
+analyzer.central.enabled='true'
+analyzer.python.distribution.enabled='true'
+analyzer.nexus.enabled='false'
+odc.reports.pretty.print='false'
+analyzer.artifactory.enabled='false'
+analyzer.retirejs.filternonvulnerable='false'
+analyzer.ossindex.enabled='true'
+analyzer.central.parallel.analysis='false'
+analyzer.nexus.proxy='true'
+analyzer.maveninstall.enabled='true'
+odc.ecosystem.maxquerylimit.default='100'
+downloader.tls.protocols='TLSv1.1,TLSv1.2,TLSv1.3'
+data.file_name='odc.mv.db'
+nvd.api.delay='0'
+analyzer.ruby.gemspec.enabled='true'
+analyzer.carthage.enabled='true'
+analyzer.composer.lock.enabled='true'
+data.version='5.5'
+kev.check.validforhours='24'
+analyzer.vulnerabilitysuppression.enabled='true'
+analyzer.libman.enabled='true'
+data.directory='[JAR]/data/11.0'
+analyzer.experimental.enabled='false'
+analyzer.golang.mod.enabled='true'
+analyzer.filename.enabled='true'
+analyzer.ossindex.use.cache='true'
+analyzer.python.package.enabled='true'
+updater.versioncheck.enabled='true'
+nvd.api.datafeed.validfordays='7'
+ecosystem.skip.cpeanalyzer='npm'
+analyzer.suppression.unused.fail='false'
+kev.url='https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json'
+analyzer.pip.enabled='true'
+analyzer.falsepositive.enabled='true'
+analyzer.node.audit.enabled='true'
+analyzer.yarn.audit.enabled='true'
+analyzer.npm.cpe.enabled='true'
+database.batchinsert.maxsize='1000'
+data.driver_name='org.h2.Driver'
+hosted.suppressions.url='https://dependency-check.github.io/DependencyCheck/suppressions/publishedSuppressions.xml'
+data.password='********'
+analyzer.nugetconf.enabled='true'
+
+[DEBUG] Properties updated via merge:
+
+analyzer.cocoapods.enabled='true'
+proxy.disableSchemas='true'
+analyzer.dependencybundling.enabled='true'
+odc.ecosystem.maxquerylimit.native='1000'
+data.connection_string='jdbc:h2:file:%s;AUTOCOMMIT=ON;CACHE_SIZE=65536;RETENTION_TIME=1000;MAX_COMPACT_TIME=10000;'
+archive.scan.depth='3'
+analyzer.cmake.enabled='true'
+analyzer.pipfile.enabled='true'
+odc.application.name='Dependency-Check Core'
+analyzer.retirejs.repo.validforhours='24'
+analyzer.node.package.enabled='true'
+analyzer.central.url='https://search.maven.org/solrsearch/select'
+analyzer.pe.enabled='true'
+analyzer.poetry.enabled='true'
+downloader.quick.query.timestamp='true'
+analyzer.archive.enabled='true'
+analyzer.retirejs.repo.js.url='https://raw.githubusercontent.com/Retirejs/retire.js/master/repository/jsrepository.json'
+analyzer.swift.package.resolved.enabled='true'
+cpe.url='https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz'
+analyzer.ossindex.url='https://ossindex.sonatype.org'
+analyzer.nvdcve.enabled='true'
+analyzer.jar.enabled='true'
+analyzer.cpe.enabled='true'
+analyzer.knownexploited.enabled='true'
+nvd.api.check.validforhours='4'
+analyzer.cpanfile.enabled='true'
+data.writelock.shutdownhook='org.owasp.dependencycheck.utils.WriteLockCleanupHook'
+analyzer.central.query='%s?q=1:%s&wt=xml'
+analyzer.bundle.audit.enabled='true'
+analyzer.node.audit.use.cache='true'
+odc.settings.mask='.*password.*,.*token.*,.*api.key.*'
+analyzer.dependencymerging.enabled='true'
+cpe.validfordays='30'
+analyzer.pnpm.audit.enabled='true'
+junit.fail.on.cvss='0'
+central.content.url='https://search.maven.org/remotecontent?filepath='
+analyzer.node.audit.url='https://registry.npmjs.org/-/npm/v1/security/audits'
+odc.application.version='12.1.3'
+analyzer.msbuildproject.enabled='true'
+data.user='dcuser'
+engine.version.url='https://dependency-check.github.io/DependencyCheck/current.txt'
+odc.autoupdate='true'
+analyzer.autoconf.enabled='true'
+analyzer.cpesuppression.enabled='true'
+nvd.api.max.retry.count='30'
+analyzer.retirejs.enabled='true'
+hosted.suppressions.validforhours='2'
+analyzer.versionfilter.enabled='true'
+analyzer.assembly.enabled='true'
+cve.cpe.startswith.filter='cpe:2.3:a:'
+analyzer.golang.dep.enabled='true'
+odc.analysis.timeout='180'
+analyzer.nexus.url='https://repository.sonatype.org/service/local/'
+analyzer.hint.enabled='true'
+analyzer.dart.enabled='true'
+hosted.suppressions.enabled='true'
+analyzer.retired.enabled='false'
+database.batchinsert.enabled='true'
+analyzer.openssl.enabled='true'
+analyzer.swift.package.manager.enabled='true'
+analyzer.nuspec.enabled='true'
+analyzer.central.retry.count='7'
+analyzer.central.use.cache='true'
+updater.nvdcve.enabled='true'
+analyzer.mix.audit.enabled='true'
+max.download.threads='1'
+analyzer.central.enabled='false'
+analyzer.python.distribution.enabled='true'
+analyzer.nexus.enabled='false'
+odc.reports.pretty.print='false'
+analyzer.artifactory.enabled='false'
+analyzer.retirejs.filternonvulnerable='false'
+analyzer.ossindex.enabled='true'
+analyzer.central.parallel.analysis='false'
+analyzer.nexus.proxy='true'
+analyzer.maveninstall.enabled='true'
+odc.ecosystem.maxquerylimit.default='100'
+downloader.tls.protocols='TLSv1.1,TLSv1.2,TLSv1.3'
+data.file_name='odc.mv.db'
+nvd.api.delay='0'
+analyzer.ruby.gemspec.enabled='true'
+analyzer.carthage.enabled='true'
+analyzer.composer.lock.enabled='true'
+data.version='5.5'
+kev.check.validforhours='24'
+analyzer.vulnerabilitysuppression.enabled='true'
+analyzer.libman.enabled='true'
+data.directory='[JAR]/../../dependency-check-data/11.0'
+analyzer.experimental.enabled='false'
+analyzer.golang.mod.enabled='true'
+analyzer.filename.enabled='true'
+analyzer.ossindex.use.cache='true'
+analyzer.python.package.enabled='true'
+updater.versioncheck.enabled='true'
+nvd.api.datafeed.validfordays='7'
+ecosystem.skip.cpeanalyzer='npm'
+analyzer.suppression.unused.fail='false'
+kev.url='https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json'
+analyzer.pip.enabled='true'
+analyzer.falsepositive.enabled='true'
+analyzer.node.audit.enabled='true'
+analyzer.yarn.audit.enabled='true'
+analyzer.npm.cpe.enabled='true'
+database.batchinsert.maxsize='1000'
+data.driver_name='org.h2.Driver'
+hosted.suppressions.url='https://dependency-check.github.io/DependencyCheck/suppressions/publishedSuppressions.xml'
+data.password='********'
+analyzer.nugetconf.enabled='true'
+
+[DEBUG] Setting: odc.maven.local.repo='/Users/jabezasir/.m2/repository'
+[DEBUG] Setting: analyzer.golang.dep.enabled='false'
+[DEBUG] Setting: analyzer.dart.enabled='false'
+[DEBUG] Setting: updater.versioncheck.enabled='true'
+[DEBUG] Setting: junit.fail.on.cvss='0.0'
+[DEBUG] Setting: analyzer.assembly.enabled='false'
+[DEBUG] Setting: analyzer.artifactory.parallel.analysis='true'
+[DEBUG] Setting: analyzer.suppression.unused.fail='false'
+[DEBUG] Setting: analyzer.composer.lock.enabled='false'
+[DEBUG] Setting: analyzer.composer.lock.skipdev='false'
+[DEBUG] Setting: analyzer.node.audit.enabled='false'
+[DEBUG] Setting: analyzer.retirejs.enabled='false'
+[DEBUG] Setting: analyzer.bundle.audit.enabled='false'
+[DEBUG] Setting: analyzer.cocoapods.enabled='false'
+[DEBUG] Setting: nvd.api.key='********'
+[DEBUG] Loaded Analyzer Archive Analyzer
+[DEBUG] Loaded Analyzer File Name Analyzer
+[DEBUG] Loaded Analyzer Jar Analyzer
+[DEBUG] Loaded Analyzer Hint Analyzer
+[DEBUG] Loaded Analyzer CPE Analyzer
+[DEBUG] Loaded Analyzer False Positive Analyzer
+[DEBUG] Loaded Analyzer Dependency Bundling Analyzer
+[DEBUG] Loaded Analyzer Dependency Merging Analyzer
+[DEBUG] Loaded Analyzer NVD CVE Analyzer
+[DEBUG] Loaded Analyzer Vulnerability Suppression Analyzer
+[DEBUG] Loaded Analyzer Central Analyzer
+[DEBUG] Loaded Analyzer Nexus Analyzer
+[DEBUG] Loaded Analyzer Artifactory Analyzer
+[DEBUG] Loaded Analyzer Nuspec Analyzer
+[DEBUG] Loaded Analyzer Nugetconf Analyzer
+[DEBUG] Loaded Analyzer MSBuild Project Analyzer
+[DEBUG] Loaded Analyzer Assembly Analyzer
+[DEBUG] Loaded Analyzer OpenSSL Source Analyzer
+[DEBUG] Loaded Analyzer Node.js Package Analyzer
+[DEBUG] Loaded Analyzer Node Audit Analyzer
+[DEBUG] Loaded Analyzer Yarn Audit Analyzer
+[DEBUG] Loaded Analyzer Pnpm Audit Analyzer
+[DEBUG] Loaded Analyzer RetireJS Analyzer
+[DEBUG] Loaded Analyzer Ruby Bundle Audit Analyzer
+[DEBUG] Loaded Analyzer Version Filter Analyzer
+[DEBUG] Loaded Analyzer Sonatype OSS Index Analyzer
+[DEBUG] Loaded Analyzer Known Exploited Vulnerability Analyzer
+[DEBUG] Loaded Analyzer Unused Suppression Rule Analyzer
+[DEBUG] Loaded Analyzer Libman Analyzer
+[DEBUG] Settings.getDataFile() - file: '[JAR]/../../dependency-check-data/11.0'
+[DEBUG] Settings.getDataFile() - transforming filename
+[DEBUG] Settings.getDataFile() - jar file: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3'
+[DEBUG] Settings.getDataFile() - returning: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3/../../dependency-check-data/11.0'
+[DEBUG] Error loading LogFactory
+java.util.ServiceConfigurationError: org.apache.commons.jcs3.log.LogFactory: org.apache.commons.jcs3.log.Log4j2Factory Unable to get public no-arg constructor
+    at java.util.ServiceLoader.fail (ServiceLoader.java:586)
+    at java.util.ServiceLoader.getConstructor (ServiceLoader.java:679)
+    at java.util.ServiceLoader$LazyClassPathLookupIterator.hasNextService (ServiceLoader.java:1240)
+    at java.util.ServiceLoader$LazyClassPathLookupIterator.hasNext (ServiceLoader.java:1273)
+    at java.util.ServiceLoader$2.hasNext (ServiceLoader.java:1309)
+    at java.util.ServiceLoader$3.hasNext (ServiceLoader.java:1393)
+    at org.apache.commons.jcs3.log.LogManager$LogFactoryHolder.createLogFactory (LogManager.java:69)
+    at org.apache.commons.jcs3.log.LogManager$LogFactoryHolder.<clinit> (LogManager.java:48)
+    at org.apache.commons.jcs3.log.LogManager.getLogFactory (LogManager.java:121)
+    at org.apache.commons.jcs3.log.LogManager.getLog (LogManager.java:151)
+    at org.apache.commons.jcs3.engine.control.CompositeCacheManager.<clinit> (CompositeCacheManager.java:80)
+    at org.apache.commons.jcs3.JCS.getCacheManager (JCS.java:116)
+    at org.apache.commons.jcs3.JCS.getInstance (JCS.java:159)
+    at org.owasp.dependencycheck.data.cache.DataCacheFactory.getPomCache (DataCacheFactory.java:155)
+    at org.owasp.dependencycheck.analyzer.CentralAnalyzer.initialize (CentralAnalyzer.java:124)
+    at org.owasp.dependencycheck.Engine.lambda$loadAnalyzers$1 (Engine.java:238)
+    at java.util.ArrayList.forEach (ArrayList.java:1596)
+    at org.owasp.dependencycheck.Engine.loadAnalyzers (Engine.java:237)
+    at org.owasp.dependencycheck.Engine.initializeEngine (Engine.java:204)
+    at org.owasp.dependencycheck.Engine.<init> (Engine.java:193)
+    at org.owasp.dependencycheck.Engine.<init> (Engine.java:167)
+    at org.owasp.dependencycheck.Engine.<init> (Engine.java:157)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.initializeEngine (BaseDependencyCheckMojo.java:2276)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.runCheck (BaseDependencyCheckMojo.java:2060)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.execute (BaseDependencyCheckMojo.java:1267)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+Caused by: java.lang.NoClassDefFoundError: org/apache/logging/log4j/message/MessageFactory
+    at java.lang.Class.getDeclaredConstructors0 (Native Method)
+    at java.lang.Class.privateGetDeclaredConstructors (Class.java:3551)
+    at java.lang.Class.getConstructor0 (Class.java:3756)
+    at java.lang.Class.getConstructor (Class.java:2444)
+    at java.util.ServiceLoader$1.run (ServiceLoader.java:666)
+    at java.util.ServiceLoader$1.run (ServiceLoader.java:663)
+    at java.security.AccessController.doPrivileged (AccessController.java:571)
+    at java.util.ServiceLoader.getConstructor (ServiceLoader.java:674)
+    at java.util.ServiceLoader$LazyClassPathLookupIterator.hasNextService (ServiceLoader.java:1240)
+    at java.util.ServiceLoader$LazyClassPathLookupIterator.hasNext (ServiceLoader.java:1273)
+    at java.util.ServiceLoader$2.hasNext (ServiceLoader.java:1309)
+    at java.util.ServiceLoader$3.hasNext (ServiceLoader.java:1393)
+    at org.apache.commons.jcs3.log.LogManager$LogFactoryHolder.createLogFactory (LogManager.java:69)
+    at org.apache.commons.jcs3.log.LogManager$LogFactoryHolder.<clinit> (LogManager.java:48)
+    at org.apache.commons.jcs3.log.LogManager.getLogFactory (LogManager.java:121)
+    at org.apache.commons.jcs3.log.LogManager.getLog (LogManager.java:151)
+    at org.apache.commons.jcs3.engine.control.CompositeCacheManager.<clinit> (CompositeCacheManager.java:80)
+    at org.apache.commons.jcs3.JCS.getCacheManager (JCS.java:116)
+    at org.apache.commons.jcs3.JCS.getInstance (JCS.java:159)
+    at org.owasp.dependencycheck.data.cache.DataCacheFactory.getPomCache (DataCacheFactory.java:155)
+    at org.owasp.dependencycheck.analyzer.CentralAnalyzer.initialize (CentralAnalyzer.java:124)
+    at org.owasp.dependencycheck.Engine.lambda$loadAnalyzers$1 (Engine.java:238)
+    at java.util.ArrayList.forEach (ArrayList.java:1596)
+    at org.owasp.dependencycheck.Engine.loadAnalyzers (Engine.java:237)
+    at org.owasp.dependencycheck.Engine.initializeEngine (Engine.java:204)
+    at org.owasp.dependencycheck.Engine.<init> (Engine.java:193)
+    at org.owasp.dependencycheck.Engine.<init> (Engine.java:167)
+    at org.owasp.dependencycheck.Engine.<init> (Engine.java:157)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.initializeEngine (BaseDependencyCheckMojo.java:2276)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.runCheck (BaseDependencyCheckMojo.java:2060)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.execute (BaseDependencyCheckMojo.java:1267)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+Caused by: java.lang.ClassNotFoundException: org.apache.logging.log4j.message.MessageFactory
+    at org.codehaus.plexus.classworlds.strategy.SelfFirstStrategy.loadClass (SelfFirstStrategy.java:42)
+    at org.codehaus.plexus.classworlds.realm.ClassRealm.unsynchronizedLoadClass (ClassRealm.java:211)
+    at org.codehaus.plexus.classworlds.realm.ClassRealm.loadClass (ClassRealm.java:202)
+    at org.codehaus.plexus.classworlds.realm.ClassRealm.loadClass (ClassRealm.java:198)
+    at java.lang.Class.getDeclaredConstructors0 (Native Method)
+    at java.lang.Class.privateGetDeclaredConstructors (Class.java:3551)
+    at java.lang.Class.getConstructor0 (Class.java:3756)
+    at java.lang.Class.getConstructor (Class.java:2444)
+    at java.util.ServiceLoader$1.run (ServiceLoader.java:666)
+    at java.util.ServiceLoader$1.run (ServiceLoader.java:663)
+    at java.security.AccessController.doPrivileged (AccessController.java:571)
+    at java.util.ServiceLoader.getConstructor (ServiceLoader.java:674)
+    at java.util.ServiceLoader$LazyClassPathLookupIterator.hasNextService (ServiceLoader.java:1240)
+    at java.util.ServiceLoader$LazyClassPathLookupIterator.hasNext (ServiceLoader.java:1273)
+    at java.util.ServiceLoader$2.hasNext (ServiceLoader.java:1309)
+    at java.util.ServiceLoader$3.hasNext (ServiceLoader.java:1393)
+    at org.apache.commons.jcs3.log.LogManager$LogFactoryHolder.createLogFactory (LogManager.java:69)
+    at org.apache.commons.jcs3.log.LogManager$LogFactoryHolder.<clinit> (LogManager.java:48)
+    at org.apache.commons.jcs3.log.LogManager.getLogFactory (LogManager.java:121)
+    at org.apache.commons.jcs3.log.LogManager.getLog (LogManager.java:151)
+    at org.apache.commons.jcs3.engine.control.CompositeCacheManager.<clinit> (CompositeCacheManager.java:80)
+    at org.apache.commons.jcs3.JCS.getCacheManager (JCS.java:116)
+    at org.apache.commons.jcs3.JCS.getInstance (JCS.java:159)
+    at org.owasp.dependencycheck.data.cache.DataCacheFactory.getPomCache (DataCacheFactory.java:155)
+    at org.owasp.dependencycheck.analyzer.CentralAnalyzer.initialize (CentralAnalyzer.java:124)
+    at org.owasp.dependencycheck.Engine.lambda$loadAnalyzers$1 (Engine.java:238)
+    at java.util.ArrayList.forEach (ArrayList.java:1596)
+    at org.owasp.dependencycheck.Engine.loadAnalyzers (Engine.java:237)
+    at org.owasp.dependencycheck.Engine.initializeEngine (Engine.java:204)
+    at org.owasp.dependencycheck.Engine.<init> (Engine.java:193)
+    at org.owasp.dependencycheck.Engine.<init> (Engine.java:167)
+    at org.owasp.dependencycheck.Engine.<init> (Engine.java:157)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.initializeEngine (BaseDependencyCheckMojo.java:2276)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.runCheck (BaseDependencyCheckMojo.java:2060)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.execute (BaseDependencyCheckMojo.java:1267)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+[DEBUG] Found LogFactory for slf4j
+[INFO] Instance is null, returning unconfigured instance
+[INFO] Using system property [[jcs.logSystem] [slf4j]]
+[DEBUG] Initializing ThreadPoolManager
+[DEBUG] thread_pool.default PoolConfiguration = useBoundary = [true] boundarySize = [2000] maximumPoolSize = [150] minimumPoolSize = [10] keepAliveTime = [300000] whenBlockedPolicy = [RUN] startUpSize = [10]
+[DEBUG] scheduler_pool.default PoolConfiguration = useBoundary = [true] boundarySize = [2000] maximumPoolSize = [150] minimumPoolSize = [10] keepAliveTime = [300000] whenBlockedPolicy = [RUN] startUpSize = [10]
+[DEBUG] ThreadPoolManager = org.apache.commons.jcs3.utils.threadpool.ThreadPoolManager@1ccc1026
+[DEBUG] Creating a non bounded Linked Queue to use for the pool
+[DEBUG] Constructed: org.apache.commons.jcs3.engine.control.event.ElementEventQueue@120350eb
+[INFO] Setting default auxiliaries to "ODC"
+[DEBUG] Parsing options for "jcs.default.cacheattributes"
+[DEBUG] Setting property [shrinkerIntervalSeconds] to [60].
+[DEBUG] Setting property [maxObjects] to [0].
+[DEBUG] Setting property [diskUsagePattern] to [UPDATE].
+[DEBUG] Setting property [useMemoryShrinker] to [false].
+[DEBUG] Setting property [memoryCacheName] to [org.apache.commons.jcs3.engine.memory.lru.LRUMemoryCache].
+[DEBUG] Setting property [maxMemoryIdleTimeSeconds] to [3,600].
+[DEBUG] End of parsing for "jcs.default.cacheattributes"
+[INFO] setting defaultCompositeCacheAttributes to [ useLateral = true, useRemote = true, useDisk = true, maxObjs = 0, maxSpoolPerRun = -1, diskUsagePattern = UPDATE, spoolChunkSize = 2 ]
+[DEBUG] Parsing options for "jcs.default.elementattributes"
+[DEBUG] Setting property [isEternal] to [false].
+[DEBUG] Setting property [maxLife] to [86,400].
+[DEBUG] Setting property [isLateral] to [false].
+[DEBUG] Setting property [isRemote] to [false].
+[DEBUG] Setting property [isSpool] to [true].
+[DEBUG] Setting property [idleTime] to [1,800].
+[DEBUG] End of parsing for "jcs.default.elementattributes"
+[INFO] setting defaultElementAttributes to [ IS_LATERAL = false, IS_SPOOL = true, IS_REMOTE = false, IS_ETERNAL = false, MaxLifeSeconds = 86400, IdleTime = 1800, CreateTime = 1782673611210, LastAccessTime = 1782673611210, getTimeToLiveSeconds() = 86399, createTime = 1782673611210 ]
+[DEBUG] Parsing options for "jcs.region.CENTRAL.elementattributes"
+[DEBUG] Setting property [isRemote] to [false].
+[DEBUG] Setting property [maxLife] to [2,592,000].
+[DEBUG] Setting property [isLateral] to [false].
+[DEBUG] Setting property [isSpool] to [true].
+[DEBUG] End of parsing for "jcs.region.CENTRAL.elementattributes"
+[DEBUG] Parsing options for "jcs.region.CENTRAL.cacheattributes"
+[DEBUG] Setting property [diskUsagePattern] to [UPDATE].
+[DEBUG] Setting property [maxObjects] to [0].
+[DEBUG] End of parsing for "jcs.region.CENTRAL.cacheattributes"
+[INFO] initialized MemoryCache for CENTRAL
+[INFO] Constructed cache with name [CENTRAL] and cache attributes [ useLateral = true, useRemote = true, useDisk = true, maxObjs = 0, maxSpoolPerRun = -1, diskUsagePattern = UPDATE, spoolChunkSize = 2 ]
+[DEBUG] Parsing region name "CENTRAL", value "ODC"
+[DEBUG] Parsing auxiliary named "ODC".
+[DEBUG] parseAuxiliary ODC
+[DEBUG] Parsing options for "jcs.auxiliary.ODC.attributes"
+[DEBUG] Setting property [maxPurgatorySize] to [10,000,000].
+[DEBUG] Setting property [eventQueuePoolName] to [disk_cache_event_queue].
+[DEBUG] Setting property [maxKeySize] to [1,000,000].
+[DEBUG] Setting property [diskPath] to [/Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache].
+[DEBUG] Setting property [optimizeAtRemoveCount] to [300,000].
+[DEBUG] Setting property [eventQueueType] to [POOLED].
+[DEBUG] Setting property [shutdownSpoolTimeLimit] to [60].
+[DEBUG] End of parsing for "jcs.auxiliary.ODC.attributes"
+[INFO] No cache event logger defined for auxiliary [jcs.auxiliary.ODC]
+[INFO] Using standard serializer [org.apache.commons.jcs3.utils.serialization.StandardSerializer@13d289c7] for auxiliary [jcs.auxiliary.ODC]
+[DEBUG] Creating DiskCache for attributes = IndexedDiskCacheAttributes 
+ diskPath = /Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache
+ maxPurgatorySize   = 10000000
+ maxKeySize  = 1000000
+ optimizeAtRemoveCount  = 300000
+ shutdownSpoolTimeLimit  = 60
+ optimizeOnShutdown  = true
+ clearDiskOnStartup  = false
+[DEBUG] threadPoolName = [disk_cache_event_queue] poolType = POOLED
+[DEBUG] Constructed: CacheEventQueue [listenerId=262150612, cacheName=CENTRAL]
+[DEBUG] Creating pool for name [disk_cache_event_queue]
+[DEBUG] thread_pool.disk_cache_event_queue PoolConfiguration = useBoundary = [true] boundarySize = [2000] maximumPoolSize = [150] minimumPoolSize = [10] keepAliveTime = [300000] whenBlockedPolicy = [RUN] startUpSize = [10]
+[DEBUG] Creating a Bounded Buffer to use for the pool
+[INFO] Region [CENTRAL] : Set maxKeySize to: "1,000,000"
+[INFO] Region [CENTRAL] : Cache file root directory: /Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache
+[INFO] Region [CENTRAL] : Indexed Disk Cache is alive.
+[DEBUG] Parsing options for "jcs.region.POM.elementattributes"
+[DEBUG] Setting property [maxLife] to [7,776,000].
+[DEBUG] Setting property [isRemote] to [false].
+[DEBUG] Setting property [isLateral] to [false].
+[DEBUG] Setting property [isSpool] to [true].
+[DEBUG] End of parsing for "jcs.region.POM.elementattributes"
+[DEBUG] Parsing options for "jcs.region.POM.cacheattributes"
+[DEBUG] Setting property [maxObjects] to [0].
+[DEBUG] Setting property [diskUsagePattern] to [UPDATE].
+[DEBUG] End of parsing for "jcs.region.POM.cacheattributes"
+[INFO] initialized MemoryCache for POM
+[INFO] Constructed cache with name [POM] and cache attributes [ useLateral = true, useRemote = true, useDisk = true, maxObjs = 0, maxSpoolPerRun = -1, diskUsagePattern = UPDATE, spoolChunkSize = 2 ]
+[DEBUG] Parsing region name "POM", value "ODC"
+[DEBUG] Parsing auxiliary named "ODC".
+[DEBUG] parseAuxiliary ODC
+[DEBUG] Parsing options for "jcs.auxiliary.ODC.attributes"
+[DEBUG] Setting property [maxPurgatorySize] to [10,000,000].
+[DEBUG] Setting property [eventQueuePoolName] to [disk_cache_event_queue].
+[DEBUG] Setting property [maxKeySize] to [1,000,000].
+[DEBUG] Setting property [diskPath] to [/Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache].
+[DEBUG] Setting property [optimizeAtRemoveCount] to [300,000].
+[DEBUG] Setting property [eventQueueType] to [POOLED].
+[DEBUG] Setting property [shutdownSpoolTimeLimit] to [60].
+[DEBUG] End of parsing for "jcs.auxiliary.ODC.attributes"
+[INFO] No cache event logger defined for auxiliary [jcs.auxiliary.ODC]
+[INFO] Using standard serializer [org.apache.commons.jcs3.utils.serialization.StandardSerializer@1a7163e3] for auxiliary [jcs.auxiliary.ODC]
+[DEBUG] Creating DiskCache for attributes = IndexedDiskCacheAttributes 
+ diskPath = /Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache
+ maxPurgatorySize   = 10000000
+ maxKeySize  = 1000000
+ optimizeAtRemoveCount  = 300000
+ shutdownSpoolTimeLimit  = 60
+ optimizeOnShutdown  = true
+ clearDiskOnStartup  = false
+[DEBUG] threadPoolName = [disk_cache_event_queue] poolType = POOLED
+[DEBUG] Constructed: CacheEventQueue [listenerId=262150612, cacheName=POM]
+[INFO] Region [POM] : Set maxKeySize to: "1,000,000"
+[INFO] Region [POM] : Cache file root directory: /Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache
+[INFO] Region [POM] : Indexed Disk Cache is alive.
+[DEBUG] Parsing options for "jcs.region.NODEAUDIT.elementattributes"
+[DEBUG] Setting property [maxLife] to [86,400].
+[DEBUG] Setting property [isLateral] to [false].
+[DEBUG] Setting property [isRemote] to [false].
+[DEBUG] Setting property [isSpool] to [true].
+[DEBUG] End of parsing for "jcs.region.NODEAUDIT.elementattributes"
+[DEBUG] Parsing options for "jcs.region.NODEAUDIT.cacheattributes"
+[DEBUG] Setting property [diskUsagePattern] to [UPDATE].
+[DEBUG] Setting property [maxObjects] to [0].
+[DEBUG] End of parsing for "jcs.region.NODEAUDIT.cacheattributes"
+[INFO] initialized MemoryCache for NODEAUDIT
+[INFO] Constructed cache with name [NODEAUDIT] and cache attributes [ useLateral = true, useRemote = true, useDisk = true, maxObjs = 0, maxSpoolPerRun = -1, diskUsagePattern = UPDATE, spoolChunkSize = 2 ]
+[DEBUG] Parsing region name "NODEAUDIT", value "ODC"
+[DEBUG] Parsing auxiliary named "ODC".
+[DEBUG] parseAuxiliary ODC
+[DEBUG] Parsing options for "jcs.auxiliary.ODC.attributes"
+[DEBUG] Setting property [maxPurgatorySize] to [10,000,000].
+[DEBUG] Setting property [eventQueuePoolName] to [disk_cache_event_queue].
+[DEBUG] Setting property [maxKeySize] to [1,000,000].
+[DEBUG] Setting property [diskPath] to [/Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache].
+[DEBUG] Setting property [optimizeAtRemoveCount] to [300,000].
+[DEBUG] Setting property [eventQueueType] to [POOLED].
+[DEBUG] Setting property [shutdownSpoolTimeLimit] to [60].
+[DEBUG] End of parsing for "jcs.auxiliary.ODC.attributes"
+[INFO] No cache event logger defined for auxiliary [jcs.auxiliary.ODC]
+[INFO] Using standard serializer [org.apache.commons.jcs3.utils.serialization.StandardSerializer@44da7eb3] for auxiliary [jcs.auxiliary.ODC]
+[DEBUG] Creating DiskCache for attributes = IndexedDiskCacheAttributes 
+ diskPath = /Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache
+ maxPurgatorySize   = 10000000
+ maxKeySize  = 1000000
+ optimizeAtRemoveCount  = 300000
+ shutdownSpoolTimeLimit  = 60
+ optimizeOnShutdown  = true
+ clearDiskOnStartup  = false
+[DEBUG] threadPoolName = [disk_cache_event_queue] poolType = POOLED
+[DEBUG] Constructed: CacheEventQueue [listenerId=262150612, cacheName=NODEAUDIT]
+[INFO] Region [NODEAUDIT] : Set maxKeySize to: "1,000,000"
+[INFO] Region [NODEAUDIT] : Cache file root directory: /Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache
+[INFO] Region [NODEAUDIT] : Indexed Disk Cache is alive.
+[INFO] Parsed regions [CENTRAL, POM, NODEAUDIT]
+[INFO] Finished configuration in 22 ms.
+[DEBUG] attr = [ IS_LATERAL = false, IS_SPOOL = true, IS_REMOTE = false, IS_ETERNAL = false, MaxLifeSeconds = 86400, IdleTime = 1800, CreateTime = 1782673611226, LastAccessTime = 1782673611210, getTimeToLiveSeconds() = 86400, createTime = 1782673611226 ]
+[DEBUG] Dependency collection stats {ConflictMarker.analyzeTime=163000, ConflictMarker.markTime=111625, ConflictMarker.nodeCount=508, ConflictIdSorter.graphTime=89667, ConflictIdSorter.topsortTime=72291, ConflictIdSorter.conflictIdCount=196, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=2520291, ConflictResolver.conflictItemCount=440, DfDependencyCollector.collectTime=4525541, DfDependencyCollector.transformTime=3076292}
+[DEBUG] com.BlueCollar:backend:jar:0.0.1-SNAPSHOT
+[DEBUG]    org.springframework.boot:spring-boot-starter-data-jpa:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-starter:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-starter-logging:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             ch.qos.logback:logback-classic:jar:1.5.34:compile (version managed from 1.5.34)
+[DEBUG]                ch.qos.logback:logback-core:jar:1.5.34:compile (version managed from 1.5.34)
+[DEBUG]             org.apache.logging.log4j:log4j-to-slf4j:jar:2.25.4:compile (version managed from 2.25.4)
+[DEBUG]                org.apache.logging.log4j:log4j-api:jar:2.25.4:compile (version managed from 2.25.4)
+[DEBUG]             org.slf4j:jul-to-slf4j:jar:2.0.18:compile (version managed from 2.0.18)
+[DEBUG]          jakarta.annotation:jakarta.annotation-api:jar:3.0.0:compile (version managed from 3.0.0)
+[DEBUG]          org.yaml:snakeyaml:jar:2.5:compile (version managed from 2.5)
+[DEBUG]       org.springframework.boot:spring-boot-starter-jdbc:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          com.zaxxer:HikariCP:jar:7.0.2:compile (version managed from 7.0.2)
+[DEBUG]       org.springframework.boot:spring-boot-data-jpa:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-data-commons:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             org.springframework.boot:spring-boot-persistence:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             org.springframework.data:spring-data-commons:jar:4.0.6:compile (version managed from 4.0.6)
+[DEBUG]          org.springframework.boot:spring-boot-hibernate:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             org.springframework.boot:spring-boot-jpa:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]                jakarta.persistence:jakarta.persistence-api:jar:3.2.0:compile (version managed from 3.2.0)
+[DEBUG]             org.hibernate.orm:hibernate-core:jar:7.2.19.Final:compile (version managed from 7.2.19.Final)
+[DEBUG]                jakarta.transaction:jakarta.transaction-api:jar:2.0.1:compile (version managed from 2.0.1)
+[DEBUG]                org.hibernate.models:hibernate-models:jar:1.0.1:runtime
+[DEBUG]                org.glassfish.jaxb:jaxb-runtime:jar:4.0.9:runtime (version managed from 4.0.6)
+[DEBUG]                   org.glassfish.jaxb:jaxb-core:jar:4.0.9:runtime (version managed from 4.0.9)
+[DEBUG]                      org.glassfish.jaxb:txw2:jar:4.0.9:runtime (version managed from 4.0.9)
+[DEBUG]                      com.sun.istack:istack-commons-runtime:jar:4.1.2:runtime
+[DEBUG]                jakarta.inject:jakarta.inject-api:jar:2.0.1:runtime (version managed from 2.0.1)
+[DEBUG]             org.springframework:spring-orm:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]          org.springframework.data:spring-data-jpa:jar:4.0.6:compile (version managed from 4.0.6)
+[DEBUG]             org.springframework:spring-tx:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]             org.antlr:antlr4-runtime:jar:4.13.2:compile
+[DEBUG]          org.springframework:spring-aspects:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]             org.aspectj:aspectjweaver:jar:1.9.25.1:compile (version managed from 1.9.25)
+[DEBUG]       org.springframework.boot:spring-boot-jdbc:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-sql:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-transaction:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-jdbc:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]    org.springframework.boot:spring-boot-starter-flyway:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-flyway:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]    org.springframework.boot:spring-boot-starter-mail:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-mail:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-context-support:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]          jakarta.mail:jakarta.mail-api:jar:2.1.5:compile (version managed from 2.1.5)
+[DEBUG]          org.eclipse.angus:angus-mail:jar:2.0.5:runtime (version managed from 2.0.5)
+[DEBUG]             org.eclipse.angus:angus-activation:jar:2.0.3:runtime
+[DEBUG]    org.springframework.boot:spring-boot-starter-validation:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-validation:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.apache.tomcat.embed:tomcat-embed-el:jar:11.0.22:compile (version managed from 11.0.22)
+[DEBUG]          org.hibernate.validator:hibernate-validator:jar:9.0.1.Final:compile (version managed from 9.0.1.Final)
+[DEBUG]             jakarta.validation:jakarta.validation-api:jar:3.1.1:compile (version managed from 3.1.1)
+[DEBUG]             org.jboss.logging:jboss-logging:jar:3.6.3.Final:compile (version managed from 3.6.1.Final)
+[DEBUG]             com.fasterxml:classmate:jar:1.7.3:compile (version managed from 1.7.0)
+[DEBUG]    org.springframework.boot:spring-boot-starter-security:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-security:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.security:spring-security-config:jar:7.0.6:compile (version managed from 7.0.6)
+[DEBUG]       org.springframework:spring-aop:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]          org.springframework:spring-beans:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]    org.springframework.boot:spring-boot-starter-webmvc:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-starter-jackson:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-jackson:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             tools.jackson.core:jackson-databind:jar:3.1.4:compile (version managed from 3.1.4)
+[DEBUG]                tools.jackson.core:jackson-core:jar:3.1.4:compile (version managed from 3.1.4)
+[DEBUG]       org.springframework.boot:spring-boot-starter-tomcat:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-starter-tomcat-runtime:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             org.apache.tomcat.embed:tomcat-embed-core:jar:11.0.22:compile (version managed from 11.0.22)
+[DEBUG]             org.apache.tomcat.embed:tomcat-embed-websocket:jar:11.0.22:compile (version managed from 11.0.22)
+[DEBUG]          org.springframework.boot:spring-boot-tomcat:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-http-converter:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-web:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]       org.springframework.boot:spring-boot-webmvc:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-servlet:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-webmvc:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]    org.springframework.boot:spring-boot-starter-websocket:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-websocket:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-messaging:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]          org.springframework:spring-websocket:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]    org.springframework.boot:spring-boot-starter-cache:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-cache:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]    org.springframework.boot:spring-boot-starter-actuator:jar:4.0.7:compile
+[DEBUG]       org.springframework.boot:spring-boot-starter-micrometer-metrics:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-micrometer-metrics:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]             org.springframework.boot:spring-boot-micrometer-observation:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-actuator-autoconfigure:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-actuator:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-health:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]       io.micrometer:micrometer-observation:jar:1.16.6:compile (version managed from 1.16.6)
+[DEBUG]          io.micrometer:micrometer-commons:jar:1.16.6:compile (version managed from 1.16.6)
+[DEBUG]       io.micrometer:micrometer-jakarta9:jar:1.16.6:compile (version managed from 1.16.6)
+[DEBUG]          io.micrometer:micrometer-core:jar:1.16.6:compile (version managed from 1.16.6)
+[DEBUG]             org.hdrhistogram:HdrHistogram:jar:2.2.2:runtime
+[DEBUG]             org.latencyutils:LatencyUtils:jar:2.0.3:runtime
+[DEBUG]    com.github.ben-manes.caffeine:caffeine:jar:3.2.4:compile
+[DEBUG]       org.jspecify:jspecify:jar:1.0.0:compile (version managed from 1.0.0)
+[DEBUG]       com.google.errorprone:error_prone_annotations:jar:2.49.0:compile
+[DEBUG]    io.jsonwebtoken:jjwt-api:jar:0.12.6:compile
+[DEBUG]    io.jsonwebtoken:jjwt-impl:jar:0.12.6:runtime
+[DEBUG]    io.jsonwebtoken:jjwt-jackson:jar:0.12.6:runtime
+[DEBUG]       com.fasterxml.jackson.core:jackson-databind:jar:2.21.4:compile (version managed from 2.12.7.1)
+[DEBUG]          com.fasterxml.jackson.core:jackson-annotations:jar:2.21:compile (version managed from 2.21)
+[DEBUG]          com.fasterxml.jackson.core:jackson-core:jar:2.21.4:compile (version managed from 2.21.4)
+[DEBUG]    org.flywaydb:flyway-database-postgresql:jar:11.14.1:compile
+[DEBUG]       org.flywaydb:flyway-core:jar:11.14.1:compile (version managed from 11.14.1)
+[DEBUG]    org.springdoc:springdoc-openapi-starter-webmvc-ui:jar:3.0.2:compile
+[DEBUG]       org.springdoc:springdoc-openapi-starter-webmvc-api:jar:3.0.2:compile
+[DEBUG]          org.springdoc:springdoc-openapi-starter-common:jar:3.0.2:compile
+[DEBUG]             io.swagger.core.v3:swagger-core-jakarta:jar:2.2.43:compile
+[DEBUG]                io.swagger.core.v3:swagger-annotations-jakarta:jar:2.2.43:compile
+[DEBUG]                io.swagger.core.v3:swagger-models-jakarta:jar:2.2.43:compile
+[DEBUG]                com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.21.4:compile (version managed from 2.19.2)
+[DEBUG]                com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.21.4:compile (version managed from 2.19.2)
+[DEBUG]          org.springframework.boot:spring-boot-web-server:jar:4.0.7:compile (version managed from 4.0.3)
+[DEBUG]       org.webjars:swagger-ui:jar:5.32.0:compile
+[DEBUG]       org.webjars:webjars-locator-lite:jar:1.1.3:compile (version managed from 1.1.3)
+[DEBUG]    org.springframework.boot:spring-boot-devtools:jar:4.0.7:runtime (optional)
+[DEBUG]       org.springframework.boot:spring-boot:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]          org.springframework:spring-context:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]       org.springframework.boot:spring-boot-autoconfigure:jar:4.0.7:compile (version managed from 4.0.7)
+[DEBUG]    org.postgresql:postgresql:jar:42.7.11:runtime
+[DEBUG]    org.projectlombok:lombok:jar:1.18.46:compile (optional)
+[DEBUG]    org.springframework.boot:spring-boot-starter-test:jar:4.0.7:test
+[DEBUG]       org.springframework.boot:spring-boot-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-test-autoconfigure:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]       com.jayway.jsonpath:json-path:jar:2.10.0:test (version managed from 2.10.0)
+[DEBUG]          org.slf4j:slf4j-api:jar:2.0.18:compile (version managed from 2.0.17)
+[DEBUG]       jakarta.xml.bind:jakarta.xml.bind-api:jar:4.0.5:compile (version managed from 4.0.5)
+[DEBUG]          jakarta.activation:jakarta.activation-api:jar:2.1.4:compile (version managed from 2.1.4)
+[DEBUG]       net.minidev:json-smart:jar:2.6.0:test (version managed from 2.6.0)
+[DEBUG]          net.minidev:accessors-smart:jar:2.6.0:test
+[DEBUG]       org.assertj:assertj-core:jar:3.27.7:test (version managed from 3.27.7)
+[DEBUG]          net.bytebuddy:byte-buddy:jar:1.17.8:runtime (version managed from 1.18.3)
+[DEBUG]       org.awaitility:awaitility:jar:4.3.0:test (version managed from 4.3.0)
+[DEBUG]       org.hamcrest:hamcrest:jar:3.0:test (version managed from 3.0)
+[DEBUG]       org.junit.jupiter:junit-jupiter:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]          org.junit.jupiter:junit-jupiter-api:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]             org.opentest4j:opentest4j:jar:1.3.0:test
+[DEBUG]             org.junit.platform:junit-platform-commons:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]             org.apiguardian:apiguardian-api:jar:1.1.2:test
+[DEBUG]          org.junit.jupiter:junit-jupiter-params:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]          org.junit.jupiter:junit-jupiter-engine:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]             org.junit.platform:junit-platform-engine:jar:6.0.3:test (version managed from 6.0.3)
+[DEBUG]       org.mockito:mockito-core:jar:5.20.0:test (version managed from 5.20.0)
+[DEBUG]          net.bytebuddy:byte-buddy-agent:jar:1.17.8:test (version managed from 1.17.7)
+[DEBUG]          org.objenesis:objenesis:jar:3.3:test
+[DEBUG]       org.mockito:mockito-junit-jupiter:jar:5.20.0:test (version managed from 5.20.0)
+[DEBUG]       org.skyscreamer:jsonassert:jar:1.5.3:test (version managed from 1.5.3)
+[DEBUG]          com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1:test
+[DEBUG]       org.springframework:spring-core:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]          commons-logging:commons-logging:jar:1.3.6:compile (version managed from 1.3.5)
+[DEBUG]       org.springframework:spring-test:jar:7.0.8:test (version managed from 7.0.8)
+[DEBUG]       org.xmlunit:xmlunit-core:jar:2.10.4:test (version managed from 2.10.4)
+[DEBUG]    org.springframework.security:spring-security-test:jar:7.0.6:test
+[DEBUG]       org.springframework.security:spring-security-core:jar:7.0.6:compile (version managed from 7.0.6)
+[DEBUG]          org.springframework.security:spring-security-crypto:jar:7.0.6:compile (version managed from 7.0.6)
+[DEBUG]          org.springframework:spring-expression:jar:7.0.8:compile (version managed from 7.0.8)
+[DEBUG]       org.springframework.security:spring-security-web:jar:7.0.6:compile (version managed from 7.0.6)
+[DEBUG]    org.springframework.boot:spring-boot-starter-data-jpa-test:jar:4.0.7:test
+[DEBUG]       org.springframework.boot:spring-boot-starter-jdbc-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-jdbc-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-data-jpa-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]          org.springframework.boot:spring-boot-jpa-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]    org.springframework.boot:spring-boot-starter-flyway-test:jar:4.0.7:test
+[DEBUG]    org.springframework.boot:spring-boot-starter-mail-test:jar:4.0.7:test
+[DEBUG]    org.springframework.boot:spring-boot-starter-validation-test:jar:4.0.7:test
+[DEBUG]    org.springframework.boot:spring-boot-starter-webmvc-test:jar:4.0.7:test
+[DEBUG]       org.springframework.boot:spring-boot-starter-jackson-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-webmvc-test:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]       org.springframework.boot:spring-boot-resttestclient:jar:4.0.7:test (version managed from 4.0.7)
+[DEBUG]    org.testcontainers:junit-jupiter:jar:1.20.4:test
+[DEBUG]       org.testcontainers:testcontainers:jar:2.0.5:test (version managed from 1.20.4)
+[DEBUG]          org.apache.commons:commons-compress:jar:1.28.0:test
+[DEBUG]             commons-codec:commons-codec:jar:1.19.0:test (version managed from 1.19.0)
+[DEBUG]             org.apache.commons:commons-lang3:jar:3.19.0:compile (version managed from 3.18.0)
+[DEBUG]          org.rnorth.duct-tape:duct-tape:jar:1.0.8:test
+[DEBUG]             org.jetbrains:annotations:jar:17.0.0:test
+[DEBUG]          com.github.docker-java:docker-java-api:jar:3.7.1:test
+[DEBUG]          com.github.docker-java:docker-java-transport-zerodep:jar:3.7.1:test
+[DEBUG]             com.github.docker-java:docker-java-transport:jar:3.7.1:test
+[DEBUG]             net.java.dev.jna:jna:jar:5.18.1:test
+[DEBUG]    org.testcontainers:postgresql:jar:1.20.4:test
+[DEBUG]       org.testcontainers:jdbc:jar:1.20.4:test
+[DEBUG]          org.testcontainers:database-commons:jar:1.20.4:test
+[DEBUG]    com.h2database:h2:jar:2.4.240:test
+[DEBUG]    org.jacoco:jacoco-maven-plugin:jar:0.8.14:compile
+[DEBUG]       org.codehaus.plexus:plexus-utils:jar:3.0.24:compile
+[DEBUG]       org.apache.maven.shared:file-management:jar:3.2.0:compile
+[DEBUG]          commons-io:commons-io:jar:2.19.0:compile
+[DEBUG]       org.apache.maven.reporting:maven-reporting-api:jar:3.0:compile
+[DEBUG]          org.apache.maven.doxia:doxia-sink-api:jar:1.0:compile
+[DEBUG]       org.jacoco:org.jacoco.agent:jar:runtime:0.8.14:compile
+[DEBUG]       org.jacoco:org.jacoco.core:jar:0.8.14:compile
+[DEBUG]          org.ow2.asm:asm:jar:9.9:compile
+[DEBUG]          org.ow2.asm:asm-commons:jar:9.9:compile
+[DEBUG]          org.ow2.asm:asm-tree:jar:9.9:compile
+[DEBUG]       org.jacoco:org.jacoco.report:jar:0.8.14:compile
+[DEBUG]    com.github.spotbugs:spotbugs-annotations:jar:4.9.8:provided
+[DEBUG]       com.google.code.findbugs:jsr305:jar:3.0.2:provided
+[DEBUG] Dependency collection stats {ConflictMarker.analyzeTime=187333, ConflictMarker.markTime=107542, ConflictMarker.nodeCount=508, ConflictIdSorter.graphTime=150875, ConflictIdSorter.topsortTime=68334, ConflictIdSorter.conflictIdCount=196, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=2075375, ConflictResolver.conflictItemCount=440, DfDependencyCollector.collectTime=3790791, DfDependencyCollector.transformTime=2607375}
+[DEBUG] Adding new maven identifier org.projectlombok:lombok:1.18.46
+[DEBUG] Adding project reference  on dependency lombok-1.18.46.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-mail:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-mail-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-mail:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-mail-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-context-support:7.0.8
+[DEBUG] Adding project reference  on dependency spring-context-support-7.0.8.jar
+[DEBUG] Adding new maven identifier jakarta.mail:jakarta.mail-api:2.1.5
+[DEBUG] Adding project reference  on dependency jakarta.mail-api-2.1.5.jar
+[DEBUG] Adding new maven identifier org.eclipse.angus:angus-mail:2.0.5
+[DEBUG] Adding project reference  on dependency angus-mail-2.0.5.jar
+[DEBUG] Adding new maven identifier org.eclipse.angus:angus-activation:2.0.3
+[DEBUG] Adding project reference  on dependency angus-activation-2.0.3.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-webmvc:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-webmvc-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-jackson:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-jackson-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-jackson:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-jackson-4.0.7.jar
+[DEBUG] Adding new maven identifier tools.jackson.core:jackson-databind:3.1.4
+[DEBUG] Adding project reference  on dependency jackson-databind-3.1.4.jar
+[DEBUG] Adding new maven identifier tools.jackson.core:jackson-core:3.1.4
+[DEBUG] Adding project reference  on dependency jackson-core-3.1.4.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-tomcat:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-tomcat-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-tomcat-runtime:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-tomcat-runtime-4.0.7.jar
+[DEBUG] Adding new maven identifier org.apache.tomcat.embed:tomcat-embed-core:11.0.22
+[DEBUG] Adding project reference  on dependency tomcat-embed-core-11.0.22.jar
+[DEBUG] Adding new maven identifier org.apache.tomcat.embed:tomcat-embed-websocket:11.0.22
+[DEBUG] Adding project reference  on dependency tomcat-embed-websocket-11.0.22.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-tomcat:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-tomcat-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-http-converter:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-http-converter-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-web:7.0.8
+[DEBUG] Adding project reference  on dependency spring-web-7.0.8.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-webmvc:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-webmvc-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-servlet:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-servlet-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-webmvc:7.0.8
+[DEBUG] Adding project reference  on dependency spring-webmvc-7.0.8.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-devtools:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-devtools-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-context:7.0.8
+[DEBUG] Adding project reference  on dependency spring-context-7.0.8.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-autoconfigure:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-autoconfigure-4.0.7.jar
+[DEBUG] Adding new maven identifier org.postgresql:postgresql:42.7.11
+[DEBUG] Adding project reference  on dependency postgresql-42.7.11.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-cache:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-cache-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-cache:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-cache-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-websocket:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-websocket-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-websocket:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-websocket-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-messaging:7.0.8
+[DEBUG] Adding project reference  on dependency spring-messaging-7.0.8.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-websocket:7.0.8
+[DEBUG] Adding project reference  on dependency spring-websocket-7.0.8.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-actuator:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-actuator-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-micrometer-metrics:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-micrometer-metrics-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-micrometer-metrics:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-micrometer-metrics-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-micrometer-observation:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-micrometer-observation-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-actuator-autoconfigure:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-actuator-autoconfigure-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-actuator:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-actuator-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-health:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-health-4.0.7.jar
+[DEBUG] Adding new maven identifier io.micrometer:micrometer-observation:1.16.6
+[DEBUG] Adding project reference  on dependency micrometer-observation-1.16.6.jar
+[DEBUG] Adding new maven identifier io.micrometer:micrometer-commons:1.16.6
+[DEBUG] Adding project reference  on dependency micrometer-commons-1.16.6.jar
+[DEBUG] Adding new maven identifier io.micrometer:micrometer-jakarta9:1.16.6
+[DEBUG] Adding project reference  on dependency micrometer-jakarta9-1.16.6.jar
+[DEBUG] Adding new maven identifier io.micrometer:micrometer-core:1.16.6
+[DEBUG] Adding project reference  on dependency micrometer-core-1.16.6.jar
+[DEBUG] Adding new maven identifier org.hdrhistogram:HdrHistogram:2.2.2
+[DEBUG] Adding project reference  on dependency HdrHistogram-2.2.2.jar
+[DEBUG] Adding new maven identifier org.latencyutils:LatencyUtils:2.0.3
+[DEBUG] Adding project reference  on dependency LatencyUtils-2.0.3.jar
+[DEBUG] Adding new maven identifier com.github.ben-manes.caffeine:caffeine:3.2.4
+[DEBUG] Adding project reference  on dependency caffeine-3.2.4.jar
+[DEBUG] Adding new maven identifier org.jspecify:jspecify:1.0.0
+[DEBUG] Adding project reference  on dependency jspecify-1.0.0.jar
+[DEBUG] Adding new maven identifier com.google.errorprone:error_prone_annotations:2.49.0
+[DEBUG] Adding project reference  on dependency error_prone_annotations-2.49.0.jar
+[DEBUG] Adding new maven identifier io.jsonwebtoken:jjwt-jackson:0.12.6
+[DEBUG] Adding project reference  on dependency jjwt-jackson-0.12.6.jar
+[DEBUG] Adding new maven identifier com.fasterxml.jackson.core:jackson-databind:2.21.4
+[DEBUG] Adding project reference  on dependency jackson-databind-2.21.4.jar
+[DEBUG] Adding new maven identifier com.fasterxml.jackson.core:jackson-annotations:2.21
+[DEBUG] Adding project reference  on dependency jackson-annotations-2.21.jar
+[DEBUG] Adding new maven identifier com.fasterxml.jackson.core:jackson-core:2.21.4
+[DEBUG] Adding project reference  on dependency jackson-core-2.21.4.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-data-jpa:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-data-jpa-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-logging:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-logging-4.0.7.jar
+[DEBUG] Adding new maven identifier ch.qos.logback:logback-classic:1.5.34
+[DEBUG] Adding project reference  on dependency logback-classic-1.5.34.jar
+[DEBUG] Adding new maven identifier ch.qos.logback:logback-core:1.5.34
+[DEBUG] Adding project reference  on dependency logback-core-1.5.34.jar
+[DEBUG] Adding new maven identifier org.apache.logging.log4j:log4j-to-slf4j:2.25.4
+[DEBUG] Adding project reference  on dependency log4j-to-slf4j-2.25.4.jar
+[DEBUG] Adding new maven identifier org.apache.logging.log4j:log4j-api:2.25.4
+[DEBUG] Adding project reference  on dependency log4j-api-2.25.4.jar
+[DEBUG] Adding new maven identifier org.slf4j:jul-to-slf4j:2.0.18
+[DEBUG] Adding project reference  on dependency jul-to-slf4j-2.0.18.jar
+[DEBUG] Adding new maven identifier jakarta.annotation:jakarta.annotation-api:3.0.0
+[DEBUG] Adding project reference  on dependency jakarta.annotation-api-3.0.0.jar
+[DEBUG] Adding new maven identifier org.yaml:snakeyaml:2.5
+[DEBUG] Adding project reference  on dependency snakeyaml-2.5.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-jdbc:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-jdbc-4.0.7.jar
+[DEBUG] Adding new maven identifier com.zaxxer:HikariCP:7.0.2
+[DEBUG] Adding project reference  on dependency HikariCP-7.0.2.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-data-jpa:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-data-jpa-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-data-commons:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-data-commons-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-persistence:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-persistence-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.data:spring-data-commons:4.0.6
+[DEBUG] Adding project reference  on dependency spring-data-commons-4.0.6.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-hibernate:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-hibernate-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-jpa:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-jpa-4.0.7.jar
+[DEBUG] Adding new maven identifier jakarta.persistence:jakarta.persistence-api:3.2.0
+[DEBUG] Adding project reference  on dependency jakarta.persistence-api-3.2.0.jar
+[DEBUG] Adding new maven identifier org.hibernate.orm:hibernate-core:7.2.19.Final
+[DEBUG] Adding project reference  on dependency hibernate-core-7.2.19.Final.jar
+[DEBUG] Adding new maven identifier jakarta.transaction:jakarta.transaction-api:2.0.1
+[DEBUG] Adding project reference  on dependency jakarta.transaction-api-2.0.1.jar
+[DEBUG] Adding new maven identifier org.hibernate.models:hibernate-models:1.0.1
+[DEBUG] Adding project reference  on dependency hibernate-models-1.0.1.jar
+[DEBUG] Adding new maven identifier org.glassfish.jaxb:jaxb-runtime:4.0.9
+[DEBUG] Adding project reference  on dependency jaxb-runtime-4.0.9.jar
+[DEBUG] Adding new maven identifier org.glassfish.jaxb:jaxb-core:4.0.9
+[DEBUG] Adding project reference  on dependency jaxb-core-4.0.9.jar
+[DEBUG] Adding new maven identifier org.glassfish.jaxb:txw2:4.0.9
+[DEBUG] Adding project reference  on dependency txw2-4.0.9.jar
+[DEBUG] Adding new maven identifier com.sun.istack:istack-commons-runtime:4.1.2
+[DEBUG] Adding project reference  on dependency istack-commons-runtime-4.1.2.jar
+[DEBUG] Adding new maven identifier jakarta.inject:jakarta.inject-api:2.0.1
+[DEBUG] Adding project reference  on dependency jakarta.inject-api-2.0.1.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-orm:7.0.8
+[DEBUG] Adding project reference  on dependency spring-orm-7.0.8.jar
+[DEBUG] Adding new maven identifier org.springframework.data:spring-data-jpa:4.0.6
+[DEBUG] Adding project reference  on dependency spring-data-jpa-4.0.6.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-tx:7.0.8
+[DEBUG] Adding project reference  on dependency spring-tx-7.0.8.jar
+[DEBUG] Adding new maven identifier org.antlr:antlr4-runtime:4.13.2
+[DEBUG] Adding project reference  on dependency antlr4-runtime-4.13.2.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-aspects:7.0.8
+[DEBUG] Adding project reference  on dependency spring-aspects-7.0.8.jar
+[DEBUG] Adding new maven identifier org.aspectj:aspectjweaver:1.9.25.1
+[DEBUG] Adding project reference  on dependency aspectjweaver-1.9.25.1.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-jdbc:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-jdbc-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-sql:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-sql-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-transaction:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-transaction-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-jdbc:7.0.8
+[DEBUG] Adding project reference  on dependency spring-jdbc-7.0.8.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-security:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-security-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-security:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-security-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.security:spring-security-config:7.0.6
+[DEBUG] Adding project reference  on dependency spring-security-config-7.0.6.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-aop:7.0.8
+[DEBUG] Adding project reference  on dependency spring-aop-7.0.8.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-beans:7.0.8
+[DEBUG] Adding project reference  on dependency spring-beans-7.0.8.jar
+[DEBUG] Adding new maven identifier io.jsonwebtoken:jjwt-impl:0.12.6
+[DEBUG] Adding project reference  on dependency jjwt-impl-0.12.6.jar
+[DEBUG] Adding new maven identifier org.apache.commons:commons-lang3:3.19.0
+[DEBUG] Adding project reference  on dependency commons-lang3-3.19.0.jar
+[DEBUG] Adding new maven identifier org.slf4j:slf4j-api:2.0.18
+[DEBUG] Adding project reference  on dependency slf4j-api-2.0.18.jar
+[DEBUG] Adding new maven identifier jakarta.xml.bind:jakarta.xml.bind-api:4.0.5
+[DEBUG] Adding project reference  on dependency jakarta.xml.bind-api-4.0.5.jar
+[DEBUG] Adding new maven identifier jakarta.activation:jakarta.activation-api:2.1.4
+[DEBUG] Adding project reference  on dependency jakarta.activation-api-2.1.4.jar
+[DEBUG] Adding new maven identifier net.bytebuddy:byte-buddy:1.17.8
+[DEBUG] Adding project reference  on dependency byte-buddy-1.17.8.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-core:7.0.8
+[DEBUG] Adding project reference  on dependency spring-core-7.0.8.jar
+[DEBUG] Adding new maven identifier commons-logging:commons-logging:1.3.6
+[DEBUG] Adding project reference  on dependency commons-logging-1.3.6.jar
+[DEBUG] Adding new maven identifier org.springframework.security:spring-security-core:7.0.6
+[DEBUG] Adding project reference  on dependency spring-security-core-7.0.6.jar
+[DEBUG] Adding new maven identifier org.springframework.security:spring-security-crypto:7.0.6
+[DEBUG] Adding project reference  on dependency spring-security-crypto-7.0.6.jar
+[DEBUG] Adding new maven identifier org.springframework:spring-expression:7.0.8
+[DEBUG] Adding project reference  on dependency spring-expression-7.0.8.jar
+[DEBUG] Adding new maven identifier org.springframework.security:spring-security-web:7.0.6
+[DEBUG] Adding project reference  on dependency spring-security-web-7.0.6.jar
+[DEBUG] Adding new maven identifier org.flywaydb:flyway-database-postgresql:11.14.1
+[DEBUG] Adding project reference  on dependency flyway-database-postgresql-11.14.1.jar
+[DEBUG] Adding new maven identifier org.flywaydb:flyway-core:11.14.1
+[DEBUG] Adding project reference  on dependency flyway-core-11.14.1.jar
+[DEBUG] Adding new maven identifier org.jacoco:jacoco-maven-plugin:0.8.14
+[DEBUG] Adding project reference  on dependency jacoco-maven-plugin-0.8.14.jar
+[DEBUG] Adding new maven identifier org.codehaus.plexus:plexus-utils:3.0.24
+[DEBUG] Adding project reference  on dependency plexus-utils-3.0.24.jar
+[DEBUG] Adding new maven identifier org.apache.maven.shared:file-management:3.2.0
+[DEBUG] Adding project reference  on dependency file-management-3.2.0.jar
+[DEBUG] Adding new maven identifier commons-io:commons-io:2.19.0
+[DEBUG] Adding project reference  on dependency commons-io-2.19.0.jar
+[DEBUG] Adding new maven identifier org.apache.maven.reporting:maven-reporting-api:3.0
+[DEBUG] Adding project reference  on dependency maven-reporting-api-3.0.jar
+[DEBUG] Adding new maven identifier org.apache.maven.doxia:doxia-sink-api:1.0
+[DEBUG] Adding project reference  on dependency doxia-sink-api-1.0.jar
+[DEBUG] Adding new maven identifier org.jacoco:org.jacoco.agent:0.8.14
+[DEBUG] Adding project reference  on dependency org.jacoco.agent-0.8.14-runtime.jar
+[DEBUG] Adding new maven identifier org.jacoco:org.jacoco.core:0.8.14
+[DEBUG] Adding project reference  on dependency org.jacoco.core-0.8.14.jar
+[DEBUG] Adding new maven identifier org.ow2.asm:asm:9.9
+[DEBUG] Adding project reference  on dependency asm-9.9.jar
+[DEBUG] Adding new maven identifier org.ow2.asm:asm-commons:9.9
+[DEBUG] Adding project reference  on dependency asm-commons-9.9.jar
+[DEBUG] Adding new maven identifier org.ow2.asm:asm-tree:9.9
+[DEBUG] Adding project reference  on dependency asm-tree-9.9.jar
+[DEBUG] Adding new maven identifier org.jacoco:org.jacoco.report:0.8.14
+[DEBUG] Adding project reference  on dependency org.jacoco.report-0.8.14.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-flyway:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-flyway-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-flyway:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-flyway-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-starter-validation:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-starter-validation-4.0.7.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-validation:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-validation-4.0.7.jar
+[DEBUG] Adding new maven identifier org.apache.tomcat.embed:tomcat-embed-el:11.0.22
+[DEBUG] Adding project reference  on dependency tomcat-embed-el-11.0.22.jar
+[DEBUG] Adding new maven identifier org.hibernate.validator:hibernate-validator:9.0.1.Final
+[DEBUG] Adding project reference  on dependency hibernate-validator-9.0.1.Final.jar
+[DEBUG] Adding new maven identifier jakarta.validation:jakarta.validation-api:3.1.1
+[DEBUG] Adding project reference  on dependency jakarta.validation-api-3.1.1.jar
+[DEBUG] Adding new maven identifier org.jboss.logging:jboss-logging:3.6.3.Final
+[DEBUG] Adding project reference  on dependency jboss-logging-3.6.3.Final.jar
+[DEBUG] Adding new maven identifier com.fasterxml:classmate:1.7.3
+[DEBUG] Adding project reference  on dependency classmate-1.7.3.jar
+[DEBUG] Adding new maven identifier io.jsonwebtoken:jjwt-api:0.12.6
+[DEBUG] Adding project reference  on dependency jjwt-api-0.12.6.jar
+[DEBUG] Adding new maven identifier org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2
+[DEBUG] Adding project reference  on dependency springdoc-openapi-starter-webmvc-ui-3.0.2.jar
+[DEBUG] Adding new maven identifier org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.2
+[DEBUG] Adding project reference  on dependency springdoc-openapi-starter-webmvc-api-3.0.2.jar
+[DEBUG] Adding new maven identifier org.springdoc:springdoc-openapi-starter-common:3.0.2
+[DEBUG] Adding project reference  on dependency springdoc-openapi-starter-common-3.0.2.jar
+[DEBUG] Adding new maven identifier io.swagger.core.v3:swagger-core-jakarta:2.2.43
+[DEBUG] Adding project reference  on dependency swagger-core-jakarta-2.2.43.jar
+[DEBUG] Adding new maven identifier io.swagger.core.v3:swagger-annotations-jakarta:2.2.43
+[DEBUG] Adding project reference  on dependency swagger-annotations-jakarta-2.2.43.jar
+[DEBUG] Adding new maven identifier io.swagger.core.v3:swagger-models-jakarta:2.2.43
+[DEBUG] Adding project reference  on dependency swagger-models-jakarta-2.2.43.jar
+[DEBUG] Adding new maven identifier com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.4
+[DEBUG] Adding project reference  on dependency jackson-dataformat-yaml-2.21.4.jar
+[DEBUG] Adding new maven identifier com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.4
+[DEBUG] Adding project reference  on dependency jackson-datatype-jsr310-2.21.4.jar
+[DEBUG] Adding new maven identifier org.springframework.boot:spring-boot-web-server:4.0.7
+[DEBUG] Adding project reference  on dependency spring-boot-web-server-4.0.7.jar
+[DEBUG] Adding new maven identifier org.webjars:swagger-ui:5.32.0
+[DEBUG] Adding project reference  on dependency swagger-ui-5.32.0.jar
+[DEBUG] Adding new maven identifier org.webjars:webjars-locator-lite:1.1.3
+[DEBUG] Adding project reference  on dependency webjars-locator-lite-1.1.3.jar
+[DEBUG] Scanning fileSet: /Users/jabezasir/IdeaProjects/backend/src/main/resources
+[DEBUG] Scanning fileSet: /Users/jabezasir/IdeaProjects/backend/src/main/filters
+[DEBUG] Scanning fileSet: /Users/jabezasir/IdeaProjects/backend/src/main/webapp
+[DEBUG] Scanning fileSet: /Users/jabezasir/IdeaProjects/backend
+[DEBUG] Settings.getDataFile() - file: '[JAR]/../../dependency-check-data/11.0'
+[DEBUG] Settings.getDataFile() - transforming filename
+[DEBUG] Settings.getDataFile() - jar file: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3'
+[DEBUG] Settings.getDataFile() - returning: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3/../../dependency-check-data/11.0'
+[DEBUG] Data directory: /Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3/../../dependency-check-data/11.0
+[DEBUG] Connection String: 'jdbc:h2:file:/Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/odc;AUTOCOMMIT=ON;CACHE_SIZE=65536;RETENTION_TIME=1000;MAX_COMPACT_TIME=10000;'
+[DEBUG] Settings.getDataFile() - file: '[JAR]/../../dependency-check-data/11.0'
+[DEBUG] Settings.getDataFile() - transforming filename
+[DEBUG] Settings.getDataFile() - jar file: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3'
+[DEBUG] Settings.getDataFile() - returning: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3/../../dependency-check-data/11.0'
+[DEBUG] Lock file created (main) dcddcdeee53f5d970e5e0c450024c82c @ 2026-06-29 00:36:51.684
+[DEBUG] Loading driver 'org.h2.Driver'
+[DEBUG] Settings.getDataFile() - file: '[JAR]/../../dependency-check-data/11.0'
+[DEBUG] Settings.getDataFile() - transforming filename
+[DEBUG] Settings.getDataFile() - jar file: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3'
+[DEBUG] Settings.getDataFile() - returning: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3/../../dependency-check-data/11.0'
+[DEBUG] Data directory: /Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3/../../dependency-check-data/11.0
+[DEBUG] Connection String: 'jdbc:h2:file:/Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/odc;AUTOCOMMIT=ON;CACHE_SIZE=65536;RETENTION_TIME=1000;MAX_COMPACT_TIME=10000;'
+[DEBUG] Settings.getDataFile() - file: '[JAR]/../../dependency-check-data/11.0'
+[DEBUG] Settings.getDataFile() - transforming filename
+[DEBUG] Settings.getDataFile() - jar file: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3'
+[DEBUG] Settings.getDataFile() - returning: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3/../../dependency-check-data/11.0'
+[DEBUG] Need to create DB Structure: false
+[DEBUG] Loading database connection
+[DEBUG] Connection String: jdbc:h2:file:/Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/odc;AUTOCOMMIT=ON;CACHE_SIZE=65536;RETENTION_TIME=1000;MAX_COMPACT_TIME=10000;
+[DEBUG] Database User: dcuser
+[DEBUG] Database product: h2
+[DEBUG] DC Schema: 5.5
+[DEBUG] DB Schema: 5.5
+[INFO] Checking for updates
+[DEBUG] rate limited call delay: 5000
+[DEBUG] rate limited call delay: 5000
+[DEBUG] rate limited call delay: 5000
+[DEBUG] rate limited call delay: 5000
+[DEBUG] requesting URI: https://services.nvd.nist.gov/rest/json/cves/2.0?resultsPerPage=2000&startIndex=0
+[DEBUG] Ticket taken At: 00:36:51; count: 1; by 102
+[DEBUG] Requested At: 00:36:51; URI: /rest/json/cves/2.0?resultsPerPage=2000&startIndex=0
+[DEBUG] Ticket returned At: 00:36:57; count: 2; by 102
+[DEBUG] Status Code: 404
+[DEBUG] Reason: Not Found
+[DEBUG] Response Headers:
+[DEBUG] Key : date ,Value : Sun, 28 Jun 2026 19:06:57 GMT
+[DEBUG] Key : content-length ,Value : 0
+[DEBUG] Key : message ,Value : Invalid apiKey.
+[DEBUG] Key : x-frame-options ,Value : SAMEORIGIN
+[DEBUG] Key : access-control-allow-origin ,Value : *
+[DEBUG] Key : access-control-allow-headers ,Value : accept, apiKey, content-type, origin, x-requested-with
+[DEBUG] Key : access-control-allow-methods ,Value : GET, HEAD, OPTIONS
+[DEBUG] Key : access-control-allow-credentials ,Value : false
+[DEBUG] Key : strict-transport-security ,Value : max-age=31536000
+[DEBUG] Key : cf-cache-status ,Value : DYNAMIC
+[DEBUG] Key : set-cookie ,Value : __cf_bm=Z9qtpHA4_rZ3h1TvIzM7YwYa7RWJXaFgoxFIDFedeNQ-1782673613.1353738-1.0.1.1-D1Tohvghim6UG.qpODKw1HdLrmDaviI877hocLJQed32lNfyuF9RrgQ0HnEu6_Tj5q0Dhc.RYCgrmgN7j1XkrcBuajkoWSvCnqR1Tbc5sj2yhNlNMG9SI6nBZPLPYEM4; HttpOnly; SameSite=None; Secure; Path=/; Domain=nist.gov; Expires=Sun, 28 Jun 2026 19:36:57 GMT
+[DEBUG] Key : set-cookie ,Value : _cfuvid=Rq6Wpwl3hiVpaL9DHWUETBIzsDmER1pxVn7kPCo8cUw-1782673613.1353738-1.0.1.1-wJyXYMGUV51v1wbJoqhkhAjZVGhQaHb4a.q_8l369_k; HttpOnly; SameSite=None; Secure; Path=/; Domain=nist.gov
+[DEBUG] Key : server-timing ,Value : cfCacheStatus;desc="DYNAMIC"
+[DEBUG] Key : server-timing ,Value : cfEdge;dur=5,cfOrigin;dur=3959
+[DEBUG] Key : server ,Value : cloudflare
+[DEBUG] Key : cf-ray ,Value : a12ef8a21b85088a-ORD
+[ERROR] Error updating the NVD Data
+org.owasp.dependencycheck.data.update.exception.UpdateException: Error updating the NVD Data
+    at org.owasp.dependencycheck.data.update.NvdApiDataSource.processApi (NvdApiDataSource.java:399)
+    at org.owasp.dependencycheck.data.update.NvdApiDataSource.update (NvdApiDataSource.java:117)
+    at org.owasp.dependencycheck.Engine.doUpdates (Engine.java:903)
+    at org.owasp.dependencycheck.Engine.initializeAndUpdateDatabase (Engine.java:708)
+    at org.owasp.dependencycheck.Engine.analyzeDependencies (Engine.java:634)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.runCheck (BaseDependencyCheckMojo.java:2069)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.execute (BaseDependencyCheckMojo.java:1267)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+Caused by: java.lang.NullPointerException: Cannot read the array length because "bytes" is null
+    at java.lang.String.<init> (String.java:1414)
+    at io.github.jeremylong.openvulnerability.client.nvd.NvdCveClient._next (NvdCveClient.java:440)
+    at io.github.jeremylong.openvulnerability.client.nvd.NvdCveClient.next (NvdCveClient.java:379)
+    at org.owasp.dependencycheck.data.update.NvdApiDataSource.processApi (NvdApiDataSource.java:355)
+    at org.owasp.dependencycheck.data.update.NvdApiDataSource.update (NvdApiDataSource.java:117)
+    at org.owasp.dependencycheck.Engine.doUpdates (Engine.java:903)
+    at org.owasp.dependencycheck.Engine.initializeAndUpdateDatabase (Engine.java:708)
+    at org.owasp.dependencycheck.Engine.analyzeDependencies (Engine.java:634)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.runCheck (BaseDependencyCheckMojo.java:2069)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.execute (BaseDependencyCheckMojo.java:1267)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+[DEBUG] Settings.getDataFile() - file: '[JAR]/../../dependency-check-data/11.0'
+[DEBUG] Settings.getDataFile() - transforming filename
+[DEBUG] Settings.getDataFile() - jar file: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3'
+[DEBUG] Settings.getDataFile() - returning: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3/../../dependency-check-data/11.0'
+[DEBUG] Settings.getDataFile() - file: '[JAR]/../../dependency-check-data/11.0'
+[DEBUG] Settings.getDataFile() - transforming filename
+[DEBUG] Settings.getDataFile() - jar file: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3'
+[DEBUG] Settings.getDataFile() - returning: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3/../../dependency-check-data/11.0'
+[DEBUG] Last updated: 1782673076
+[DEBUG] Now: 1782673617795
+[DEBUG] Begin Hosted Suppressions file update
+[DEBUG] Settings.getDataFile() - file: '[JAR]/../../dependency-check-data/11.0'
+[DEBUG] Settings.getDataFile() - transforming filename
+[DEBUG] Settings.getDataFile() - jar file: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3'
+[DEBUG] Settings.getDataFile() - returning: '/Users/jabezasir/.m2/repository/org/owasp/dependency-check-utils/12.1.3/../../dependency-check-data/11.0'
+[DEBUG] Lock file created (main) da9d833b33484d25f50822ee1b6589d7 @ 2026-06-29 00:36:57.824
+[DEBUG] Hosted Suppressions URL: https://dependency-check.github.io/DependencyCheck/suppressions/publishedSuppressions.xml
+[DEBUG] Lock released (main) da9d833b33484d25f50822ee1b6589d7 @ 2026-06-29 00:36:58.343
+[INFO] Updating CISA Known Exploited Vulnerability list: https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
+[INFO] Begin database defrag
+[INFO] End database defrag (42 ms)
+[DEBUG] Closing database
+[DEBUG] Cache cleared
+[DEBUG] Connection closed
+[DEBUG] Resources released
+[DEBUG] Begin deregister driver
+[DEBUG] End deregister driver
+[DEBUG] Lock released (main) dcddcdeee53f5d970e5e0c450024c82c @ 2026-06-29 00:36:59.047
+[WARNING] Unable to update 1 or more Cached Web DataSource, using local data instead. Results may not include recent vulnerabilities.
+[DEBUG] Update Error
+org.owasp.dependencycheck.data.update.exception.UpdateException: Error updating the NVD Data
+    at org.owasp.dependencycheck.data.update.NvdApiDataSource.processApi (NvdApiDataSource.java:399)
+    at org.owasp.dependencycheck.data.update.NvdApiDataSource.update (NvdApiDataSource.java:117)
+    at org.owasp.dependencycheck.Engine.doUpdates (Engine.java:903)
+    at org.owasp.dependencycheck.Engine.initializeAndUpdateDatabase (Engine.java:708)
+    at org.owasp.dependencycheck.Engine.analyzeDependencies (Engine.java:634)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.runCheck (BaseDependencyCheckMojo.java:2069)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.execute (BaseDependencyCheckMojo.java:1267)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+Caused by: java.lang.NullPointerException: Cannot read the array length because "bytes" is null
+    at java.lang.String.<init> (String.java:1414)
+    at io.github.jeremylong.openvulnerability.client.nvd.NvdCveClient._next (NvdCveClient.java:440)
+    at io.github.jeremylong.openvulnerability.client.nvd.NvdCveClient.next (NvdCveClient.java:379)
+    at org.owasp.dependencycheck.data.update.NvdApiDataSource.processApi (NvdApiDataSource.java:355)
+    at org.owasp.dependencycheck.data.update.NvdApiDataSource.update (NvdApiDataSource.java:117)
+    at org.owasp.dependencycheck.Engine.doUpdates (Engine.java:903)
+    at org.owasp.dependencycheck.Engine.initializeAndUpdateDatabase (Engine.java:708)
+    at org.owasp.dependencycheck.Engine.analyzeDependencies (Engine.java:634)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.runCheck (BaseDependencyCheckMojo.java:2069)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.execute (BaseDependencyCheckMojo.java:1267)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+[ERROR] Unable to continue dependency-check analysis.
+[DEBUG] 
+org.owasp.dependencycheck.exception.NoDataException: No documents exist
+    at org.owasp.dependencycheck.Engine.ensureDataExists (Engine.java:1160)
+    at org.owasp.dependencycheck.Engine.analyzeDependencies (Engine.java:638)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.runCheck (BaseDependencyCheckMojo.java:2069)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.execute (BaseDependencyCheckMojo.java:1267)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+[INFO] Element event queue destroyed: org.apache.commons.jcs3.engine.control.event.ElementEventQueue@120350eb
+[INFO] In DISPOSE, [NODEAUDIT] fromRemote [false]
+[INFO] In DISPOSE, [NODEAUDIT] auxiliary [NODEAUDIT]
+[INFO] In DISPOSE, [NODEAUDIT] put 0 into auxiliary [NODEAUDIT]
+[INFO] In dispose, destroying event queue.
+[INFO] Cache event queue destroyed: CacheEventQueue [listenerId=262150612, cacheName=NODEAUDIT]
+[INFO] Region [NODEAUDIT] : Saving keys to: NODEAUDIT, key count: 0
+[DEBUG] Resetting Indexed File [/Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache/NODEAUDIT.key]
+[INFO] Region [NODEAUDIT] : Finished saving keys.
+[DEBUG] Region [NODEAUDIT] : Closing files, base filename: NODEAUDIT
+[INFO] Region [NODEAUDIT] : Shutdown complete.
+[INFO] In DISPOSE, [NODEAUDIT] disposing of memory cache.
+[INFO] Memory Cache dispose called.
+[INFO] In DISPOSE, [CENTRAL] fromRemote [false]
+[INFO] In DISPOSE, [CENTRAL] auxiliary [CENTRAL]
+[INFO] In DISPOSE, [CENTRAL] put 0 into auxiliary [CENTRAL]
+[INFO] In dispose, destroying event queue.
+[INFO] Cache event queue destroyed: CacheEventQueue [listenerId=262150612, cacheName=CENTRAL]
+[INFO] Region [CENTRAL] : Saving keys to: CENTRAL, key count: 0
+[DEBUG] Resetting Indexed File [/Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache/CENTRAL.key]
+[INFO] Region [CENTRAL] : Finished saving keys.
+[DEBUG] Region [CENTRAL] : Closing files, base filename: CENTRAL
+[INFO] Region [CENTRAL] : Shutdown complete.
+[INFO] In DISPOSE, [CENTRAL] disposing of memory cache.
+[INFO] Memory Cache dispose called.
+[INFO] In DISPOSE, [POM] fromRemote [false]
+[INFO] In DISPOSE, [POM] auxiliary [POM]
+[INFO] In DISPOSE, [POM] put 0 into auxiliary [POM]
+[INFO] In dispose, destroying event queue.
+[INFO] Cache event queue destroyed: CacheEventQueue [listenerId=262150612, cacheName=POM]
+[INFO] Region [POM] : Saving keys to: POM, key count: 0
+[DEBUG] Resetting Indexed File [/Users/jabezasir/.m2/repository/org/owasp/dependency-check-data/11.0/cache/POM.key]
+[INFO] Region [POM] : Finished saving keys.
+[DEBUG] Region [POM] : Closing files, base filename: POM
+[INFO] Region [POM] : Shutdown complete.
+[INFO] In DISPOSE, [POM] disposing of memory cache.
+[INFO] Memory Cache dispose called.
+[INFO] In dispose, destroying event queue.
+[ERROR] Region [NODEAUDIT] : Not alive and dispose was called, filename: NODEAUDIT
+[INFO] In dispose, destroying event queue.
+[ERROR] Region [CENTRAL] : Not alive and dispose was called, filename: CENTRAL
+[INFO] In dispose, destroying event queue.
+[ERROR] Region [POM] : Not alive and dispose was called, filename: POM
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  8.806 s
+[INFO] Finished at: 2026-06-29T00:36:59+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.owasp:dependency-check-maven:12.1.3:check (default-cli) on project backend: Fatal exception(s) analyzing : One or more exceptions occurred during analysis:
+[ERROR] 	UpdateException: Error updating the NVD Data
+[ERROR] 		caused by NullPointerException: Cannot read the array length because "bytes" is null
+[ERROR] 	NoDataException: No documents exist
+[ERROR] -> [Help 1]
+org.apache.maven.lifecycle.LifecycleExecutionException: Failed to execute goal org.owasp:dependency-check-maven:12.1.3:check (default-cli) on project backend: Fatal exception(s) analyzing 
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:333)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+Caused by: org.apache.maven.plugin.MojoExecutionException: Fatal exception(s) analyzing 
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.handleAnalysisExceptions (BaseDependencyCheckMojo.java:2141)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.runCheck (BaseDependencyCheckMojo.java:2071)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.execute (BaseDependencyCheckMojo.java:1267)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+Caused by: org.owasp.dependencycheck.exception.ExceptionCollection: One or more exceptions occurred during analysis:
+	UpdateException: Error updating the NVD Data
+		caused by NullPointerException: Cannot read the array length because "bytes" is null
+	NoDataException: No documents exist
+    at org.owasp.dependencycheck.Engine.throwFatalExceptionCollection (Engine.java:1178)
+    at org.owasp.dependencycheck.Engine.analyzeDependencies (Engine.java:640)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.runCheck (BaseDependencyCheckMojo.java:2069)
+    at org.owasp.dependencycheck.maven.BaseDependencyCheckMojo.execute (BaseDependencyCheckMojo.java:1267)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:328)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:316)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:212)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:174)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:75)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:162)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:159)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:919)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:285)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:207)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:362)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+[ERROR] 
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+[DEBUG] Shutting down adapter factory; available factories [file-lock, rwlock-local, semaphore-local, noop]; available name mappers [discriminating, file-gaecv, file-gav, file-hgaecv, file-hgav, file-static, gaecv, gav, static]
+[DEBUG] Shutting down 'file-lock' factory
+[DEBUG] Shutting down 'rwlock-local' factory
+[DEBUG] Shutting down 'semaphore-local' factory
+[DEBUG] Shutting down 'noop' factory
