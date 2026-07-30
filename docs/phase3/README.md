@@ -4,7 +4,7 @@ Production-ready design for Phase 3 of the BlueCollar marketplace platform. This
 
 ## Current Stack (Phase 1–2)
 
-- Spring Boot 4.x, Java 25, PostgreSQL, Flyway, JWT Authentication
+- Spring Boot 3.4.x, Java 21, PostgreSQL, Flyway, JWT Authentication
 - Modules: Category, Skill, Worker, Customer, Address, Booking, Review, Admin, Auth
 - Patterns: `com.bluecollar.*` package-by-feature, `BaseEntity`, `ApiResponse`, record DTOs, Flyway migrations (V2–V11)
 
