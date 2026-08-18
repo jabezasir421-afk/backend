@@ -28,7 +28,11 @@ public class AddressController {
     private final AddressService addressService;
 
     @PostMapping
-    @Operation(summary = "Create a new address")
+    @Operation(
+            summary = "Create a new address",
+            description = "Create a new address for the authenticated customer.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<AddressResponse>> createAddress(
             @Valid @RequestBody CreateAddressRequest request
     ) {
@@ -38,19 +42,31 @@ public class AddressController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all active addresses", description = "Retrieve all active addresses for the authenticated customer")
+    @Operation(
+            summary = "Get all active addresses",
+            description = "Retrieve all active addresses for the authenticated customer.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<List<AddressResponse>>> getMyAddresses() {
         return ResponseEntity.ok(ApiResponse.success(addressService.getMyAddresses(), "Addresses fetched successfully"));
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get address by ID")
+    @Operation(
+            summary = "Get address by ID",
+            description = "Retrieve a specific address owned by the authenticated customer.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<AddressResponse>> getMyAddressById(@PathVariable UUID id) {
         return ResponseEntity.ok(ApiResponse.success(addressService.getMyAddressById(id), "Address fetched successfully"));
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update an address", description = "Update address details. Only active addresses can be updated.")
+    @Operation(
+            summary = "Update an address",
+            description = "Update address details owned by the authenticated customer. Only active addresses can be updated.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<AddressResponse>> updateAddress(
             @PathVariable UUID id,
             @Valid @RequestBody UpdateAddressRequest request
@@ -61,8 +77,9 @@ public class AddressController {
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Deactivate an address",
-            description = "Soft-delete (deactivate) an address. The address remains in the system for booking history but is no longer available for new bookings. " +
-                    "If the deleted address is marked as default, the default status is cleared."
+            description = "Soft-delete (deactivate) an address owned by the authenticated customer. The address remains in the system for booking history but is no longer available for new bookings. " +
+                    "If the deleted address is marked as default, the default status is cleared.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<ApiResponse<Void>> deleteAddress(@PathVariable UUID id) {
         addressService.deleteAddress(id);
@@ -70,7 +87,11 @@ public class AddressController {
     }
 
     @PutMapping("/{id}/default")
-    @Operation(summary = "Set default address", description = "Mark this address as the default for new bookings. Clears the default status from any previously default address.")
+    @Operation(
+            summary = "Set default address",
+            description = "Mark an address owned by the authenticated customer as the default for new bookings. Clears the default status from any previously default address.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<AddressResponse>> setDefaultAddress(@PathVariable UUID id) {
         return ResponseEntity.ok(ApiResponse.success(addressService.setDefaultAddress(id), "Default address updated successfully"));
     }
