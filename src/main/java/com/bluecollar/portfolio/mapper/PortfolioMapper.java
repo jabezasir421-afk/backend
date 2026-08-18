@@ -4,6 +4,7 @@ import com.bluecollar.portfolio.dto.CertificateResponse;
 import com.bluecollar.portfolio.dto.IdentityDocumentResponse;
 import com.bluecollar.portfolio.dto.PortfolioImageResponse;
 import com.bluecollar.portfolio.dto.PortfolioSummaryResponse;
+import com.bluecollar.portfolio.dto.PublicPortfolioResponse;
 import com.bluecollar.portfolio.entity.WorkerCertificate;
 import com.bluecollar.portfolio.entity.WorkerIdentityDocument;
 import com.bluecollar.portfolio.entity.WorkerPortfolioItem;
@@ -74,6 +75,19 @@ public class PortfolioMapper {
                 worker.getId(),
                 resolvePublicUrl(worker.getProfilePhotoFileId()),
                 worker.getProfileCompletionPercent() == null ? 0 : worker.getProfileCompletionPercent(),
+                images,
+                certificates
+        );
+    }
+
+    public PublicPortfolioResponse toPublicPortfolioResponse(
+            Worker worker,
+            List<PortfolioImageResponse> images,
+            List<CertificateResponse> certificates
+    ) {
+        return new PublicPortfolioResponse(
+                worker.getId(),
+                resolvePublicUrl(worker.getProfilePhotoFileId()),
                 images,
                 certificates
         );

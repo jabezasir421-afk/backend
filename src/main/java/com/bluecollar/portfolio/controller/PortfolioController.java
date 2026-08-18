@@ -150,7 +150,13 @@ public class PortfolioController {
     }
 
     @GetMapping("/api/v1/workers/{id}/portfolio")
-    public ResponseEntity<ApiResponse<List<PortfolioImageResponse>>> getPublicPortfolio(@PathVariable UUID id) {
+    @Operation(
+            summary = "Get worker's public portfolio",
+            description = "Retrieve a worker's public portfolio including profile photo, portfolio images, and verified certificates. " +
+                    "Does not include profile completion percentage (private metric).",
+            security = {}
+    )
+    public ResponseEntity<ApiResponse<PublicPortfolioResponse>> getPublicPortfolio(@PathVariable UUID id) {
         return ResponseEntity.ok(ApiResponse.success(
                 portfolioService.getPublicPortfolio(id),
                 "Public portfolio fetched successfully"

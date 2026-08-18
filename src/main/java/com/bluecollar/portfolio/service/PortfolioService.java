@@ -31,5 +31,5 @@ public interface PortfolioService {
 
     PortfolioSummaryResponse setProfilePhoto(SetProfilePhotoRequest request);
 
-    List<PortfolioImageResponse> getPublicPortfolio(UUID workerId);
+    PublicPortfolioResponse getPublicPortfolio(UUID workerId);
 }

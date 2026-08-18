@@ -232,14 +232,22 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PortfolioImageResponse> getPublicPortfolio(UUID workerId) {
+    public PublicPortfolioResponse getPublicPortfolio(UUID workerId) {
         Worker worker = workerRepository.findById(workerId)
                 .filter(w -> Boolean.TRUE.equals(w.getActive()))
                 .orElseThrow(() -> new WorkerNotFoundException(workerId));
 
-        return portfolioItemRepository.findByWorkerIdAndActiveTrueOrderByDisplayOrderAsc(worker.getId()).stream()
+        List<PortfolioImageResponse> images = portfolioItemRepository
+                .findByWorkerIdAndActiveTrueOrderByDisplayOrderAsc(worker.getId()).stream()
                 .map(portfolioMapper::toImageResponse)
                 .toList();
+
+        List<CertificateResponse> certificates = certificateRepository
+                .findByWorkerIdAndActiveTrueOrderByCreatedAtDesc(worker.getId()).stream()
+                .map(portfolioMapper::toCertificateResponse)
+                .toList();
+
+        return portfolioMapper.toPublicPortfolioResponse(worker, images, certificates);
     }
 
     private PortfolioSummaryResponse buildSummary(Worker worker) {

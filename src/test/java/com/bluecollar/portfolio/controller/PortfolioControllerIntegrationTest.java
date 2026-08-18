@@ -272,8 +272,9 @@ class PortfolioControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Public portfolio fetched successfully"))
-                .andExpect(jsonPath("$.data", hasSize(1)))
-                .andExpect(jsonPath("$.data[0].title").value("Public project"));
+                .andExpect(jsonPath("$.data.workerId").value(worker.getId().toString()))
+                .andExpect(jsonPath("$.data.images", hasSize(1)))
+                .andExpect(jsonPath("$.data.images[0].title").value("Public project"));
     }
 
     @Test
