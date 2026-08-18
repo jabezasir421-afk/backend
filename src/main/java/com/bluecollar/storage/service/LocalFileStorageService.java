@@ -79,6 +79,18 @@ public class LocalFileStorageService implements FileStorageService {
         return Files.exists(resolvePath(key));
     }
 
+    @Override
+    public InputStream getInputStream(String key) {
+        try {
+            return Files.newInputStream(resolvePath(key));
+        } catch (IOException ex) {
+            throw new FileUploadException(
+                    "Failed to read file: " + key,
+                    ex
+            );
+        }
+    }
+
     private Path resolvePath(String key) {
 
         Path baseDirectory = Path.of(storageProperties.getLocal().getBasePath())

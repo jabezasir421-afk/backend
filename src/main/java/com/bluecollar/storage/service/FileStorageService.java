@@ -11,4 +11,6 @@ public interface FileStorageService {
     String getDownloadUrl(String key, long expirySeconds);
 
     boolean exists(String key);
+
+    InputStream getInputStream(String key);
 }

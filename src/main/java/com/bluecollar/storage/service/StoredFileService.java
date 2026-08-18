@@ -1,5 +1,6 @@
 package com.bluecollar.storage.service;
 
+import com.bluecollar.storage.dto.FileDownloadInfo;
 import com.bluecollar.storage.dto.StoredFileResponse;
 import com.bluecollar.storage.entity.EntityType;
 import com.bluecollar.storage.entity.FileCategory;
@@ -21,4 +22,6 @@ public interface StoredFileService {
     void delete(UUID id);
 
     String getPublicDownloadUrl(UUID fileId);
+
+    FileDownloadInfo download(UUID id);
 }

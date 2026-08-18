@@ -5,6 +5,7 @@ import com.bluecollar.common.exception.UnauthorizedException;
 import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
 import com.bluecollar.storage.config.StorageProperties;
+import com.bluecollar.storage.dto.FileDownloadInfo;
 import com.bluecollar.storage.dto.StoredFileResponse;
 import com.bluecollar.storage.entity.EntityType;
 import com.bluecollar.storage.entity.FileCategory;
@@ -130,6 +131,27 @@ public class StoredFileServiceImpl implements StoredFileService {
         assertOwnerOrAdmin(storedFile, currentUser);
         storedFile.setActive(false);
         storedFileRepository.save(storedFile);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FileDownloadInfo download(UUID id) {
+        AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
+        StoredFile storedFile = findActiveFile(id);
+
+        if (storedFile.getFileCategory() == FileCategory.IDENTITY_DOC && currentUser.role() != UserRole.ADMIN) {
+            throw new UnauthorizedException("You do not have access to this file");
+        }
+
+        assertOwnerOrAdmin(storedFile, currentUser);
+
+        var inputStream = fileStorageService.getInputStream(storedFile.getStorageKey());
+        return new FileDownloadInfo(
+                inputStream,
+                storedFile.getMimeType(),
+                storedFile.getOriginalName(),
+                storedFile.getSizeBytes()
+        );
     }
 
     private StoredFile findActiveFile(UUID id) {
