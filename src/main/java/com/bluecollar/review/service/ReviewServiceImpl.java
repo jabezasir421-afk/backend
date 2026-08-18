@@ -147,6 +147,15 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public void activateReview(UUID id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ReviewNotFoundException(id));
+        review.setActive(true);
+        reviewRepository.save(review);
+        recalculateWorkerRating(review.getWorker().getId());
+    }
+
+    @Override
     public void reportReview(UUID reviewId, ReportReviewRequest request) {
         Review review = findActiveReview(reviewId);
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();

@@ -55,6 +55,13 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.success(null, "Review deactivated successfully"));
     }
 
+    @PutMapping("/{id}/activate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Void>> activateReview(@PathVariable UUID id) {
+        reviewService.activateReview(id);
+        return ResponseEntity.ok(ApiResponse.success(null, "Review activated successfully"));
+    }
+
     @PostMapping("/{id}/report")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'WORKER')")
     public ResponseEntity<ApiResponse<Void>> reportReview(

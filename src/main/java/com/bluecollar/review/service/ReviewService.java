@@ -20,6 +20,8 @@ public interface ReviewService {
 
     void deactivateReview(UUID id);
 
+    void activateReview(UUID id);
+
     void reportReview(UUID reviewId, ReportReviewRequest request);
 
     Page<AdminReviewResponse> getPendingReviews(Pageable pageable);
