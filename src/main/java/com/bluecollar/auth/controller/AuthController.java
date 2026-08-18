@@ -36,8 +36,10 @@ public class AuthController {
 
     @PostMapping("/register/worker")
     @Operation(
-            summary = "Register a new worker",
-            description = "Register a new worker account without requiring authentication",
+            summary = "Self-register as a new worker",
+            description = "Public worker self-registration endpoint. Users create their own account and set their password. " +
+                    "This is the customer-facing worker registration flow. " +
+                    "See POST /workers for admin worker provisioning.",
             security = {}
     )
     public ResponseEntity<ApiResponse<AuthResponse>> registerWorker(

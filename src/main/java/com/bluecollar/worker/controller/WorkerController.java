@@ -31,8 +31,11 @@ public class WorkerController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(
-            summary = "Create a new worker",
-            description = "Admin endpoint to create a new worker profile",
+            summary = "Provision a new worker (admin only)",
+            description = "Admin-only worker provisioning endpoint. Admins create worker profiles without a password. " +
+                    "Provisioned workers must authenticate separately (admin provides temporary credentials or other flow). " +
+                    "This is the admin backend worker creation flow. " +
+                    "See POST /auth/register/worker for customer-facing self-registration.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<ApiResponse<WorkerResponse>> createWorker(@Valid @RequestBody CreateWorkerRequest request) {
