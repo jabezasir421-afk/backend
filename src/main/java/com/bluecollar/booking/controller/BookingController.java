@@ -181,8 +181,10 @@ public class BookingController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(
-            summary = "Get all bookings",
-            description = "Admin endpoint to retrieve all bookings with optional filtering by status, category, worker, customer, or date range",
+            summary = "Search all bookings (admin only)",
+            description = "Admin-only endpoint for searching all bookings across the platform. " +
+                    "Supports filtering by status, category, worker, customer, and date range. " +
+                    "WARNING: Exposing this to non-admins would allow unauthorized data access.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<ApiResponse<Page<BookingResponse>>> getAllBookings(
