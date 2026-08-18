@@ -70,13 +70,17 @@ public class StoredFileServiceImpl implements StoredFileService {
         }
 
         validateUpload(file, fileCategory, content);
+        validateFileCategory(fileCategory, entityType, entityId);
+
+        EntityType resolvedEntityType = entityType == null ? mapDefaultEntityType(fileCategory) : entityType;
+        validateCategoryEntityMatch(fileCategory, resolvedEntityType);
 
         String storageKey = buildStorageKey(currentUser.userAccountId(), fileCategory, file.getOriginalFilename());
         String checksum = storeWithChecksum(storageKey, content, file.getContentType());
 
         StoredFile storedFile = StoredFile.builder()
                 .ownerUserId(currentUser.userAccountId())
-                .entityType(entityType == null ? mapDefaultEntityType(fileCategory) : entityType)
+                .entityType(resolvedEntityType)
                 .entityId(entityId)
                 .fileCategory(fileCategory)
                 .storageKey(storageKey)
@@ -177,6 +181,31 @@ public class StoredFileServiceImpl implements StoredFileService {
         System.arraycopy(content, 0, header, 0, headerLength);
         if (!matchesMime(header, mimeType)) {
             throw new FileUploadException("File content does not match declared MIME type");
+        }
+    }
+
+    private void validateFileCategory(FileCategory fileCategory, EntityType entityType, UUID entityId) {
+        boolean requiresEntity = fileCategory == FileCategory.CERTIFICATE || fileCategory == FileCategory.IDENTITY_DOC;
+
+        if (requiresEntity && entityId == null) {
+            throw new FileUploadException("entityId is required for file category " + fileCategory);
+        }
+
+        if (!requiresEntity && entityId != null) {
+            throw new FileUploadException("entityId should not be provided for file category " + fileCategory);
+        }
+    }
+
+    private void validateCategoryEntityMatch(FileCategory fileCategory, EntityType entityType) {
+        boolean valid = switch (fileCategory) {
+            case PROFILE_PHOTO -> entityType == EntityType.WORKER;
+            case PORTFOLIO_IMAGE -> entityType == EntityType.PORTFOLIO;
+            case CERTIFICATE -> entityType == EntityType.CERTIFICATE;
+            case IDENTITY_DOC -> entityType == EntityType.IDENTITY_DOC;
+        };
+
+        if (!valid) {
+            throw new FileUploadException("File category " + fileCategory + " cannot be used with entity type " + entityType);
         }
     }
 
