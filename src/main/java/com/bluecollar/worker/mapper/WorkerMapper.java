@@ -28,9 +28,9 @@ public class WorkerMapper {
                 .experienceYears(request.experienceYears())
                 .bio(request.bio())
                 .hourlyRate(request.hourlyRate())
-                .available(request.available())
-                .verified(request.verified())
-                .active(request.active())
+                .available(false)
+                .verified(false)
+                .active(true)
                 .category(category)
                 .skills(new LinkedHashSet<>(skills))
                 .build();
@@ -71,9 +71,6 @@ public class WorkerMapper {
         worker.setExperienceYears(request.experienceYears());
         worker.setBio(request.bio());
         worker.setHourlyRate(request.hourlyRate());
-        worker.setAvailable(request.available());
-        worker.setVerified(request.verified());
-        worker.setActive(request.active());
         worker.setCategory(category);
         worker.setSkills(new LinkedHashSet<>(skills));
     }

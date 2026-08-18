@@ -126,9 +126,6 @@ class WorkerServiceTest {
                 5,
                 "Experienced plumber",
                 BigDecimal.valueOf(50),
-                null,
-                null,
-                null,
                 categoryId,
                 Set.of(skillId)
         );
@@ -143,9 +140,6 @@ class WorkerServiceTest {
                 3,
                 "Expert electrician",
                 BigDecimal.valueOf(60),
-                true,
-                true,
-                true,
                 categoryId,
                 Set.of(skillId)
         );
@@ -212,7 +206,7 @@ class WorkerServiceTest {
         CreateWorkerRequest requestWithMissingSkill = new CreateWorkerRequest(
                 "John", "Doe", "+1234567890", "john.doe@example.com",
                 Gender.MALE, LocalDate.of(1990, 1, 1), 5, "Bio",
-                BigDecimal.valueOf(50), null, null, null,
+                BigDecimal.valueOf(50),
                 categoryId, Set.of(missingSkillId)
         );
 

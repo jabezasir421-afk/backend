@@ -38,15 +38,6 @@ public record UpdateWorkerRequest(
         @Positive(message = "Hourly rate must be positive")
         BigDecimal hourlyRate,
 
-        @NotNull(message = "Available status is required")
-        Boolean available,
-
-        @NotNull(message = "Verified status is required")
-        Boolean verified,
-
-        @NotNull(message = "Active status is required")
-        Boolean active,
-
         @NotNull(message = "Category is required")
         UUID categoryId,
 

@@ -38,12 +38,6 @@ public record CreateWorkerRequest(
         @Positive(message = "Hourly rate must be positive")
         BigDecimal hourlyRate,
 
-        Boolean available,
-
-        Boolean verified,
-
-        Boolean active,
-
         @NotNull(message = "Category is required")
         UUID categoryId,
 
