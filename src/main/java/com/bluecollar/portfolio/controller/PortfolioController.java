@@ -3,6 +3,9 @@ package com.bluecollar.portfolio.controller;
 import com.bluecollar.common.dto.ApiResponse;
 import com.bluecollar.portfolio.dto.*;
 import com.bluecollar.portfolio.service.PortfolioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Portfolio", description = "Worker portfolio management including images, certificates, and identity documents")
 public class PortfolioController {
 
     private final PortfolioService portfolioService;
@@ -94,6 +98,11 @@ public class PortfolioController {
 
     @PostMapping("/api/v1/workers/me/portfolio/identity-documents")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Submit an identity document",
+            description = "Upload an identity document for verification. Documents are immutable once submitted for compliance/audit purposes.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<IdentityDocumentResponse>> addIdentityDocument(
             @Valid @RequestBody AddIdentityDocumentRequest request
     ) {
@@ -104,11 +113,29 @@ public class PortfolioController {
 
     @GetMapping("/api/v1/workers/me/portfolio/identity-documents")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Get submitted identity documents",
+            description = "Retrieve all identity documents submitted for verification. Shows document type, verification status, and any rejection reasons.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<List<IdentityDocumentResponse>>> getMyIdentityDocuments() {
         return ResponseEntity.ok(ApiResponse.success(
                 portfolioService.getMyIdentityDocuments(),
                 "Identity documents fetched successfully"
         ));
+    }
+
+    @DeleteMapping("/api/v1/workers/me/portfolio/identity-documents/{id}")
+    @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Deactivate an identity document",
+            description = "Soft-delete (deactivate) an identity document. The document remains in the audit trail for compliance but is no longer active. " +
+                    "Cannot deactivate verified documents—contact admin if correction is needed.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<ApiResponse<Void>> deleteIdentityDocument(@PathVariable UUID id) {
+        portfolioService.deleteIdentityDocument(id);
+        return ResponseEntity.ok(ApiResponse.success(null, "Identity document deactivated successfully"));
     }
 
     @PutMapping("/api/v1/workers/me/profile-photo")

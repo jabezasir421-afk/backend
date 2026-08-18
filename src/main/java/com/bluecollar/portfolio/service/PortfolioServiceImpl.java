@@ -208,6 +208,19 @@ public class PortfolioServiceImpl implements PortfolioService {
     }
 
     @Override
+    public void deleteIdentityDocument(UUID id) {
+        Worker worker = findWorkerByCurrentUser();
+        WorkerIdentityDocument document = identityDocumentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Identity document not found"));
+        if (!document.getWorker().getId().equals(worker.getId())) {
+            throw new RuntimeException("Unauthorized");
+        }
+        document.setActive(false);
+        identityDocumentRepository.save(document);
+        profileCompletionService.recalculateAndSave(worker);
+    }
+
+    @Override
     public PortfolioSummaryResponse setProfilePhoto(SetProfilePhotoRequest request) {
         Worker worker = findWorkerByCurrentUser();
         validateOwnedFile(worker, request.fileId(), FileCategory.PROFILE_PHOTO);

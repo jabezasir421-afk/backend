@@ -27,6 +27,8 @@ public interface PortfolioService {
 
     List<IdentityDocumentResponse> getMyIdentityDocuments();
 
+    void deleteIdentityDocument(UUID id);
+
     PortfolioSummaryResponse setProfilePhoto(SetProfilePhotoRequest request);
 
     List<PortfolioImageResponse> getPublicPortfolio(UUID workerId);
