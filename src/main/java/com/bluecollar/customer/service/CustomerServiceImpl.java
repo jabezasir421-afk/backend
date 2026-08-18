@@ -6,6 +6,7 @@ import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
 import com.bluecollar.customer.dto.CustomerResponse;
 import com.bluecollar.customer.dto.UpdateCustomerRequest;
+import com.bluecollar.customer.dto.UpdateProfilePhotoRequest;
 import com.bluecollar.customer.entity.Customer;
 import com.bluecollar.customer.exception.CustomerNotFoundException;
 import com.bluecollar.customer.mapper.CustomerMapper;
@@ -37,6 +38,13 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerResponse updateMyProfile(UpdateCustomerRequest request) {
         Customer customer = findCustomerByCurrentUser();
         customerMapper.updateEntity(customer, request);
+        return customerMapper.toResponse(customerRepository.save(customer));
+    }
+
+    @Override
+    public CustomerResponse updateMyProfilePhoto(UpdateProfilePhotoRequest request) {
+        Customer customer = findCustomerByCurrentUser();
+        customer.setProfilePhotoFileId(request.fileId());
         return customerMapper.toResponse(customerRepository.save(customer));
     }
 

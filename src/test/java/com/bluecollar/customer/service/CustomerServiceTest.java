@@ -70,11 +70,11 @@ class CustomerServiceTest {
         customer.setId(customerId);
         customer.setFirstName("John");
         customer.setLastName("Doe");
-        customer.setAvatarUrl(null);
+        customer.setProfilePhotoFileId(null);
         customer.setActive(true);
         customer.setUserAccount(userAccount);
 
-        updateRequest = new UpdateCustomerRequest("Jane", "Smith", "https://example.com/avatar.jpg");
+        updateRequest = new UpdateCustomerRequest("Jane", "Smith");
 
         response = new CustomerResponse(
                 customerId, userAccountId,
@@ -121,11 +121,12 @@ class CustomerServiceTest {
 
     @Test
     void updateMyProfileShouldUpdateAndReturnUpdatedResponse() {
+        UUID photoFileId = UUID.randomUUID();
         Customer savedCustomer = new Customer();
         savedCustomer.setId(customerId);
         savedCustomer.setFirstName("Jane");
         savedCustomer.setLastName("Smith");
-        savedCustomer.setAvatarUrl("https://example.com/avatar.jpg");
+        savedCustomer.setProfilePhotoFileId(photoFileId);
         savedCustomer.setActive(true);
         savedCustomer.setUserAccount(userAccount);
 
@@ -133,7 +134,7 @@ class CustomerServiceTest {
                 customerId, userAccountId,
                 "Jane", "Smith",
                 "john.doe@example.com", "+919876543210",
-                "https://example.com/avatar.jpg", true, null, null
+                photoFileId, true, null, null
         );
 
         when(customerRepository.findByUserAccountId(userAccountId)).thenReturn(Optional.of(customer));

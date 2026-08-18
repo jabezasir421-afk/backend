@@ -27,7 +27,7 @@ public class CustomerMapper {
                 customer.getLastName(),
                 userAccount.getEmail(),
                 userAccount.getPhoneNumber(),
-                customer.getAvatarUrl(),
+                customer.getProfilePhotoFileId(),
                 customer.getActive(),
                 customer.getCreatedAt(),
                 customer.getUpdatedAt()
@@ -45,7 +45,6 @@ public class CustomerMapper {
     public void updateEntity(Customer customer, UpdateCustomerRequest request) {
         customer.setFirstName(normalize(request.firstName()));
         customer.setLastName(normalize(request.lastName()));
-        customer.setAvatarUrl(normalize(request.avatarUrl()));
     }
 
     private String normalize(String value) {

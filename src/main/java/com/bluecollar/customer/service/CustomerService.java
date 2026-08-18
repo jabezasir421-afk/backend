@@ -2,6 +2,7 @@ package com.bluecollar.customer.service;
 
 import com.bluecollar.customer.dto.CustomerResponse;
 import com.bluecollar.customer.dto.UpdateCustomerRequest;
+import com.bluecollar.customer.dto.UpdateProfilePhotoRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,6 +13,8 @@ public interface CustomerService {
     CustomerResponse getMyProfile();
 
     CustomerResponse updateMyProfile(UpdateCustomerRequest request);
+
+    CustomerResponse updateMyProfilePhoto(UpdateProfilePhotoRequest request);
 
     CustomerResponse getCustomerById(UUID id);
 

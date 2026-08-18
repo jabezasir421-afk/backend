@@ -24,8 +24,8 @@ public class Customer extends BaseEntity {
     @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @Column(name = "avatar_url", length = 500)
-    private String avatarUrl;
+    @Column(name = "profile_photo_file_id")
+    private java.util.UUID profilePhotoFileId;
 
     @Column(nullable = false)
     private Boolean active;

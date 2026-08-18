@@ -10,9 +10,6 @@ public record UpdateCustomerRequest(
 
         @NotBlank(message = "Last name is required")
         @Size(max = 100, message = "Last name must not exceed 100 characters")
-        String lastName,
-
-        @Size(max = 500, message = "Avatar URL must not exceed 500 characters")
-        String avatarUrl
+        String lastName
 ) {
 }

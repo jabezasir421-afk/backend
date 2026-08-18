@@ -10,7 +10,7 @@ public record CustomerResponse(
         String lastName,
         String email,
         String phoneNumber,
-        String avatarUrl,
+        UUID profilePhotoFileId,
         Boolean active,
         Instant createdAt,
         Instant updatedAt
