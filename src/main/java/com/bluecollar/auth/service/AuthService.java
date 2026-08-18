@@ -15,4 +15,10 @@ public interface AuthService {
     void logout(RefreshTokenRequest request);
 
     CurrentUserResponse getCurrentUser();
+
+    void forgotPassword(ForgotPasswordRequest request);
+
+    void resetPassword(ResetPasswordRequest request);
+
+    void changePassword(ChangePasswordRequest request);
 }

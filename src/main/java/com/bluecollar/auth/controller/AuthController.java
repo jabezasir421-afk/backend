@@ -88,4 +88,38 @@ public class AuthController {
     public ResponseEntity<ApiResponse<CurrentUserResponse>> getCurrentUser() {
         return ResponseEntity.ok(ApiResponse.success(authService.getCurrentUser(), "Current user fetched successfully"));
     }
+
+    @PostMapping("/forgot-password")
+    @Operation(
+            summary = "Initiate password reset",
+            description = "Request a password reset. User will receive a reset token via email (simulated in this API). " +
+                    "In production, this would send an email with a reset link.",
+            security = {}
+    )
+    public ResponseEntity<ApiResponse<Void>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        authService.forgotPassword(request);
+        return ResponseEntity.ok(ApiResponse.success(null, "If an account with this email exists, a password reset token has been sent"));
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(
+            summary = "Complete password reset",
+            description = "Reset password using the token sent via email. Requires the reset token and new password.",
+            security = {}
+    )
+    public ResponseEntity<ApiResponse<Void>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request);
+        return ResponseEntity.ok(ApiResponse.success(null, "Password reset successfully"));
+    }
+
+    @PostMapping("/change-password")
+    @Operation(
+            summary = "Change password (authenticated)",
+            description = "Change password for the currently authenticated user. Requires verification of current password.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<ApiResponse<Void>> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        authService.changePassword(request);
+        return ResponseEntity.ok(ApiResponse.success(null, "Password changed successfully"));
+    }
 }

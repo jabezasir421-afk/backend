@@ -88,6 +88,39 @@ public class JwtService {
         return jwtProperties.getRefreshTokenExpirationMs();
     }
 
+    public String generatePasswordResetToken(UUID userAccountId) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + 3600000);
+
+        return Jwts.builder()
+                .subject(userAccountId.toString())
+                .claim("type", "password_reset")
+                .issuedAt(now)
+                .expiration(expiry)
+                .signWith(secretKey)
+                .compact();
+    }
+
+    public Claims validatePasswordResetToken(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            if (!"password_reset".equals(claims.get("type", String.class))) {
+                throw new InvalidTokenException("Invalid token type");
+            }
+
+            return claims;
+        } catch (ExpiredJwtException exception) {
+            throw new TokenExpiredException();
+        } catch (Exception exception) {
+            throw new InvalidTokenException("Invalid password reset token");
+        }
+    }
+
     private String encodeSecret(String secret) {
 
         if (secret == null || secret.isBlank()) {

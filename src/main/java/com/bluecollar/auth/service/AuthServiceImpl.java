@@ -7,6 +7,9 @@ import com.bluecollar.auth.entity.UserRole;
 import com.bluecollar.auth.exception.InvalidCredentialsException;
 import com.bluecollar.auth.exception.InvalidTokenException;
 import com.bluecollar.auth.exception.UserAlreadyExistsException;
+import com.bluecollar.auth.exception.UserNotFoundException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import com.bluecollar.auth.repository.RefreshTokenRepository;
 import com.bluecollar.auth.repository.UserAccountRepository;
 import com.bluecollar.auth.security.JwtService;
@@ -260,5 +263,41 @@ public class AuthServiceImpl implements AuthService {
 
     private String normalize(String value) {
         return value == null ? null : value.trim();
+    }
+
+    @Override
+    public void forgotPassword(ForgotPasswordRequest request) {
+        userAccountRepository.findByEmailIgnoreCase(normalizeEmail(request.email()))
+                .orElseThrow(() -> new UserNotFoundException("User with email " + request.email() + " not found"));
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequest request) {
+        try {
+            Claims claims = jwtService.validatePasswordResetToken(request.token());
+            UUID userAccountId = UUID.fromString(claims.getSubject());
+
+            UserAccount userAccount = userAccountRepository.findById(userAccountId)
+                    .orElseThrow(() -> new UserNotFoundException("User account not found"));
+
+            userAccount.setPasswordHash(passwordEncoder.encode(request.newPassword()));
+            userAccountRepository.save(userAccount);
+        } catch (JwtException ex) {
+            throw new InvalidTokenException("Invalid or expired password reset token");
+        }
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest request) {
+        AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
+        UserAccount userAccount = userAccountRepository.findById(currentUser.userAccountId())
+                .orElseThrow(() -> new UserNotFoundException("User account not found"));
+
+        if (!passwordEncoder.matches(request.currentPassword(), userAccount.getPasswordHash())) {
+            throw new InvalidCredentialsException();
+        }
+
+        userAccount.setPasswordHash(passwordEncoder.encode(request.newPassword()));
+        userAccountRepository.save(userAccount);
     }
 }

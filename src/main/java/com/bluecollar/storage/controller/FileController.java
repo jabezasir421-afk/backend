@@ -54,7 +54,11 @@ public class FileController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get file details", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(
+            summary = "Get file details",
+            description = "Retrieve file metadata including download URL (if applicable)",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<StoredFileResponse>> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(ApiResponse.success(storedFileService.getById(id), "File fetched successfully"));
     }
