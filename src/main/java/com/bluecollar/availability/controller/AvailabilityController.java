@@ -3,6 +3,9 @@ package com.bluecollar.availability.controller;
 import com.bluecollar.availability.dto.*;
 import com.bluecollar.availability.service.AvailabilityService;
 import com.bluecollar.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,12 +20,18 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Worker Availability", description = "Worker availability management including online status, working hours, and vacation")
 public class AvailabilityController {
 
     private final AvailabilityService availabilityService;
 
     @GetMapping("/api/v1/workers/me/availability")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Get my availability",
+            description = "Retrieve the authenticated worker's current availability configuration including online status, bookable status, vacation mode, and working hours.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<WorkerAvailabilityConfigResponse>> getMyAvailability() {
         return ResponseEntity.ok(ApiResponse.success(
                 availabilityService.getMyAvailability(),
@@ -32,6 +41,11 @@ public class AvailabilityController {
 
     @PutMapping("/api/v1/workers/me/availability/status")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Update online status",
+            description = "Update the authenticated worker's online/offline status.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<AvailabilitySummaryResponse>> updateOnlineStatus(
             @Valid @RequestBody UpdateOnlineStatusRequest request
     ) {
@@ -43,6 +57,11 @@ public class AvailabilityController {
 
     @PutMapping("/api/v1/workers/me/availability/bookable")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Update bookable status",
+            description = "Update whether the authenticated worker is available for new bookings.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<AvailabilitySummaryResponse>> updateBookable(
             @Valid @RequestBody UpdateBookableRequest request
     ) {
@@ -54,6 +73,11 @@ public class AvailabilityController {
 
     @PutMapping("/api/v1/workers/me/availability/working-hours")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Update working hours",
+            description = "Set the authenticated worker's working hours for each day of the week.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<List<WorkingHoursEntry>>> updateWorkingHours(
             @Valid @RequestBody UpdateWorkingHoursRequest request
     ) {
@@ -65,6 +89,11 @@ public class AvailabilityController {
 
     @GetMapping("/api/v1/workers/me/availability/working-hours")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Get working hours",
+            description = "Retrieve the authenticated worker's working hours for each day of the week.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<List<WorkingHoursEntry>>> getWorkingHours() {
         return ResponseEntity.ok(ApiResponse.success(
                 availabilityService.getWorkingHours(),
@@ -74,6 +103,11 @@ public class AvailabilityController {
 
     @PutMapping("/api/v1/workers/me/availability/vacation")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Update vacation mode",
+            description = "Enable or disable vacation mode for the authenticated worker.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<AvailabilitySummaryResponse>> updateVacationMode(
             @Valid @RequestBody VacationModeRequest request
     ) {
@@ -85,6 +119,11 @@ public class AvailabilityController {
 
     @PostMapping("/api/v1/workers/me/availability/overrides")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Add schedule override",
+            description = "Create a specific availability override (exception) for the authenticated worker on a given date.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<ScheduleOverrideResponse>> addScheduleOverride(
             @Valid @RequestBody ScheduleOverrideRequest request
     ) {
@@ -95,6 +134,11 @@ public class AvailabilityController {
 
     @DeleteMapping("/api/v1/workers/me/availability/overrides/{id}")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Remove schedule override",
+            description = "Delete a schedule override for the authenticated worker.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<Void>> removeScheduleOverride(@PathVariable UUID id) {
         availabilityService.removeScheduleOverride(id);
         return ResponseEntity.ok(ApiResponse.success(null, "Schedule override removed successfully"));
@@ -102,6 +146,11 @@ public class AvailabilityController {
 
     @PostMapping("/api/v1/workers/me/availability/heartbeat")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Send heartbeat",
+            description = "Send a heartbeat signal to indicate the authenticated worker is actively available.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<AvailabilitySummaryResponse>> heartbeat() {
         return ResponseEntity.ok(ApiResponse.success(
                 availabilityService.heartbeat(),

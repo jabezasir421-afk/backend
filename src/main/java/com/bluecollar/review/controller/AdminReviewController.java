@@ -28,7 +28,11 @@ public class AdminReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/pending")
-    @Operation(summary = "Get pending reviews", description = "Retrieve reviews pending moderation approval")
+    @Operation(
+            summary = "Get pending reviews",
+            description = "Admin endpoint requiring JWT token with ADMIN role. Retrieve reviews pending moderation approval.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<Page<AdminReviewResponse>>> getPendingReviews(
             @PageableDefault(sort = "createdAt") Pageable pageable
     ) {
@@ -39,7 +43,11 @@ public class AdminReviewController {
     }
 
     @PutMapping("/{id}/approve")
-    @Operation(summary = "Approve a review", description = "Admin approves a review for display")
+    @Operation(
+            summary = "Approve a review",
+            description = "Admin endpoint requiring JWT token with ADMIN role. Approve a review for public display.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<AdminReviewResponse>> approveReview(
             @PathVariable UUID id,
             @Valid @RequestBody ModerateReviewRequest request
@@ -51,7 +59,11 @@ public class AdminReviewController {
     }
 
     @PutMapping("/{id}/reject")
-    @Operation(summary = "Reject a review", description = "Admin rejects a review for moderation violation")
+    @Operation(
+            summary = "Reject a review",
+            description = "Admin endpoint requiring JWT token with ADMIN role. Reject a review for moderation violation.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<AdminReviewResponse>> rejectReview(
             @PathVariable UUID id,
             @Valid @RequestBody ModerateReviewRequest request
@@ -63,7 +75,11 @@ public class AdminReviewController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all reviews", description = "Retrieve all reviews with moderation metadata (replaces customer-facing endpoint for admin)")
+    @Operation(
+            summary = "Get all reviews",
+            description = "Admin endpoint requiring JWT token with ADMIN role. Retrieve all reviews with moderation metadata.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<Page<AdminReviewResponse>>> getAllReviews(
             @PageableDefault(sort = "createdAt") Pageable pageable
     ) {

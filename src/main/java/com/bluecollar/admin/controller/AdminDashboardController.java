@@ -3,6 +3,9 @@ package com.bluecollar.admin.controller;
 import com.bluecollar.admin.dto.DashboardResponse;
 import com.bluecollar.admin.service.AdminDashboardService;
 import com.bluecollar.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +21,17 @@ import java.time.LocalDate;
 @RequestMapping("/api/v1/admin/dashboard")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Admin Dashboard", description = "Admin dashboard metrics and overview")
 public class AdminDashboardController {
 
     private final AdminDashboardService adminDashboardService;
 
     @GetMapping
+    @Operation(
+            summary = "Get admin dashboard",
+            description = "Admin endpoint requiring JWT token with ADMIN role. Retrieve dashboard metrics including platform statistics.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<DashboardResponse>> getDashboard(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate

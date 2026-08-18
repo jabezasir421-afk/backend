@@ -25,12 +25,22 @@ public class PortfolioController {
 
     @GetMapping("/api/v1/workers/me/portfolio")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Get my portfolio",
+            description = "Retrieve authenticated worker's portfolio including images, certificates, and completion status.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<PortfolioSummaryResponse>> getMyPortfolio() {
         return ResponseEntity.ok(ApiResponse.success(portfolioService.getMyPortfolio(), "Portfolio fetched successfully"));
     }
 
     @GetMapping("/api/v1/workers/me/portfolio/completion")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Get profile completion percentage",
+            description = "Retrieve the authenticated worker's profile completion percentage (0-100%).",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<ProfileCompletionResponse>> getProfileCompletion() {
         return ResponseEntity.ok(ApiResponse.success(
                 portfolioService.getProfileCompletion(),
@@ -40,6 +50,11 @@ public class PortfolioController {
 
     @PostMapping("/api/v1/workers/me/portfolio/images")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Add portfolio image",
+            description = "Add an image to the authenticated worker's portfolio.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<PortfolioImageResponse>> addPortfolioImage(
             @Valid @RequestBody AddPortfolioImageRequest request
     ) {
@@ -50,6 +65,11 @@ public class PortfolioController {
 
     @PutMapping("/api/v1/workers/me/portfolio/images/{id}")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Update portfolio image",
+            description = "Update metadata (description, order) for a portfolio image.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<PortfolioImageResponse>> updatePortfolioImage(
             @PathVariable UUID id,
             @Valid @RequestBody UpdatePortfolioImageRequest request
@@ -62,6 +82,11 @@ public class PortfolioController {
 
     @DeleteMapping("/api/v1/workers/me/portfolio/images/{id}")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Delete portfolio image",
+            description = "Remove an image from the authenticated worker's portfolio.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<Void>> deletePortfolioImage(@PathVariable UUID id) {
         portfolioService.deletePortfolioImage(id);
         return ResponseEntity.ok(ApiResponse.success(null, "Portfolio image deleted successfully"));
@@ -69,6 +94,11 @@ public class PortfolioController {
 
     @PostMapping("/api/v1/workers/me/portfolio/certificates")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Add certificate",
+            description = "Add a professional certificate to the authenticated worker's portfolio.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<CertificateResponse>> addCertificate(
             @Valid @RequestBody AddCertificateRequest request
     ) {
@@ -79,6 +109,11 @@ public class PortfolioController {
 
     @PutMapping("/api/v1/workers/me/portfolio/certificates/{id}")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Update certificate",
+            description = "Update certificate information (title, issuer, issue/expiry dates).",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<CertificateResponse>> updateCertificate(
             @PathVariable UUID id,
             @Valid @RequestBody UpdateCertificateRequest request
@@ -91,6 +126,11 @@ public class PortfolioController {
 
     @DeleteMapping("/api/v1/workers/me/portfolio/certificates/{id}")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Delete certificate",
+            description = "Remove a certificate from the authenticated worker's portfolio.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<Void>> deleteCertificate(@PathVariable UUID id) {
         portfolioService.deleteCertificate(id);
         return ResponseEntity.ok(ApiResponse.success(null, "Certificate deleted successfully"));
@@ -140,6 +180,11 @@ public class PortfolioController {
 
     @PutMapping("/api/v1/workers/me/profile-photo")
     @PreAuthorize("hasRole('WORKER')")
+    @Operation(
+            summary = "Update profile photo",
+            description = "Set or update the authenticated worker's profile photo.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<PortfolioSummaryResponse>> setProfilePhoto(
             @Valid @RequestBody SetProfilePhotoRequest request
     ) {

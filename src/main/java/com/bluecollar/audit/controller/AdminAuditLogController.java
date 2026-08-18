@@ -3,6 +3,9 @@ package com.bluecollar.audit.controller;
 import com.bluecollar.audit.dto.AuditLogResponse;
 import com.bluecollar.audit.service.AuditLogService;
 import com.bluecollar.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +25,17 @@ import java.util.UUID;
 @RequestMapping("/api/v1/admin/audit-logs")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Admin Audit Logs", description = "Admin audit log search and review")
 public class AdminAuditLogController {
 
     private final AuditLogService auditLogService;
 
     @GetMapping
+    @Operation(
+            summary = "Search audit logs",
+            description = "Admin endpoint requiring JWT token with ADMIN role. Search and filter audit logs by entity, actor, and date range.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<Page<AuditLogResponse>>> searchAuditLogs(
             @RequestParam(required = false) String entityType,
             @RequestParam(required = false) UUID entityId,

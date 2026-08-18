@@ -101,7 +101,7 @@ public class StoredFileServiceImpl implements StoredFileService {
     public StoredFileResponse getById(UUID id) {
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
         StoredFile storedFile = findActiveFile(id);
-        assertOwnerOrAdmin(storedFile, currentUser);
+        validateFileAuthorization(storedFile, currentUser);
         String downloadUrl = resolveDownloadUrl(storedFile, currentUser);
         return storedFileMapper.toResponse(storedFile, downloadUrl);
     }
@@ -131,7 +131,7 @@ public class StoredFileServiceImpl implements StoredFileService {
     public void delete(UUID id) {
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
         StoredFile storedFile = findActiveFile(id);
-        assertOwnerOrAdmin(storedFile, currentUser);
+        validateFileAuthorization(storedFile, currentUser);
         storedFile.setActive(false);
         storedFileRepository.save(storedFile);
     }
@@ -141,12 +141,7 @@ public class StoredFileServiceImpl implements StoredFileService {
     public FileDownloadInfo download(UUID id) {
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
         StoredFile storedFile = findActiveFile(id);
-
-        if (storedFile.getFileCategory() == FileCategory.IDENTITY_DOC && currentUser.role() != UserRole.ADMIN) {
-            throw new UnauthorizedException("You do not have access to this file");
-        }
-
-        assertOwnerOrAdmin(storedFile, currentUser);
+        validateFileDownloadAuthorization(storedFile, currentUser);
 
         var inputStream = fileStorageService.getInputStream(storedFile.getStorageKey());
         return new FileDownloadInfo(
@@ -157,18 +152,45 @@ public class StoredFileServiceImpl implements StoredFileService {
         );
     }
 
-    private StoredFile findActiveFile(UUID id) {
-        return storedFileRepository.findByIdAndActiveTrue(id)
-                .orElseThrow(() -> new FileNotFoundException(id));
-    }
-
-    private void assertOwnerOrAdmin(StoredFile storedFile, AuthenticatedUser currentUser) {
+    private void validateFileAuthorization(StoredFile storedFile, AuthenticatedUser currentUser) {
         if (currentUser.role() == UserRole.ADMIN) {
             return;
         }
+
+        switch (storedFile.getFileCategory()) {
+            case IDENTITY_DOC:
+            case CERTIFICATE:
+                throw new UnauthorizedException("You do not have access to this file");
+            case PROFILE_PHOTO:
+            case PORTFOLIO_IMAGE:
+                if (!storedFile.getOwnerUserId().equals(currentUser.userAccountId())) {
+                    throw new UnauthorizedException("You do not have access to this file");
+                }
+                break;
+        }
+    }
+
+    private void validateFileDownloadAuthorization(StoredFile storedFile, AuthenticatedUser currentUser) {
+        if (currentUser.role() == UserRole.ADMIN) {
+            return;
+        }
+
+        if (storedFile.getFileCategory() == FileCategory.IDENTITY_DOC) {
+            throw new UnauthorizedException("You do not have access to this file");
+        }
+
+        if (storedFile.getFileCategory() == FileCategory.CERTIFICATE) {
+            throw new UnauthorizedException("You do not have access to this file");
+        }
+
         if (!storedFile.getOwnerUserId().equals(currentUser.userAccountId())) {
             throw new UnauthorizedException("You do not have access to this file");
         }
+    }
+
+    private StoredFile findActiveFile(UUID id) {
+        return storedFileRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new FileNotFoundException(id));
     }
 
     private String resolveDownloadUrl(StoredFile storedFile, AuthenticatedUser currentUser) {
