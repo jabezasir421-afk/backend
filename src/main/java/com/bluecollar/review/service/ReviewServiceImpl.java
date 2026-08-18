@@ -133,8 +133,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ReviewResponse> getAllReviews(Pageable pageable) {
-        return reviewRepository.findAll(pageable).map(reviewMapper::toResponse);
+    public Page<AdminReviewResponse> getAllReviews(Pageable pageable) {
+        return reviewRepository.findAll(pageable).map(this::toAdminResponse);
     }
 
     @Override

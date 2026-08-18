@@ -3,8 +3,10 @@ package com.bluecollar.review.controller;
 import com.bluecollar.common.dto.ApiResponse;
 import com.bluecollar.review.dto.AdminReviewResponse;
 import com.bluecollar.review.dto.ModerateReviewRequest;
-import com.bluecollar.review.dto.ReviewResponse;
 import com.bluecollar.review.service.ReviewService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,11 +22,13 @@ import java.util.UUID;
 @RequestMapping("/api/v1/admin/reviews")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Admin Reviews", description = "Admin review moderation and management")
 public class AdminReviewController {
 
     private final ReviewService reviewService;
 
     @GetMapping("/pending")
+    @Operation(summary = "Get pending reviews", description = "Retrieve reviews pending moderation approval")
     public ResponseEntity<ApiResponse<Page<AdminReviewResponse>>> getPendingReviews(
             @PageableDefault(sort = "createdAt") Pageable pageable
     ) {
@@ -35,6 +39,7 @@ public class AdminReviewController {
     }
 
     @PutMapping("/{id}/approve")
+    @Operation(summary = "Approve a review", description = "Admin approves a review for display")
     public ResponseEntity<ApiResponse<AdminReviewResponse>> approveReview(
             @PathVariable UUID id,
             @Valid @RequestBody ModerateReviewRequest request
@@ -46,6 +51,7 @@ public class AdminReviewController {
     }
 
     @PutMapping("/{id}/reject")
+    @Operation(summary = "Reject a review", description = "Admin rejects a review for moderation violation")
     public ResponseEntity<ApiResponse<AdminReviewResponse>> rejectReview(
             @PathVariable UUID id,
             @Valid @RequestBody ModerateReviewRequest request
@@ -57,7 +63,8 @@ public class AdminReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<ReviewResponse>>> getAllReviews(
+    @Operation(summary = "Get all reviews", description = "Retrieve all reviews with moderation metadata (replaces customer-facing endpoint for admin)")
+    public ResponseEntity<ApiResponse<Page<AdminReviewResponse>>> getAllReviews(
             @PageableDefault(sort = "createdAt") Pageable pageable
     ) {
         return ResponseEntity.ok(ApiResponse.success(

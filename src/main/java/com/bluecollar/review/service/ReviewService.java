@@ -16,7 +16,7 @@ public interface ReviewService {
 
     ReviewResponse getReviewById(UUID id);
 
-    Page<ReviewResponse> getAllReviews(Pageable pageable);
+    Page<AdminReviewResponse> getAllReviews(Pageable pageable);
 
     void deactivateReview(UUID id);
 
