@@ -203,6 +203,29 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.toResponse(saved);
     }
 
+    @Override
+    public BookingResponse rescheduleBooking(UUID id, RescheduleBookingRequest request) {
+        Booking booking = findBookingForCustomer(id);
+
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new InvalidBookingStateException("Bookings can only be rescheduled in PENDING status");
+        }
+
+        if (!availabilityService.isAvailableOnDate(booking.getWorker().getId(), request.scheduledDate())) {
+            throw new InvalidBookingStateException("Worker is not available on the selected date");
+        }
+
+        booking.setScheduledDate(request.scheduledDate());
+        booking.setTimeSlot(request.timeSlot().trim());
+        if (request.description() != null) {
+            booking.setDescription(request.description().trim());
+        }
+        booking.setQuotedAmount(calculateQuotedAmount(booking.getWorker().getHourlyRate(), request.timeSlot()));
+
+        Booking saved = bookingRepository.save(booking);
+        return bookingMapper.toResponse(saved);
+    }
+
     private Booking findBooking(UUID id) {
         return bookingRepository.findById(id)
                 .orElseThrow(() -> new BookingNotFoundException(id));
@@ -213,6 +236,15 @@ public class BookingServiceImpl implements BookingService {
         Worker worker = findWorkerByCurrentUser();
         if (!booking.getWorker().getId().equals(worker.getId())) {
             throw new UnauthorizedException("You are not assigned to this booking");
+        }
+        return booking;
+    }
+
+    private Booking findBookingForCustomer(UUID id) {
+        Booking booking = findBooking(id);
+        Customer customer = customerService.findCustomerByCurrentUser();
+        if (!booking.getCustomer().getId().equals(customer.getId())) {
+            throw new UnauthorizedException("You did not create this booking");
         }
         return booking;
     }

@@ -163,6 +163,21 @@ public class BookingController {
         return ResponseEntity.ok(ApiResponse.success(bookingService.completeBooking(id, request), "Booking completed successfully"));
     }
 
+    @PutMapping("/{id}/reschedule")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @Operation(
+            summary = "Reschedule a booking",
+            description = "Customer reschedules a pending booking to a different date/time. Only allowed before worker accepts. " +
+                    "Worker availability will be validated for the new time slot.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<ApiResponse<BookingResponse>> rescheduleBooking(
+            @PathVariable UUID id,
+            @Valid @RequestBody RescheduleBookingRequest request
+    ) {
+        return ResponseEntity.ok(ApiResponse.success(bookingService.rescheduleBooking(id, request), "Booking rescheduled successfully"));
+    }
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(

@@ -26,6 +26,8 @@ public interface BookingService {
 
     BookingResponse completeBooking(UUID id, CompleteBookingRequest request);
 
+    BookingResponse rescheduleBooking(UUID id, RescheduleBookingRequest request);
+
     Page<BookingResponse> getAllBookings(
             BookingStatus status,
             UUID categoryId,
