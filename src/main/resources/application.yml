@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: bluecollar-backend
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/bluecollar}
+    username: ${DB_USERNAME:jabezasir}
+    password: ${DB_PASSWORD:jabezasir@421}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: ${SERVER_PORT:8080}
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/plain,text/html
+    min-response-size: 1024
+
+bluecollar:
+  jwt:
+    secret: ${JWT_SECRET:change-me-to-a-secure-secret-key-at-least-256-bits-long-for-production}
+    access-token-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:900000}
+    refresh-token-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}
+  admin:
+    email: ${ADMIN_EMAIL:admin@bluecollar.in}
+    password: ${ADMIN_PASSWORD:Admin@12345}
+    phone: ${ADMIN_PHONE:9999999999}
+  storage:
+    type: local
+    local:
+      base-path: ${STORAGE_PATH:/var/bluecollar/files}
+    presigned-url-expiry-seconds: 3600
+  encryption:
+    document-key: ${DOCUMENT_ENCRYPTION_KEY:dev-default-32-byte-key-change!!}
+  cache:
+    type: caffeine
+  notification:
+    email:
+      enabled: ${NOTIFICATION_EMAIL_ENABLED:false}
+      from: ${MAIL_FROM:noreply@bluecollar.com}
+  security:
+    rate-limit:
+      enabled: true
+      max-requests: ${RATE_LIMIT_MAX_REQUESTS:20}
+      window-ms: ${RATE_LIMIT_WINDOW_MS:60000}
+    outbox:
+      poll-interval-ms: 30000
+      max-retries: 3
+  availability:
+    heartbeat-timeout-minutes: 15
+  analytics:
+    snapshot-cron: "0 0 2 * * *"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+    prometheus:
+      enabled: true

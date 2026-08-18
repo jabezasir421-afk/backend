@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: bluecollar
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  app:
+    build: .
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/bluecollar
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: change-me-to-a-secure-secret-key-at-least-256-bits-long-for-production
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+volumes:
+  postgres-data:
