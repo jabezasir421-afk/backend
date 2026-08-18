@@ -21,4 +21,8 @@ public interface AuthService {
     void resetPassword(ResetPasswordRequest request);
 
     void changePassword(ChangePasswordRequest request);
+
+    void verifyEmail(VerifyEmailRequest request);
+
+    void resendVerificationEmail(ResendVerificationEmailRequest request);
 }

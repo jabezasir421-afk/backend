@@ -122,4 +122,28 @@ public class AuthController {
         authService.changePassword(request);
         return ResponseEntity.ok(ApiResponse.success(null, "Password changed successfully"));
     }
+
+    @PostMapping("/email/verify")
+    @Operation(
+            summary = "Verify email address",
+            description = "Complete email verification using the token sent via email during registration. " +
+                    "In production, users would click a link in the email that contains this token.",
+            security = {}
+    )
+    public ResponseEntity<ApiResponse<Void>> verifyEmail(@Valid @RequestBody VerifyEmailRequest request) {
+        authService.verifyEmail(request);
+        return ResponseEntity.ok(ApiResponse.success(null, "Email verified successfully"));
+    }
+
+    @PostMapping("/email/resend")
+    @Operation(
+            summary = "Resend email verification",
+            description = "Request a new verification email. Generic response regardless of whether account exists (security best practice). " +
+                    "In production, this would send a new verification link.",
+            security = {}
+    )
+    public ResponseEntity<ApiResponse<Void>> resendVerificationEmail(@Valid @RequestBody ResendVerificationEmailRequest request) {
+        authService.resendVerificationEmail(request);
+        return ResponseEntity.ok(ApiResponse.success(null, "If an unverified account with this email exists, a verification email has been sent"));
+    }
 }

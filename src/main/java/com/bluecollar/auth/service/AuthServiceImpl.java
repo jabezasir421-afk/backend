@@ -300,4 +300,30 @@ public class AuthServiceImpl implements AuthService {
         userAccount.setPasswordHash(passwordEncoder.encode(request.newPassword()));
         userAccountRepository.save(userAccount);
     }
+
+    @Override
+    public void verifyEmail(VerifyEmailRequest request) {
+        try {
+            Claims claims = jwtService.validateEmailVerificationToken(request.token());
+            UUID userAccountId = UUID.fromString(claims.getSubject());
+
+            UserAccount userAccount = userAccountRepository.findById(userAccountId)
+                    .orElseThrow(() -> new UserNotFoundException("User account not found"));
+
+            userAccount.setEmailVerified(true);
+            userAccountRepository.save(userAccount);
+        } catch (JwtException ex) {
+            throw new InvalidTokenException("Invalid or expired email verification token");
+        }
+    }
+
+    @Override
+    public void resendVerificationEmail(ResendVerificationEmailRequest request) {
+        userAccountRepository.findByEmailIgnoreCase(normalizeEmail(request.email()))
+                .ifPresent(userAccount -> {
+                    if (!userAccount.getEmailVerified()) {
+                        String token = jwtService.generateEmailVerificationToken(userAccount.getId());
+                    }
+                });
+    }
 }

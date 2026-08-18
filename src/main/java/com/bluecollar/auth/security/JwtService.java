@@ -121,6 +121,39 @@ public class JwtService {
         }
     }
 
+    public String generateEmailVerificationToken(UUID userAccountId) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + 86400000);
+
+        return Jwts.builder()
+                .subject(userAccountId.toString())
+                .claim("type", "email_verification")
+                .issuedAt(now)
+                .expiration(expiry)
+                .signWith(secretKey)
+                .compact();
+    }
+
+    public Claims validateEmailVerificationToken(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            if (!"email_verification".equals(claims.get("type", String.class))) {
+                throw new InvalidTokenException("Invalid token type");
+            }
+
+            return claims;
+        } catch (ExpiredJwtException exception) {
+            throw new TokenExpiredException();
+        } catch (Exception exception) {
+            throw new InvalidTokenException("Invalid email verification token");
+        }
+    }
+
     private String encodeSecret(String secret) {
 
         if (secret == null || secret.isBlank()) {
