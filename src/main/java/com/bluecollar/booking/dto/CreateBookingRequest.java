@@ -1,5 +1,6 @@
 package com.bluecollar.booking.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public record CreateBookingRequest(
 
         @NotBlank(message = "Time slot is required")
         @Pattern(regexp = "^\\d{2}:\\d{2}-\\d{2}:\\d{2}$", message = "Time slot must be in HH:MM-HH:MM format")
+        @Schema(description = "Time slot in HH:MM-HH:MM format (e.g., 09:00-18:00)", example = "09:00-18:00")
         String timeSlot,
 
         @NotBlank(message = "Description is required")
