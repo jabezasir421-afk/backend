@@ -303,7 +303,7 @@ class AddressControllerIntegrationTest {
                         .with(authentication(customerAuth)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Address deleted successfully"));
+                .andExpect(jsonPath("$.message").value("Address deactivated successfully"));
 
         Address result = addressRepository.findById(saved.getId()).orElseThrow();
         assertFalse(result.getActive());
