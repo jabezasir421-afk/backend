@@ -76,6 +76,11 @@ public class StoredFileServiceImpl implements StoredFileService {
         EntityType resolvedEntityType = entityType == null ? mapDefaultEntityType(fileCategory) : entityType;
         validateCategoryEntityMatch(fileCategory, resolvedEntityType);
 
+        // CRITICAL SECURITY: Resource-specific endpoints MUST validate that entityId belongs to authenticated user.
+        // This upload endpoint trusts that the calling resource endpoint (e.g., POST /workers/me/portfolio/certificates)
+        // verified ownership before calling upload(). UUID possession alone does NOT grant file association rights.
+        // If calling endpoint fails to validate ownership, arbitrary entityId values could be associated with files.
+
         String storageKey = buildStorageKey(currentUser.userAccountId(), fileCategory, file.getOriginalFilename());
         String checksum = storeWithChecksum(storageKey, content, file.getContentType());
 
@@ -175,14 +180,20 @@ public class StoredFileServiceImpl implements StoredFileService {
             return;
         }
 
+        // IDENTITY_DOC: admin-only
         if (storedFile.getFileCategory() == FileCategory.IDENTITY_DOC) {
             throw new UnauthorizedException("You do not have access to this file");
         }
 
+        // CERTIFICATE: admin or certificate owner
         if (storedFile.getFileCategory() == FileCategory.CERTIFICATE) {
-            throw new UnauthorizedException("You do not have access to this file");
+            if (!storedFile.getOwnerUserId().equals(currentUser.userAccountId())) {
+                throw new UnauthorizedException("You do not have access to this file");
+            }
+            return;
         }
 
+        // PROFILE_PHOTO and PORTFOLIO_IMAGE: owner only
         if (!storedFile.getOwnerUserId().equals(currentUser.userAccountId())) {
             throw new UnauthorizedException("You do not have access to this file");
         }

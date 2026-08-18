@@ -9,7 +9,6 @@ import java.util.UUID;
 public record CertificateResponse(
         UUID id,
         UUID fileId,
-        String downloadUrl,
         String title,
         String issuingOrg,
         LocalDate issueDate,

@@ -40,10 +40,12 @@ public class PortfolioMapper {
     }
 
     public CertificateResponse toCertificateResponse(WorkerCertificate certificate) {
+        // SECURITY: Certificates do NOT include downloadUrl. Clients must fetch via authenticated GET /files/{fileId}/download
+        // which enforces proper authorization (admin or certificate owner). Returning a URL in response could expose
+        // permanent credentials for sensitive documents.
         return new CertificateResponse(
                 certificate.getId(),
                 certificate.getFileId(),
-                resolvePublicUrl(certificate.getFileId()),
                 certificate.getTitle(),
                 certificate.getIssuingOrg(),
                 certificate.getIssueDate(),

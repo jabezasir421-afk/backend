@@ -126,7 +126,7 @@ class PortfolioServiceTest {
                 portfolioItemId, fileId, "http://files/test.jpg", "Project", "Description", (short) 0, Instant.now()
         );
         certificateResponse = new CertificateResponse(
-                certificateId, fileId, "http://files/cert.pdf", "Safety Cert", "OSHA",
+                certificateId, fileId, "Safety Cert", "OSHA",
                 LocalDate.of(2024, 1, 1), LocalDate.of(2026, 1, 1),
                 VerificationStatus.PENDING, Instant.now()
         );
