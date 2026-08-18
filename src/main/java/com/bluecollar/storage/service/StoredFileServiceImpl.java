@@ -114,10 +114,13 @@ public class StoredFileServiceImpl implements StoredFileService {
         if (storedFile == null) {
             return null;
         }
+        // SECURITY: Only PROFILE_PHOTO and PORTFOLIO_IMAGE are public
+        // IDENTITY_DOC and CERTIFICATE URLs are never public - download only via authenticated endpoint
         if (storedFile.getFileCategory() != FileCategory.PROFILE_PHOTO
                 && storedFile.getFileCategory() != FileCategory.PORTFOLIO_IMAGE) {
             return null;
         }
+        // Use short-lived signed URLs (expires in seconds) rather than permanent public URLs
         return fileStorageService.getDownloadUrl(
                 storedFile.getStorageKey(),
                 storageProperties.getPresignedUrlExpirySeconds()
@@ -216,6 +219,10 @@ public class StoredFileServiceImpl implements StoredFileService {
         if (!requiresEntity && entityId != null) {
             throw new FileUploadException("entityId should not be provided for file category " + fileCategory);
         }
+
+        // Note: entityId ownership validation should happen at resource-level endpoints
+        // (e.g., POST /workers/me/portfolio/certificates validates certificate ownership)
+        // The upload endpoint stores with ownerUserId, so file access is always validated via ownership.
     }
 
     private void validateCategoryEntityMatch(FileCategory fileCategory, EntityType entityType) {

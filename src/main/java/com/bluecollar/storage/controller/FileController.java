@@ -35,11 +35,15 @@ public class FileController {
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Upload a file",
-            description = "Upload a file with validation. File category determines allowed entity types:\n" +
+            description = "Upload a file with validation. File is owned by authenticated user. " +
+                    "File category determines allowed entity types:\n" +
                     "- PROFILE_PHOTO: entityType=WORKER (required), entityId=worker-id (required)\n" +
                     "- PORTFOLIO_IMAGE: entityType=PORTFOLIO (required), entityId=portfolio-id (required)\n" +
                     "- CERTIFICATE: entityType=CERTIFICATE (required), entityId=certificate-id (required)\n" +
-                    "- IDENTITY_DOC: entityType=IDENTITY_DOC (required), entityId=identity-doc-id (required)",
+                    "- IDENTITY_DOC: entityType=IDENTITY_DOC (required), entityId=identity-doc-id (required)\n\n" +
+                    "NOTE: To improve API design, future versions should move entity association to resource-specific endpoints " +
+                    "(e.g., POST /workers/me/certificates with fileId) rather than specifying entity details during upload. " +
+                    "This would give the backend full control over ownership validation.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<ApiResponse<StoredFileResponse>> upload(
@@ -66,7 +70,10 @@ public class FileController {
     @GetMapping("/{id}/download")
     @Operation(
             summary = "Download a file",
-            description = "Stream file content for download. IDENTITY_DOC files can only be downloaded by admins.",
+            description = "Stream file content for download. Authenticated endpoint ensures files are accessed securely. " +
+                    "CRITICAL SECURITY: IDENTITY_DOC and CERTIFICATE files can ONLY be downloaded by ADMIN role. " +
+                    "This endpoint streams file bytes from backend rather than exposing direct storage URLs. " +
+                    "Public files (PROFILE_PHOTO, PORTFOLIO_IMAGE) use short-lived signed URLs instead.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<?> download(@PathVariable UUID id) {

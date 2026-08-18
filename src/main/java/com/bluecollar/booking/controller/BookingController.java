@@ -182,7 +182,7 @@ public class BookingController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Search all bookings (admin only)",
-            description = "Admin-only endpoint for searching all bookings across the platform. " +
+            description = "Admin-only endpoint requiring JWT token with ADMIN role. Searches all bookings across the platform. " +
                     "Supports filtering by status, category, worker, customer, and date range. " +
                     "WARNING: Exposing this to non-admins would allow unauthorized data access.",
             security = @SecurityRequirement(name = "bearerAuth")

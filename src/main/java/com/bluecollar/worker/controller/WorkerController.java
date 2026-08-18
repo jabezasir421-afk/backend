@@ -32,7 +32,8 @@ public class WorkerController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Provision a new worker (admin only)",
-            description = "Admin-only worker provisioning endpoint. Admins create worker profiles without a password. " +
+            description = "Admin-only worker provisioning endpoint. Requires JWT token with ADMIN role. " +
+                    "Admins create worker profiles without a password. " +
                     "Provisioned workers must authenticate separately (admin provides temporary credentials or other flow). " +
                     "This is the admin backend worker creation flow. " +
                     "See POST /auth/register/worker for customer-facing self-registration.",
