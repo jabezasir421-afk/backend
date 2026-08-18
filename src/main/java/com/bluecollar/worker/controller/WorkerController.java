@@ -5,6 +5,9 @@ import com.bluecollar.worker.dto.CreateWorkerRequest;
 import com.bluecollar.worker.dto.UpdateWorkerRequest;
 import com.bluecollar.worker.dto.WorkerResponse;
 import com.bluecollar.worker.service.WorkerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,12 +23,18 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/workers")
 @RequiredArgsConstructor
+@Tag(name = "Workers", description = "Worker profile management and discovery")
 public class WorkerController {
 
     private final WorkerService workerService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Create a new worker",
+            description = "Admin endpoint to create a new worker profile",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<WorkerResponse>> createWorker(@Valid @RequestBody CreateWorkerRequest request) {
         WorkerResponse worker = workerService.createWorker(request);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -33,6 +42,11 @@ public class WorkerController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "List all workers",
+            description = "Retrieve a paginated list of all worker profiles",
+            security = {}
+    )
     public ResponseEntity<ApiResponse<Page<WorkerResponse>>> getAllWorkers(
             @PageableDefault(sort = "createdAt") Pageable pageable
     ) {
@@ -40,12 +54,22 @@ public class WorkerController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Get worker by ID",
+            description = "Retrieve a specific worker's profile and availability information",
+            security = {}
+    )
     public ResponseEntity<ApiResponse<WorkerResponse>> getWorkerById(@PathVariable UUID id) {
         return ResponseEntity.ok(ApiResponse.success(workerService.getWorkerById(id), "Worker fetched successfully"));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Update worker profile",
+            description = "Admin endpoint to update worker profile information",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<WorkerResponse>> updateWorker(
             @PathVariable UUID id,
             @Valid @RequestBody UpdateWorkerRequest request
@@ -55,6 +79,11 @@ public class WorkerController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Delete worker",
+            description = "Admin endpoint to delete a worker profile",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<ApiResponse<Void>> deleteWorker(@PathVariable UUID id) {
         workerService.deleteWorker(id);
         return ResponseEntity.ok(ApiResponse.success(null, "Worker deleted successfully"));
