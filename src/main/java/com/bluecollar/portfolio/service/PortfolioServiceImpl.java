@@ -285,7 +285,10 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .orElseThrow(() -> new FileNotFoundException(fileId));
 
         UUID ownerUserId = worker.getUserAccount() != null ? worker.getUserAccount().getId() : null;
-        if (ownerUserId == null || !storedFile.getOwnerUserId().equals(ownerUserId)) {
+        if (ownerUserId != null && !storedFile.getOwnerUserId().equals(ownerUserId)) {
+            throw new UnauthorizedException("You do not have access to this file");
+        }
+        if (ownerUserId == null) {
             throw new UnauthorizedException("You do not have access to this file");
         }
         if (storedFile.getFileCategory() != expectedCategory) {

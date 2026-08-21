@@ -185,15 +185,7 @@ public class StoredFileServiceImpl implements StoredFileService {
             throw new UnauthorizedException("You do not have access to this file");
         }
 
-        // CERTIFICATE: admin or certificate owner
-        if (storedFile.getFileCategory() == FileCategory.CERTIFICATE) {
-            if (!storedFile.getOwnerUserId().equals(currentUser.userAccountId())) {
-                throw new UnauthorizedException("You do not have access to this file");
-            }
-            return;
-        }
-
-        // PROFILE_PHOTO and PORTFOLIO_IMAGE: owner only
+        // CERTIFICATE, PROFILE_PHOTO, and PORTFOLIO_IMAGE: owner only
         if (!storedFile.getOwnerUserId().equals(currentUser.userAccountId())) {
             throw new UnauthorizedException("You do not have access to this file");
         }

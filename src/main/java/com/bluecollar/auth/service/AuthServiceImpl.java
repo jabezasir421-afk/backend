@@ -251,14 +251,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private String normalizePhone(String phone) {
-        if (phone == null) {
-            return null;
-        }
-        String trimmed = phone.trim();
-        if (trimmed.startsWith("+91")) {
-            return trimmed;
-        }
-        return trimmed;
+        return phone == null ? null : phone.trim();
     }
 
     private String normalize(String value) {
