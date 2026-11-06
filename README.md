@@ -48,8 +48,7 @@ BlueCollar is a production-ready marketplace platform that connects skilled blue
 ### Quick Start with Docker
 ```bash
 # Clone the repository
-git clone https://github.com/BlueCollar/backend.git
-cd backend
+git clone https://github.com/jabezasir421-afk/backend
 
 # Start the database and application
 docker-compose up -d
