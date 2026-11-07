@@ -3,6 +3,8 @@ package com.bluecollar.audit.service;
 import com.bluecollar.audit.dto.AuditLogResponse;
 import com.bluecollar.audit.entity.AuditLog;
 import com.bluecollar.audit.repository.AuditLogRepository;
+import com.bluecollar.common.security.AuthenticatedUser;
+import com.bluecollar.common.security.SecurityUtils;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -50,6 +52,46 @@ public class AuditLogServiceImpl implements AuditLogService {
                 .correlationId(correlationId)
                 .build();
         auditLogRepository.save(auditLog);
+    }
+
+    @Override
+    public void log(
+            UUID actorUserId,
+            String actorRole,
+            String action,
+            String entityType,
+            UUID entityId,
+            Map<String, Object> oldValue,
+            Map<String, Object> newValue
+    ) {
+        AuditLog auditLog = AuditLog.builder()
+                .actorUserId(actorUserId)
+                .actorRole(actorRole)
+                .action(action)
+                .entityType(entityType)
+                .entityId(entityId)
+                .oldValue(oldValue)
+                .newValue(newValue)
+                .build();
+        auditLogRepository.save(auditLog);
+    }
+
+    @Override
+    public void logCurrentAction(
+            String action,
+            String entityType,
+            UUID entityId,
+            Map<String, Object> oldValue,
+            Map<String, Object> newValue
+    ) {
+        UUID actorUserId = null;
+        String actorRole = "SYSTEM";
+        if (SecurityUtils.isAuthenticated()) {
+            AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
+            actorUserId = currentUser.userAccountId();
+            actorRole = currentUser.role() != null ? currentUser.role().name() : "USER";
+        }
+        log(actorUserId, actorRole, action, entityType, entityId, oldValue, newValue);
     }
 
     @Override

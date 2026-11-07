@@ -65,6 +65,9 @@ class AdminWorkerServiceTest {
     @Mock
     private ProfileCompletionService profileCompletionService;
 
+    @Mock
+    private com.bluecollar.audit.service.AuditLogService auditLogService;
+
     @InjectMocks
     private AdminWorkerServiceImpl adminWorkerService;
 

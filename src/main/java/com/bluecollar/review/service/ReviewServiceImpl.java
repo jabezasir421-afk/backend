@@ -1,6 +1,8 @@
 package com.bluecollar.review.service;
 
+import com.bluecollar.audit.service.AuditLogService;
 import com.bluecollar.auth.entity.UserAccount;
+import com.bluecollar.auth.entity.UserRole;
 import com.bluecollar.auth.repository.UserAccountRepository;
 import com.bluecollar.booking.entity.Booking;
 import com.bluecollar.booking.entity.BookingStatus;
@@ -55,6 +57,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserAccountRepository userAccountRepository;
     private final ReviewMapper reviewMapper;
     private final ApplicationEventPublisher eventPublisher;
+    private final AuditLogService auditLogService;
 
     @Override
     public ReviewResponse createReview(CreateReviewRequest request) {
@@ -128,7 +131,15 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional(readOnly = true)
     public ReviewResponse getReviewById(UUID id) {
-        return reviewMapper.toResponse(findActiveReview(id));
+        Review review = findActiveReview(id);
+        if (review.getModerationStatus() != ModerationStatus.APPROVED) {
+            boolean isAdmin = SecurityUtils.isAuthenticated()
+                    && SecurityUtils.getCurrentUser().role() == UserRole.ADMIN;
+            if (!isAdmin) {
+                throw new ReviewNotFoundException(id);
+            }
+        }
+        return reviewMapper.toResponse(review);
     }
 
     @Override
@@ -144,6 +155,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setActive(false);
         reviewRepository.save(review);
         recalculateWorkerRating(review.getWorker().getId());
+        auditLogService.logCurrentAction("REVIEW_DEACTIVATED", "REVIEW", review.getId(), Map.of("active", true), Map.of("active", false));
     }
 
     @Override
@@ -153,6 +165,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setActive(true);
         reviewRepository.save(review);
         recalculateWorkerRating(review.getWorker().getId());
+        auditLogService.logCurrentAction("REVIEW_ACTIVATED", "REVIEW", review.getId(), Map.of("active", false), Map.of("active", true));
     }
 
     @Override
@@ -205,6 +218,9 @@ public class ReviewServiceImpl implements ReviewService {
         review.setModerationNotes(request.notes());
         reviewRepository.save(review);
         recalculateWorkerRating(review.getWorker().getId());
+        auditLogService.logCurrentAction("REVIEW_APPROVED", "REVIEW", review.getId(),
+                Map.of("moderationStatus", "PENDING"),
+                Map.of("moderationStatus", "APPROVED"));
         return toAdminResponse(review);
     }
 
@@ -219,6 +235,9 @@ public class ReviewServiceImpl implements ReviewService {
         review.setModerationNotes(request.notes());
         reviewRepository.save(review);
         recalculateWorkerRating(review.getWorker().getId());
+        auditLogService.logCurrentAction("REVIEW_REJECTED", "REVIEW", review.getId(),
+                Map.of("moderationStatus", "PENDING"),
+                Map.of("moderationStatus", "HIDDEN"));
         return toAdminResponse(review);
     }
 

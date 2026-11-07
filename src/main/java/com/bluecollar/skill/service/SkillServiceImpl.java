@@ -1,5 +1,7 @@
 package com.bluecollar.skill.service;
 
+import com.bluecollar.auth.entity.UserRole;
+import com.bluecollar.common.security.SecurityUtils;
 import com.bluecollar.skill.dto.CreateSkillRequest;
 import com.bluecollar.skill.dto.SkillResponse;
 import com.bluecollar.skill.dto.UpdateSkillRequest;
@@ -36,14 +38,22 @@ public class SkillServiceImpl implements SkillService {
     @Override
     @Transactional(readOnly = true)
     public Page<SkillResponse> getAllSkills(Pageable pageable) {
-        return skillRepository.findAll(pageable)
+        return skillRepository.findByActiveTrue(pageable)
                 .map(skillMapper::toResponse);
     }
 
     @Override
     @Transactional(readOnly = true)
     public SkillResponse getSkillById(UUID id) {
-        return skillMapper.toResponse(findSkill(id));
+        Skill skill = findSkill(id);
+        if (!Boolean.TRUE.equals(skill.getActive())) {
+            boolean isAdmin = SecurityUtils.isAuthenticated()
+                    && SecurityUtils.getCurrentUser().role() == UserRole.ADMIN;
+            if (!isAdmin) {
+                throw new SkillNotFoundException(id);
+            }
+        }
+        return skillMapper.toResponse(skill);
     }
 
     @Override
@@ -57,10 +67,9 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public void deleteSkill(UUID id) {
-        if (!skillRepository.existsById(id)) {
-            throw new SkillNotFoundException(id);
-        }
-        skillRepository.deleteById(id);
+        Skill skill = findSkill(id);
+        skill.setActive(false);
+        skillRepository.save(skill);
     }
 
     private Skill findSkill(UUID id) {

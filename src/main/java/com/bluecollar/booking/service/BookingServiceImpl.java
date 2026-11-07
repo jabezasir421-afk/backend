@@ -2,6 +2,7 @@ package com.bluecollar.booking.service;
 
 import com.bluecollar.address.entity.Address;
 import com.bluecollar.address.service.AddressServiceImpl;
+import com.bluecollar.audit.service.AuditLogService;
 import com.bluecollar.auth.entity.UserRole;
 import com.bluecollar.auth.repository.UserAccountRepository;
 import com.bluecollar.availability.service.AvailabilityService;
@@ -60,6 +61,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final AvailabilityService availabilityService;
     private final ApplicationEventPublisher eventPublisher;
+    private final AuditLogService auditLogService;
 
     @Override
     public BookingResponse createBooking(CreateBookingRequest request) {
@@ -106,6 +108,11 @@ public class BookingServiceImpl implements BookingService {
                 .build();
 
         Booking saved = bookingRepository.save(booking);
+        auditLogService.logCurrentAction("BOOKING_CREATED", "BOOKING", saved.getId(),
+                null,
+                java.util.Map.of("status", saved.getStatus().name(),
+                        "scheduledDate", saved.getScheduledDate().toString(),
+                        "timeSlot", saved.getTimeSlot()));
         publishBookingCreated(saved);
         return bookingMapper.toResponse(saved);
     }
@@ -251,6 +258,9 @@ public class BookingServiceImpl implements BookingService {
             throw new InvalidBookingStateException("Worker has an existing booking that overlaps with the requested time slot");
         }
 
+        LocalDate oldDate = booking.getScheduledDate();
+        String oldTimeSlot = booking.getTimeSlot();
+
         booking.setScheduledDate(request.scheduledDate());
         booking.setTimeSlot(request.timeSlot().trim());
         booking.setStartTime(slot.startTime());
@@ -261,6 +271,9 @@ public class BookingServiceImpl implements BookingService {
         booking.setQuotedAmount(calculateQuotedAmount(worker.getHourlyRate(), slot));
 
         Booking saved = bookingRepository.save(booking);
+        auditLogService.logCurrentAction("BOOKING_RESCHEDULED", "BOOKING", saved.getId(),
+                java.util.Map.of("scheduledDate", oldDate.toString(), "timeSlot", oldTimeSlot),
+                java.util.Map.of("scheduledDate", saved.getScheduledDate().toString(), "timeSlot", saved.getTimeSlot()));
         return bookingMapper.toResponse(saved);
     }
 
@@ -431,6 +444,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void publishStatusChanged(Booking booking, BookingStatus oldStatus) {
+        auditLogService.logCurrentAction("BOOKING_STATUS_CHANGED", "BOOKING", booking.getId(),
+                java.util.Map.of("status", oldStatus.name()),
+                java.util.Map.of("status", booking.getStatus().name()));
         eventPublisher.publishEvent(new BookingStatusChangedEvent(
                 booking.getId(),
                 oldStatus,

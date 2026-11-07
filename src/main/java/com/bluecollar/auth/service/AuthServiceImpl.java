@@ -1,5 +1,6 @@
 package com.bluecollar.auth.service;
 
+import com.bluecollar.audit.service.AuditLogService;
 import com.bluecollar.auth.dto.*;
 import com.bluecollar.auth.entity.RefreshToken;
 import com.bluecollar.auth.entity.UserAccount;
@@ -59,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final TokenHashService tokenHashService;
     private final NotificationService notificationService;
+    private final AuditLogService auditLogService;
 
     @Override
     public AuthResponse registerCustomer(RegisterCustomerRequest request) {
@@ -254,8 +256,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private Category findCategory(UUID categoryId) {
-        return categoryRepository.findById(categoryId)
+        Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+        if (!Boolean.TRUE.equals(category.getActive())) {
+            throw new IllegalArgumentException("Cannot assign inactive category: " + category.getName());
+        }
+        return category;
     }
 
     private Set<Skill> findSkills(Set<UUID> skillIds) {
@@ -266,6 +272,11 @@ public class AuthServiceImpl implements AuthService {
         List<Skill> skills = skillRepository.findAllById(skillIds);
         if (skills.size() != skillIds.size()) {
             throw new SkillNotFoundException("One or more skills were not found");
+        }
+        for (Skill skill : skills) {
+            if (!Boolean.TRUE.equals(skill.getActive())) {
+                throw new IllegalArgumentException("Cannot assign inactive skill: " + skill.getName());
+            }
         }
         return new LinkedHashSet<>(skills);
     }
@@ -340,6 +351,11 @@ public class AuthServiceImpl implements AuthService {
 
         refreshTokenRepository.revokeAllByUserAccountId(userAccount.getId(), now);
 
+        auditLogService.log(userAccount.getId(),
+                userAccount.getRole() != null ? userAccount.getRole().name() : "USER",
+                "PASSWORD_RESET", "USER", userAccount.getId(), null,
+                java.util.Map.of("email", userAccount.getEmail()));
+
         notificationService.notifyUser(
                 userAccount.getId(),
                 NotificationType.ACCOUNT_PASSWORD_CHANGED,
@@ -368,6 +384,11 @@ public class AuthServiceImpl implements AuthService {
         userAccountRepository.saveAndFlush(userAccount);
 
         refreshTokenRepository.revokeAllByUserAccountId(userAccount.getId(), now);
+
+        auditLogService.log(userAccount.getId(),
+                userAccount.getRole() != null ? userAccount.getRole().name() : "USER",
+                "PASSWORD_CHANGED", "USER", userAccount.getId(), null,
+                java.util.Map.of("email", userAccount.getEmail()));
 
         notificationService.notifyUser(
                 userAccount.getId(),

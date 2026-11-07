@@ -74,6 +74,8 @@ class BookingServiceTest {
     private AvailabilityService availabilityService;
     @Mock
     private ApplicationEventPublisher eventPublisher;
+    @Mock
+    private com.bluecollar.audit.service.AuditLogService auditLogService;
 
     @InjectMocks
     private BookingServiceImpl bookingService;

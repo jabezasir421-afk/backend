@@ -69,6 +69,8 @@ class ReviewServiceTest {
     private ReviewMapper reviewMapper;
     @Mock
     private ApplicationEventPublisher eventPublisher;
+    @Mock
+    private com.bluecollar.audit.service.AuditLogService auditLogService;
 
     @InjectMocks
     private ReviewServiceImpl reviewService;

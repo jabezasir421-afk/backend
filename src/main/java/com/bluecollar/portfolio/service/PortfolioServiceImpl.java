@@ -8,6 +8,9 @@ import com.bluecollar.portfolio.dto.*;
 import com.bluecollar.portfolio.entity.WorkerCertificate;
 import com.bluecollar.portfolio.entity.WorkerIdentityDocument;
 import com.bluecollar.portfolio.entity.WorkerPortfolioItem;
+import com.bluecollar.portfolio.exception.CertificateNotFoundException;
+import com.bluecollar.portfolio.exception.DuplicateIdentityDocumentException;
+import com.bluecollar.portfolio.exception.IdentityDocumentNotFoundException;
 import com.bluecollar.portfolio.exception.MaxPortfolioItemsExceededException;
 import com.bluecollar.portfolio.exception.PortfolioItemNotFoundException;
 import com.bluecollar.portfolio.mapper.PortfolioMapper;
@@ -173,7 +176,7 @@ public class PortfolioServiceImpl implements PortfolioService {
             throw new MaxPortfolioItemsExceededException("identity documents", MAX_IDENTITY_DOCS);
         }
         if (identityDocumentRepository.existsByWorkerIdAndDocumentTypeAndActiveTrue(worker.getId(), request.documentType())) {
-            throw new IllegalStateException("Identity document of type " + request.documentType() + " already exists");
+            throw new DuplicateIdentityDocumentException(request.documentType());
         }
 
         validateOwnedFile(worker, request.fileId(), FileCategory.IDENTITY_DOC);
@@ -211,9 +214,9 @@ public class PortfolioServiceImpl implements PortfolioService {
     public void deleteIdentityDocument(UUID id) {
         Worker worker = findWorkerByCurrentUser();
         WorkerIdentityDocument document = identityDocumentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Identity document not found"));
+                .orElseThrow(() -> new IdentityDocumentNotFoundException(id));
         if (!document.getWorker().getId().equals(worker.getId())) {
-            throw new RuntimeException("Unauthorized");
+            throw new UnauthorizedException("You do not have access to this identity document");
         }
         document.setActive(false);
         identityDocumentRepository.save(document);
@@ -277,7 +280,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     private WorkerCertificate findCertificate(UUID workerId, UUID id) {
         return certificateRepository.findByIdAndWorkerIdAndActiveTrue(id, workerId)
-                .orElseThrow(() -> new PortfolioItemNotFoundException("Certificate not found with id: " + id));
+                .orElseThrow(() -> new CertificateNotFoundException(id));
     }
 
     private void validateOwnedFile(Worker worker, UUID fileId, FileCategory expectedCategory) {

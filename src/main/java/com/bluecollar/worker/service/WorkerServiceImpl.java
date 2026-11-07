@@ -91,10 +91,10 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public void deleteWorker(UUID id) {
-        if (!workerRepository.existsById(id)) {
-            throw new WorkerNotFoundException(id);
-        }
-        workerRepository.deleteById(id);
+        Worker worker = findWorker(id);
+        worker.setActive(false);
+        worker.setAvailable(false);
+        workerRepository.save(worker);
     }
 
     private Worker findWorker(UUID id) {
@@ -103,8 +103,12 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     private Category findCategory(UUID id) {
-        return categoryRepository.findById(id)
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
+        if (!Boolean.TRUE.equals(category.getActive())) {
+            throw new IllegalArgumentException("Cannot assign inactive category: " + category.getName());
+        }
+        return category;
     }
 
     private Set<Skill> findSkills(Set<UUID> skillIds) {
@@ -116,6 +120,11 @@ public class WorkerServiceImpl implements WorkerService {
         List<Skill> skills = skillRepository.findAllById(requestedSkillIds);
         if (skills.size() != requestedSkillIds.size()) {
             throw new SkillNotFoundException(findMissingSkillId(requestedSkillIds, skills));
+        }
+        for (Skill skill : skills) {
+            if (!Boolean.TRUE.equals(skill.getActive())) {
+                throw new IllegalArgumentException("Cannot assign inactive skill: " + skill.getName());
+            }
         }
         return new LinkedHashSet<>(skills);
     }

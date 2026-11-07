@@ -302,7 +302,7 @@ class PortfolioServiceTest {
         when(identityDocumentRepository.existsByWorkerIdAndDocumentTypeAndActiveTrue(workerId, DocumentType.AADHAAR))
                 .thenReturn(true);
 
-        assertThrows(IllegalStateException.class, () -> portfolioService.addIdentityDocument(request));
+        assertThrows(com.bluecollar.portfolio.exception.DuplicateIdentityDocumentException.class, () -> portfolioService.addIdentityDocument(request));
         verify(identityDocumentRepository, never()).save(any());
     }
 

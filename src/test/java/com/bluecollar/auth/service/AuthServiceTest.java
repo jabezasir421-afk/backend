@@ -69,6 +69,8 @@ class AuthServiceTest {
     private TokenHashService tokenHashService;
     @Mock
     private com.bluecollar.notification.service.NotificationService notificationService;
+    @Mock
+    private com.bluecollar.audit.service.AuditLogService auditLogService;
 
     @InjectMocks
     private AuthServiceImpl authService;

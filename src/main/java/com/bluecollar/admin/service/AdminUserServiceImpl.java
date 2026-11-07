@@ -1,6 +1,7 @@
 package com.bluecollar.admin.service;
 
 import com.bluecollar.admin.dto.AdminUserResponse;
+import com.bluecollar.audit.service.AuditLogService;
 import com.bluecollar.auth.entity.UserAccount;
 import com.bluecollar.auth.entity.UserRole;
 import com.bluecollar.auth.repository.UserAccountRepository;
@@ -25,6 +26,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     private final CustomerRepository customerRepository;
     private final WorkerRepository workerRepository;
     private final com.bluecollar.auth.repository.RefreshTokenRepository refreshTokenRepository;
+    private final AuditLogService auditLogService;
 
     @Override
     @Transactional(readOnly = true)
@@ -43,7 +45,10 @@ public class AdminUserServiceImpl implements AdminUserService {
     public AdminUserResponse activateUser(UUID id) {
         UserAccount user = findUser(id);
         user.setActive(true);
-        return toResponse(userAccountRepository.save(user));
+        UserAccount saved = userAccountRepository.save(user);
+        auditLogService.logCurrentAction("USER_ACTIVATED", "USER", saved.getId(),
+                java.util.Map.of("active", false), java.util.Map.of("active", true));
+        return toResponse(saved);
     }
 
     @Override
@@ -57,7 +62,10 @@ public class AdminUserServiceImpl implements AdminUserService {
         }
         user.setActive(false);
         refreshTokenRepository.revokeAllByUserAccountId(user.getId(), java.time.Instant.now());
-        return toResponse(userAccountRepository.save(user));
+        UserAccount saved = userAccountRepository.save(user);
+        auditLogService.logCurrentAction("USER_DEACTIVATED", "USER", saved.getId(),
+                java.util.Map.of("active", true), java.util.Map.of("active", false));
+        return toResponse(saved);
     }
 
     @Override
@@ -72,8 +80,12 @@ public class AdminUserServiceImpl implements AdminUserService {
                 && userAccountRepository.countByRoleAndActiveTrue(UserRole.ADMIN) <= 1) {
             throw new IllegalStateException("Cannot demote the last active administrator");
         }
+        UserRole oldRole = user.getRole();
         user.setRole(role);
-        return toResponse(userAccountRepository.save(user));
+        UserAccount saved = userAccountRepository.save(user);
+        auditLogService.logCurrentAction("USER_ROLE_CHANGED", "USER", saved.getId(),
+                java.util.Map.of("role", oldRole.name()), java.util.Map.of("role", role.name()));
+        return toResponse(saved);
     }
 
     private UserAccount findUser(UUID id) {

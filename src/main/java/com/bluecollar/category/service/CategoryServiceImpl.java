@@ -1,5 +1,6 @@
 package com.bluecollar.category.service;
 
+import com.bluecollar.auth.entity.UserRole;
 import com.bluecollar.category.dto.CategoryResponse;
 import com.bluecollar.category.dto.CreateCategoryRequest;
 import com.bluecollar.category.dto.UpdateCategoryRequest;
@@ -8,6 +9,7 @@ import com.bluecollar.category.exception.CategoryAlreadyExistsException;
 import com.bluecollar.category.exception.CategoryNotFoundException;
 import com.bluecollar.category.mapper.CategoryMapper;
 import com.bluecollar.category.repository.CategoryRepository;
+import com.bluecollar.common.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,14 +38,22 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(readOnly = true)
     public Page<CategoryResponse> getAllCategories(Pageable pageable) {
-        return categoryRepository.findAll(pageable)
+        return categoryRepository.findByActiveTrue(pageable)
                 .map(categoryMapper::toResponse);
     }
 
     @Override
     @Transactional(readOnly = true)
     public CategoryResponse getCategoryById(UUID id) {
-        return categoryMapper.toResponse(findCategory(id));
+        Category category = findCategory(id);
+        if (!Boolean.TRUE.equals(category.getActive())) {
+            boolean isAdmin = SecurityUtils.isAuthenticated()
+                    && SecurityUtils.getCurrentUser().role() == UserRole.ADMIN;
+            if (!isAdmin) {
+                throw new CategoryNotFoundException(id);
+            }
+        }
+        return categoryMapper.toResponse(category);
     }
 
     @Override
@@ -57,10 +67,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(UUID id) {
-        if (!categoryRepository.existsById(id)) {
-            throw new CategoryNotFoundException(id);
-        }
-        categoryRepository.deleteById(id);
+        Category category = findCategory(id);
+        category.setActive(false);
+        categoryRepository.save(category);
     }
 
     private Category findCategory(UUID id) {

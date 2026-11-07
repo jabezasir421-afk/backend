@@ -3,6 +3,7 @@ package com.bluecollar.admin.service;
 import com.bluecollar.admin.dto.AdminIdentityDocumentResponse;
 import com.bluecollar.admin.dto.LinkWorkerUserRequest;
 import com.bluecollar.admin.dto.RejectDocumentRequest;
+import com.bluecollar.audit.service.AuditLogService;
 import com.bluecollar.auth.entity.UserAccount;
 import com.bluecollar.auth.entity.UserRole;
 import com.bluecollar.auth.repository.UserAccountRepository;
@@ -41,6 +42,7 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
     private final UserAccountRepository userAccountRepository;
     private final DocumentEncryptionService documentEncryptionService;
     private final ProfileCompletionService profileCompletionService;
+    private final AuditLogService auditLogService;
 
     @Override
     public WorkerResponse verifyWorker(UUID id) {
@@ -74,14 +76,20 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
         }
 
         worker.setVerified(true);
-        return workerMapper.toResponse(workerRepository.save(worker));
+        Worker saved = workerRepository.save(worker);
+        auditLogService.logCurrentAction("WORKER_VERIFIED", "WORKER", saved.getId(),
+                java.util.Map.of("verified", false), java.util.Map.of("verified", true));
+        return workerMapper.toResponse(saved);
     }
 
     @Override
     public WorkerResponse unverifyWorker(UUID id) {
         Worker worker = findWorker(id);
         worker.setVerified(false);
-        return workerMapper.toResponse(workerRepository.save(worker));
+        Worker saved = workerRepository.save(worker);
+        auditLogService.logCurrentAction("WORKER_UNVERIFIED", "WORKER", saved.getId(),
+                java.util.Map.of("verified", true), java.util.Map.of("verified", false));
+        return workerMapper.toResponse(saved);
     }
 
     @Override
@@ -89,7 +97,10 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
         Worker worker = findWorker(id);
         worker.setActive(false);
         worker.setAvailable(false);
-        return workerMapper.toResponse(workerRepository.save(worker));
+        Worker saved = workerRepository.save(worker);
+        auditLogService.logCurrentAction("WORKER_DEACTIVATED", "WORKER", saved.getId(),
+                java.util.Map.of("active", true), java.util.Map.of("active", false));
+        return workerMapper.toResponse(saved);
     }
 
     @Override
@@ -129,6 +140,8 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
 
         worker.setUserAccount(userAccount);
         Worker saved = workerRepository.save(worker);
+        auditLogService.logCurrentAction("WORKER_LINKED_USER", "WORKER", saved.getId(),
+                null, java.util.Map.of("userAccountId", userAccount.getId().toString()));
         return workerMapper.toResponse(saved);
     }
 
@@ -166,6 +179,9 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
 
         WorkerIdentityDocument saved = identityDocumentRepository.save(document);
         profileCompletionService.recalculateAndSave(saved.getWorker());
+        auditLogService.logCurrentAction("IDENTITY_DOCUMENT_APPROVED", "WORKER_IDENTITY_DOCUMENT", saved.getId(),
+                java.util.Map.of("verificationStatus", "PENDING"),
+                java.util.Map.of("verificationStatus", "VERIFIED"));
         return toAdminDocumentResponse(saved);
     }
 
@@ -186,6 +202,9 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
 
         WorkerIdentityDocument saved = identityDocumentRepository.save(document);
         profileCompletionService.recalculateAndSave(saved.getWorker());
+        auditLogService.logCurrentAction("IDENTITY_DOCUMENT_REJECTED", "WORKER_IDENTITY_DOCUMENT", saved.getId(),
+                java.util.Map.of("verificationStatus", "PENDING"),
+                java.util.Map.of("verificationStatus", "REJECTED", "reason", saved.getRejectionReason()));
         return toAdminDocumentResponse(saved);
     }
 

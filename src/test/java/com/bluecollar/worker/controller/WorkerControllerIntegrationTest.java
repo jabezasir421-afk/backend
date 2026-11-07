@@ -256,7 +256,9 @@ class WorkerControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Worker deleted successfully"));
 
-        assertFalse(workerRepository.findById(worker.getId()).isPresent());
+        Worker deleted = workerRepository.findById(worker.getId()).orElseThrow();
+        assertFalse(deleted.getActive());
+        assertFalse(deleted.getAvailable());
     }
 
     @Test

@@ -148,7 +148,9 @@ class CategoryControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Category deleted successfully"));
 
-        assertFalse(categoryRepository.findById(category.getId()).isPresent());
+        Category deleted = categoryRepository.findById(category.getId()).orElseThrow();
+        assertFalse(deleted.getActive());
+        assertFalse(categoryRepository.findByIdAndActiveTrue(category.getId()).isPresent());
     }
 
     private Category buildCategory(String name, String description) {

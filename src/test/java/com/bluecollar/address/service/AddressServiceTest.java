@@ -35,6 +35,9 @@ class AddressServiceTest {
     private AddressRepository addressRepository;
 
     @Mock
+    private com.bluecollar.customer.repository.CustomerRepository customerRepository;
+
+    @Mock
     private CustomerServiceImpl customerService;
 
     @Mock

@@ -41,6 +41,9 @@ class AdminUserServiceTest {
     @Mock
     private com.bluecollar.auth.repository.RefreshTokenRepository refreshTokenRepository;
 
+    @Mock
+    private com.bluecollar.audit.service.AuditLogService auditLogService;
+
     @InjectMocks
     private AdminUserServiceImpl adminUserService;
 

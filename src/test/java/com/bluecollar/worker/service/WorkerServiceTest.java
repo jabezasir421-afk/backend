@@ -32,8 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -74,10 +73,12 @@ class WorkerServiceTest {
         category = new Category();
         category.setId(categoryId);
         category.setName("Plumbing");
+        category.setActive(true);
 
         skill = new Skill();
         skill.setId(skillId);
         skill.setName("Pipe fitting");
+        skill.setActive(true);
 
         worker = Worker.builder()
                 .firstName("John")
@@ -339,19 +340,21 @@ class WorkerServiceTest {
 
     @Test
     void deleteWorkerShouldDeleteWhenWorkerExists() {
-        when(workerRepository.existsById(workerId)).thenReturn(true);
+        when(workerRepository.findById(workerId)).thenReturn(Optional.of(worker));
 
         workerService.deleteWorker(workerId);
 
-        verify(workerRepository).existsById(workerId);
-        verify(workerRepository).deleteById(workerId);
+        verify(workerRepository).findById(workerId);
+        verify(workerRepository).save(worker);
+        assertFalse(worker.getActive());
+        assertFalse(worker.getAvailable());
     }
 
     @Test
     void deleteWorkerShouldThrowWhenWorkerDoesNotExist() {
-        when(workerRepository.existsById(workerId)).thenReturn(false);
+        when(workerRepository.findById(workerId)).thenReturn(Optional.empty());
 
         assertThrows(WorkerNotFoundException.class, () -> workerService.deleteWorker(workerId));
-        verify(workerRepository, never()).deleteById(any());
+        verify(workerRepository, never()).save(any());
     }
 }

@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -111,14 +110,14 @@ class SkillServiceTest {
         PageRequest pageable = PageRequest.of(0, 10);
         Page<Skill> page = new PageImpl<>(List.of(skill), pageable, 1);
 
-        when(skillRepository.findAll(pageable)).thenReturn(page);
+        when(skillRepository.findByActiveTrue(pageable)).thenReturn(page);
         when(skillMapper.toResponse(skill)).thenReturn(response);
 
         Page<SkillResponse> result = skillService.getAllSkills(pageable);
 
         assertEquals(1, result.getTotalElements());
         assertEquals(response, result.getContent().getFirst());
-        verify(skillRepository).findAll(pageable);
+        verify(skillRepository).findByActiveTrue(pageable);
     }
 
     @Test
@@ -149,11 +148,12 @@ class SkillServiceTest {
     void deleteSkillShouldDeleteWhenSkillExists() {
         UUID id = UUID.randomUUID();
 
-        when(skillRepository.existsById(id)).thenReturn(true);
+        when(skillRepository.findById(id)).thenReturn(Optional.of(skill));
 
         skillService.deleteSkill(id);
 
-        verify(skillRepository).existsById(id);
-        verify(skillRepository).deleteById(id);
+        verify(skillRepository).findById(id);
+        verify(skillRepository).save(skill);
+        assertFalse(skill.getActive());
     }
 }
