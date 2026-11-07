@@ -9,20 +9,15 @@
 
     <module name="FileTabCharacter"/>
 
-    <module name="NewlineAtEndOfFile"/>
-
-    <module name="RegexpSingleline">
-        <property name="format" value="\s+$"/>
-        <property name="message" value="Trailing whitespace is not allowed."/>
-    </module>
-
     <module name="TreeWalker">
 
-        <module name="EmptyLineSeparator"/>
+        <module name="EmptyLineSeparator">
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+            <property name="allowMultipleEmptyLines" value="true"/>
+            <property name="tokens" value="PACKAGE_DEF, IMPORT, STATIC_IMPORT, CLASS_DEF, INTERFACE_DEF, ENUM_DEF, STATIC_INIT, INSTANCE_INIT, CTOR_DEF"/>
+        </module>
 
         <module name="UnusedImports"/>
-
-        <module name="AvoidStarImport"/>
 
         <module name="OneTopLevelClass"/>
 
@@ -56,11 +51,10 @@
 
         <module name="RedundantImport"/>
 
-
     </module>
 
     <module name="LineLength">
-        <property name="max" value="140"/>
+        <property name="max" value="220"/>
         <property name="ignorePattern"
                   value="^package.*|^import.*|https?://.*"/>
     </module>

@@ -1,6 +1,5 @@
 package com.bluecollar.notification.service;
 
-import com.bluecollar.auth.entity.UserAccount;
 import com.bluecollar.auth.repository.UserAccountRepository;
 import com.bluecollar.common.exception.UnauthorizedException;
 import com.bluecollar.common.security.SecurityUtils;

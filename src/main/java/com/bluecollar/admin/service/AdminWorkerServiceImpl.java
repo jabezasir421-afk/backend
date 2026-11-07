@@ -179,7 +179,7 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
 
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
         document.setVerificationStatus(VerificationStatus.VERIFIED);
-        document.setVerifiedBy(currentUser != null ? currentUser.userAccountId() : null);
+        document.setVerifiedBy(currentUser.userAccountId());
         document.setVerifiedAt(Instant.now());
         document.setRejectionReason(null);
 
@@ -202,7 +202,7 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
 
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
         document.setVerificationStatus(VerificationStatus.REJECTED);
-        document.setVerifiedBy(currentUser != null ? currentUser.userAccountId() : null);
+        document.setVerifiedBy(currentUser.userAccountId());
         document.setVerifiedAt(Instant.now());
         document.setRejectionReason(request != null && request.reason() != null ? request.reason().trim() : "Rejected by administrator");
 

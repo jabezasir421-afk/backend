@@ -153,10 +153,18 @@ public class FileController {
 
     private String probeContentType(String key) {
         String lower = key.toLowerCase();
-        if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
-        if (lower.endsWith(".png")) return "image/png";
-        if (lower.endsWith(".webp")) return "image/webp";
-        if (lower.endsWith(".pdf")) return "application/pdf";
+        if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) {
+            return "image/jpeg";
+        }
+        if (lower.endsWith(".png")) {
+            return "image/png";
+        }
+        if (lower.endsWith(".webp")) {
+            return "image/webp";
+        }
+        if (lower.endsWith(".pdf")) {
+            return "application/pdf";
+        }
         return MediaType.APPLICATION_OCTET_STREAM_VALUE;
     }
 }

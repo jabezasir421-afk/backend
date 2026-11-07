@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,7 +47,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 Claims claims = jwtService.parseClaims(token);
                 UUID userAccountId = UUID.fromString(claims.getSubject());
-                Date tokenIssuedAt = claims.getIssuedAt();
 
                 UserAccount userAccount = userAccountRepository.findById(userAccountId).orElse(null);
 

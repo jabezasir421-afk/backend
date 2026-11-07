@@ -382,9 +382,6 @@ public class BookingServiceImpl implements BookingService {
         return hourlyRate.multiply(hours);
     }
 
-    private BigDecimal calculateQuotedAmount(BigDecimal hourlyRate, String timeSlot) {
-        return calculateQuotedAmount(hourlyRate, parseTimeSlot(timeSlot));
-    }
 
     private void transition(Booking booking, BookingStatus target) {
         if (!booking.getStatus().canTransitionTo(target)) {

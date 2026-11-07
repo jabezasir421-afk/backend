@@ -1,6 +1,7 @@
 package com.bluecollar.auth.config;
 
 import com.bluecollar.auth.filter.JwtAuthenticationFilter;
+import com.bluecollar.common.filter.CorrelationIdFilter;
 import com.bluecollar.common.filter.RateLimitingFilter;
 import com.bluecollar.common.idempotency.IdempotencyFilter;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final CorrelationIdFilter correlationIdFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final RateLimitingFilter rateLimitingFilter;
     private final IdempotencyFilter idempotencyFilter;
@@ -50,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(correlationIdFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(idempotencyFilter, JwtAuthenticationFilter.class);
