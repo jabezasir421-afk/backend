@@ -101,6 +101,7 @@ public class ProfileCompletionServiceImpl implements ProfileCompletionService {
     }
 
     @Override
+    @Transactional
     public void recalculateAndSave(Worker worker) {
         ProfileCompletionResponse completion = calculate(worker);
         worker.setProfileCompletionPercent((short) completion.completionPercent());

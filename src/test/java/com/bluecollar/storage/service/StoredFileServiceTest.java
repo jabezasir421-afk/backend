@@ -20,6 +20,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -90,7 +91,7 @@ class StoredFileServiceTest {
     void uploadShouldThrowWhenContentTypeIsMissing() throws Exception {
         MultipartFile file = mock(MultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        when(file.getBytes()).thenReturn(jpegBytes);
+        when(file.getInputStream()).thenAnswer(inv -> new ByteArrayInputStream(jpegBytes));
         when(file.getContentType()).thenReturn(null);
 
         assertThrows(FileUploadException.class, () ->
@@ -103,7 +104,8 @@ class StoredFileServiceTest {
     void uploadShouldThrowWhenMimeTypeIsNotAllowed() throws Exception {
         MultipartFile file = mock(MultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        when(file.getBytes()).thenReturn(jpegBytes);
+        when(file.getInputStream()).thenAnswer(inv -> new ByteArrayInputStream(jpegBytes));
+        when(file.getSize()).thenReturn((long) jpegBytes.length);
         when(file.getContentType()).thenReturn("application/pdf");
 
         assertThrows(FileUploadException.class, () ->
@@ -117,7 +119,8 @@ class StoredFileServiceTest {
         MultipartFile file = mock(MultipartFile.class);
         byte[] pngHeader = new byte[]{(byte) 0x89, 0x50, 0x4E, 0x47, 0x00, 0x00, 0x00, 0x00};
         when(file.isEmpty()).thenReturn(false);
-        when(file.getBytes()).thenReturn(pngHeader);
+        when(file.getInputStream()).thenAnswer(inv -> new ByteArrayInputStream(pngHeader));
+        when(file.getSize()).thenReturn((long) pngHeader.length);
         when(file.getContentType()).thenReturn("image/jpeg");
 
         assertThrows(FileUploadException.class, () ->
@@ -130,7 +133,8 @@ class StoredFileServiceTest {
     void uploadShouldStoreFileAndReturnResponseWhenValid() throws Exception {
         MultipartFile file = mock(MultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        when(file.getBytes()).thenReturn(jpegBytes);
+        when(file.getInputStream()).thenAnswer(inv -> new ByteArrayInputStream(jpegBytes));
+        when(file.getSize()).thenReturn((long) jpegBytes.length);
         when(file.getContentType()).thenReturn("image/jpeg");
         when(file.getOriginalFilename()).thenReturn("photo.jpg");
         when(storageProperties.getPresignedUrlExpirySeconds()).thenReturn(3600L);
@@ -173,6 +177,25 @@ class StoredFileServiceTest {
         assertEquals(response, result);
         verify(fileStorageService).store(anyString(), any(), eq("image/jpeg"), eq((long) jpegBytes.length));
         verify(storedFileRepository).save(any(StoredFile.class));
+    }
+
+    @Test
+    void uploadShouldDeleteStoredFileWhenDatabasePersistenceFails() throws Exception {
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.isEmpty()).thenReturn(false);
+        when(file.getInputStream()).thenAnswer(inv -> new ByteArrayInputStream(jpegBytes));
+        when(file.getSize()).thenReturn((long) jpegBytes.length);
+        when(file.getContentType()).thenReturn("image/jpeg");
+        when(file.getOriginalFilename()).thenReturn("photo.jpg");
+
+        when(storedFileRepository.save(any(StoredFile.class)))
+                .thenThrow(new RuntimeException("Database connection failure"));
+
+        assertThrows(RuntimeException.class, () ->
+                storedFileService.upload(file, FileCategory.PROFILE_PHOTO, EntityType.WORKER, null));
+
+        // Verify that the stored file was cleaned up immediately from storage
+        verify(fileStorageService).delete(anyString());
     }
 
     @Test

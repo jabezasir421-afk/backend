@@ -55,7 +55,6 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     @Transactional(readOnly = true)
     public WorkerAvailabilityConfigResponse getMyAvailability() {
         Worker worker = findWorkerByCurrentUser();
-        refreshStaleOnlineStatus(worker);
         List<WorkerWorkingHours> workingHours = workingHoursRepository.findByWorkerIdAndActiveTrueOrderByDayOfWeekAsc(worker.getId());
         AvailabilitySummaryResponse summary = availabilityMapper.toSummaryResponse(
                 worker,
@@ -182,7 +181,6 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     @Transactional(readOnly = true)
     public AvailabilitySummaryResponse getPublicAvailability(UUID workerId) {
         Worker worker = findActiveWorker(workerId);
-        refreshStaleOnlineStatus(worker);
         List<WorkerWorkingHours> workingHours = workingHoursRepository.findByWorkerIdAndActiveTrueOrderByDayOfWeekAsc(worker.getId());
         return availabilityMapper.toSummaryResponse(worker, resolveEffectiveOnlineStatus(worker), workingHours);
     }
@@ -420,13 +418,6 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         return OnlineStatus.ONLINE;
     }
 
-    private void refreshStaleOnlineStatus(Worker worker) {
-        if (worker.getOnlineStatus() == OnlineStatus.ONLINE
-                && resolveEffectiveOnlineStatus(worker) == OnlineStatus.OFFLINE) {
-            worker.setOnlineStatus(OnlineStatus.OFFLINE);
-            workerRepository.save(worker);
-        }
-    }
 
     private Worker findWorkerByCurrentUser() {
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();

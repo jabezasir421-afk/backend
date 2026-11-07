@@ -13,8 +13,9 @@ public class RateLimitConfig {
     @ConditionalOnProperty(prefix = "bluecollar.security.rate-limit", name = "enabled", havingValue = "true")
     public RateLimitService rateLimitService(
             @Value("${bluecollar.security.rate-limit.max-requests:20}") int maxRequests,
-            @Value("${bluecollar.security.rate-limit.window-ms:60000}") long windowMs
+            @Value("${bluecollar.security.rate-limit.window-ms:60000}") long windowMs,
+            @Value("${bluecollar.security.rate-limit.max-capacity:100000}") long maxCapacity
     ) {
-        return new RateLimitService(maxRequests, windowMs);
+        return new RateLimitService(maxRequests, windowMs, maxCapacity);
     }
 }

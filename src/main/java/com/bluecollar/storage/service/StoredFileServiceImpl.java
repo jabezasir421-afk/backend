@@ -19,21 +19,27 @@ import com.bluecollar.storage.repository.StoredFileRepository;
 import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HexFormat;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional
 public class StoredFileServiceImpl implements StoredFileService {
 
@@ -73,14 +79,31 @@ public class StoredFileServiceImpl implements StoredFileService {
             throw new UnauthorizedException("Customers can only upload profile photos");
         }
 
-        byte[] content;
+        if (file == null || file.isEmpty()) {
+            throw new FileUploadException("File is required");
+        }
+
+        // Validate magic header without buffering entire file in memory
+        byte[] header = new byte[12];
+        InputStream rawStream;
         try {
-            content = file.getBytes();
+            rawStream = file.getInputStream();
         } catch (IOException exception) {
             throw new FileUploadException("Failed to read uploaded file", exception);
         }
 
-        validateUpload(file, fileCategory, content);
+        BufferedInputStream bufferedStream = new BufferedInputStream(rawStream);
+        bufferedStream.mark(16);
+        int read;
+        try {
+            read = bufferedStream.read(header);
+            bufferedStream.reset();
+        } catch (IOException ex) {
+            throw new FileUploadException("Failed to inspect file header", ex);
+        }
+
+        byte[] actualHeader = read > 0 && read < 12 ? Arrays.copyOf(header, read) : header;
+        validateUpload(file, fileCategory, actualHeader);
         validateFileCategory(fileCategory, entityType, entityId);
 
         EntityType resolvedEntityType = entityType == null ? mapDefaultEntityType(fileCategory, currentUser) : entityType;
@@ -103,7 +126,8 @@ public class StoredFileServiceImpl implements StoredFileService {
         }
 
         String storageKey = buildStorageKey(currentUser.userAccountId(), fileCategory, file.getOriginalFilename());
-        String checksum = storeWithChecksum(storageKey, content, file.getContentType());
+        // Stream directly into storage calculating SHA-256 digest on the fly
+        String checksum = storeWithChecksum(storageKey, bufferedStream, file.getContentType(), file.getSize());
 
         StoredFile storedFile = StoredFile.builder()
                 .ownerUserId(currentUser.userAccountId())
@@ -113,11 +137,41 @@ public class StoredFileServiceImpl implements StoredFileService {
                 .storageKey(storageKey)
                 .originalName(sanitizeFilename(file.getOriginalFilename()))
                 .mimeType(file.getContentType())
-                .sizeBytes((long) content.length)
+                .sizeBytes(file.getSize())
                 .checksumSha256(checksum)
                 .build();
 
-        StoredFile savedFile = storedFileRepository.save(storedFile);
+        StoredFile savedFile;
+        try {
+            savedFile = storedFileRepository.save(storedFile);
+        } catch (Exception ex) {
+            // Immediately delete uploaded file if database persistence fails
+            try {
+                fileStorageService.delete(storageKey);
+            } catch (Exception deleteEx) {
+                log.warn("Failed to delete orphaned file {} after persistence failure: {}", storageKey, deleteEx.getMessage());
+            }
+            throw ex;
+        }
+
+        // Register transaction rollback synchronization to clean up file if subsequent operations abort
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            final String cleanupKey = storageKey;
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCompletion(int status) {
+                    if (status != TransactionSynchronization.STATUS_COMMITTED) {
+                        try {
+                            fileStorageService.delete(cleanupKey);
+                            log.debug("Deleted uncommitted stored file {} after transaction rollback", cleanupKey);
+                        } catch (Exception ex) {
+                            log.warn("Failed to delete stored file {} on transaction rollback: {}", cleanupKey, ex.getMessage());
+                        }
+                    }
+                }
+            });
+        }
+
         String downloadUrl = resolveDownloadUrl(savedFile, currentUser);
         return storedFileMapper.toResponse(savedFile, downloadUrl);
     }
@@ -219,18 +273,14 @@ public class StoredFileServiceImpl implements StoredFileService {
         );
     }
 
-    private void validateUpload(MultipartFile file, FileCategory fileCategory, byte[] content) {
-        if (file == null || file.isEmpty()) {
-            throw new FileUploadException("File is required");
-        }
-
+    private void validateUpload(MultipartFile file, FileCategory fileCategory, byte[] header) {
         String mimeType = file.getContentType();
         if (mimeType == null || mimeType.isBlank()) {
             throw new FileUploadException("Content type is required");
         }
 
         long maxSize = isImageCategory(fileCategory) ? IMAGE_MAX_BYTES : DOCUMENT_MAX_BYTES;
-        if (content.length > maxSize) {
+        if (file.getSize() > maxSize) {
             throw new FileUploadException("File exceeds maximum allowed size for category " + fileCategory);
         }
 
@@ -239,9 +289,6 @@ public class StoredFileServiceImpl implements StoredFileService {
             throw new FileUploadException("MIME type '" + mimeType + "' is not allowed for category " + fileCategory);
         }
 
-        int headerLength = Math.min(content.length, 12);
-        byte[] header = new byte[headerLength];
-        System.arraycopy(content, 0, header, 0, headerLength);
         if (!matchesMime(header, mimeType)) {
             throw new FileUploadException("File content does not match declared MIME type");
         }
@@ -257,10 +304,6 @@ public class StoredFileServiceImpl implements StoredFileService {
         if (!requiresEntity && entityId != null) {
             throw new FileUploadException("entityId should not be provided for file category " + fileCategory);
         }
-
-        // Note: entityId ownership validation should happen at resource-level endpoints
-        // (e.g., POST /workers/me/portfolio/certificates validates certificate ownership)
-        // The upload endpoint stores with ownerUserId, so file access is always validated via ownership.
     }
 
     private void validateCategoryEntityMatch(FileCategory fileCategory, EntityType entityType) {
@@ -305,12 +348,11 @@ public class StoredFileServiceImpl implements StoredFileService {
         };
     }
 
-    private String storeWithChecksum(String storageKey, byte[] content, String contentType) {
+    private String storeWithChecksum(String storageKey, InputStream inputStream, String contentType, long size) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            try (InputStream inputStream = new java.io.ByteArrayInputStream(content);
-                 DigestInputStream digestInputStream = new DigestInputStream(inputStream, digest)) {
-                fileStorageService.store(storageKey, digestInputStream, contentType, content.length);
+            try (DigestInputStream digestInputStream = new DigestInputStream(inputStream, digest)) {
+                fileStorageService.store(storageKey, digestInputStream, contentType, size);
             }
             return HexFormat.of().formatHex(digest.digest());
         } catch (IOException | NoSuchAlgorithmException exception) {
