@@ -2,6 +2,7 @@ package com.bluecollar.booking.service;
 
 import com.bluecollar.address.entity.Address;
 import com.bluecollar.address.service.AddressServiceImpl;
+import com.bluecollar.audit.service.AuditLogService;
 import com.bluecollar.auth.entity.UserRole;
 import com.bluecollar.auth.repository.UserAccountRepository;
 import com.bluecollar.availability.service.AvailabilityService;
@@ -15,6 +16,7 @@ import com.bluecollar.booking.repository.BookingRepository;
 import com.bluecollar.category.entity.Category;
 import com.bluecollar.category.exception.CategoryNotFoundException;
 import com.bluecollar.category.repository.CategoryRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.common.event.BookingCreatedEvent;
 import com.bluecollar.common.event.BookingStatusChangedEvent;
 import com.bluecollar.common.exception.UnauthorizedException;
@@ -26,6 +28,7 @@ import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.exception.WorkerNotFoundException;
 import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.*;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -43,6 +48,11 @@ import java.util.UUID;
 public class BookingServiceImpl implements BookingService {
 
     private static final Duration CANCELLATION_CUTOFF = Duration.ofHours(2);
+    private static final List<BookingStatus> BLOCKING_STATUSES = List.of(
+            BookingStatus.PENDING,
+            BookingStatus.ACCEPTED,
+            BookingStatus.IN_PROGRESS
+    );
 
     private final BookingRepository bookingRepository;
     private final CustomerServiceImpl customerService;
@@ -53,18 +63,33 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
     private final AvailabilityService availabilityService;
     private final ApplicationEventPublisher eventPublisher;
+    private final AuditLogService auditLogService;
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse createBooking(CreateBookingRequest request) {
         Customer customer = customerService.findCustomerByCurrentUser();
-        Worker worker = findAvailableWorker(request.workerId());
+        Worker worker = findWorkerWithLock(request.workerId());
         Category category = findCategory(request.categoryId());
         Address address = addressService.findActiveAddressForCustomer(request.addressId(), customer.getId());
 
         validateWorkerCategory(worker, category);
         validateWorkerHourlyRate(worker);
-        if (!availabilityService.isAvailableOnDate(worker.getId(), request.scheduledDate())) {
-            throw new InvalidBookingStateException("Worker is not available on the selected date");
+
+        ParsedTimeSlot slot = parseTimeSlot(request.timeSlot());
+
+        if (!availabilityService.isSlotAvailable(worker.getId(), request.scheduledDate(), slot.startTime(), slot.endTime())) {
+            throw new InvalidBookingStateException("Worker is not available for the requested time slot");
+        }
+
+        if (bookingRepository.existsOverlappingBooking(
+                worker.getId(),
+                request.scheduledDate(),
+                slot.startTime(),
+                slot.endTime(),
+                BLOCKING_STATUSES,
+                null)) {
+            throw new InvalidBookingStateException("Worker has an existing booking that overlaps with the requested time slot");
         }
 
         Booking booking = Booking.builder()
@@ -75,8 +100,10 @@ public class BookingServiceImpl implements BookingService {
                 .status(BookingStatus.PENDING)
                 .scheduledDate(request.scheduledDate())
                 .timeSlot(request.timeSlot().trim())
+                .startTime(slot.startTime())
+                .endTime(slot.endTime())
                 .description(request.description().trim())
-                .quotedAmount(calculateQuotedAmount(worker.getHourlyRate(), request.timeSlot()))
+                .quotedAmount(calculateQuotedAmount(worker.getHourlyRate(), slot))
                 .addressLine1(address.getLine1())
                 .addressCity(address.getCity())
                 .addressState(address.getState())
@@ -84,6 +111,11 @@ public class BookingServiceImpl implements BookingService {
                 .build();
 
         Booking saved = bookingRepository.save(booking);
+        auditLogService.logCurrentAction("BOOKING_CREATED", "BOOKING", saved.getId(),
+                null,
+                java.util.Map.of("status", saved.getStatus().name(),
+                        "scheduledDate", saved.getScheduledDate().toString(),
+                        "timeSlot", saved.getTimeSlot()));
         publishBookingCreated(saved);
         return bookingMapper.toResponse(saved);
     }
@@ -136,6 +168,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse acceptBooking(UUID id) {
         Booking booking = findBookingForWorker(id);
         BookingStatus oldStatus = booking.getStatus();
@@ -147,6 +180,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse startBooking(UUID id) {
         Booking booking = findBookingForWorker(id);
         BookingStatus oldStatus = booking.getStatus();
@@ -157,6 +191,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse rejectBooking(UUID id, RejectBookingRequest request) {
         Booking booking = findBookingForWorker(id);
         BookingStatus oldStatus = booking.getStatus();
@@ -171,6 +206,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse cancelBooking(UUID id, CancelBookingRequest request) {
         Booking booking = findBooking(id);
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
@@ -192,6 +228,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse completeBooking(UUID id, CompleteBookingRequest request) {
         Booking booking = findBookingForWorker(id);
         BookingStatus oldStatus = booking.getStatus();
@@ -204,6 +241,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse rescheduleBooking(UUID id, RescheduleBookingRequest request) {
         Booking booking = findBookingForCustomer(id);
 
@@ -211,18 +249,40 @@ public class BookingServiceImpl implements BookingService {
             throw new InvalidBookingStateException("Bookings can only be rescheduled in PENDING status");
         }
 
-        if (!availabilityService.isAvailableOnDate(booking.getWorker().getId(), request.scheduledDate())) {
-            throw new InvalidBookingStateException("Worker is not available on the selected date");
+        Worker worker = findWorkerWithLock(booking.getWorker().getId());
+
+        ParsedTimeSlot slot = parseTimeSlot(request.timeSlot());
+
+        if (!availabilityService.isSlotAvailable(worker.getId(), request.scheduledDate(), slot.startTime(), slot.endTime(), booking.getId())) {
+            throw new InvalidBookingStateException("Worker is not available for the requested time slot");
         }
+
+        if (bookingRepository.existsOverlappingBooking(
+                worker.getId(),
+                request.scheduledDate(),
+                slot.startTime(),
+                slot.endTime(),
+                BLOCKING_STATUSES,
+                booking.getId())) {
+            throw new InvalidBookingStateException("Worker has an existing booking that overlaps with the requested time slot");
+        }
+
+        LocalDate oldDate = booking.getScheduledDate();
+        String oldTimeSlot = booking.getTimeSlot();
 
         booking.setScheduledDate(request.scheduledDate());
         booking.setTimeSlot(request.timeSlot().trim());
+        booking.setStartTime(slot.startTime());
+        booking.setEndTime(slot.endTime());
         if (request.description() != null) {
             booking.setDescription(request.description().trim());
         }
-        booking.setQuotedAmount(calculateQuotedAmount(booking.getWorker().getHourlyRate(), request.timeSlot()));
+        booking.setQuotedAmount(calculateQuotedAmount(worker.getHourlyRate(), slot));
 
         Booking saved = bookingRepository.save(booking);
+        auditLogService.logCurrentAction("BOOKING_RESCHEDULED", "BOOKING", saved.getId(),
+                java.util.Map.of("scheduledDate", oldDate.toString(), "timeSlot", oldTimeSlot),
+                java.util.Map.of("scheduledDate", saved.getScheduledDate().toString(), "timeSlot", saved.getTimeSlot()));
         return bookingMapper.toResponse(saved);
     }
 
@@ -256,8 +316,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private Worker findAvailableWorker(UUID workerId) {
-        Worker worker = workerRepository.findById(workerId)
-                .orElseThrow(() -> new WorkerNotFoundException(workerId));
+        return findWorkerWithLock(workerId);
+    }
+
+    private Worker findWorkerWithLock(UUID workerId) {
+        Worker worker = workerRepository.findByIdWithLock(workerId)
+                .orElseGet(() -> workerRepository.findById(workerId)
+                        .orElseThrow(() -> new WorkerNotFoundException(workerId)));
 
         if (!Boolean.TRUE.equals(worker.getActive())
                 || !Boolean.TRUE.equals(worker.getVerified())
@@ -284,18 +349,39 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    private BigDecimal calculateQuotedAmount(BigDecimal hourlyRate, String timeSlot) {
-        String[] parts = timeSlot.trim().split("-");
-        LocalTime start = LocalTime.parse(parts[0]);
-        LocalTime end = LocalTime.parse(parts[1]);
-        long minutes = Duration.between(start, end).toMinutes();
-        if (minutes <= 0) {
-            throw new InvalidBookingStateException("Time slot end must be after start");
+    private record ParsedTimeSlot(LocalTime startTime, LocalTime endTime) {}
+
+    private ParsedTimeSlot parseTimeSlot(String timeSlot) {
+        if (timeSlot == null || !timeSlot.contains("-")) {
+            throw new InvalidBookingStateException("Time slot format must be HH:MM-HH:MM");
         }
+        String[] parts = timeSlot.trim().split("-");
+        if (parts.length != 2) {
+            throw new InvalidBookingStateException("Time slot format must be HH:MM-HH:MM");
+        }
+        try {
+            LocalTime start = LocalTime.parse(parts[0].trim());
+            LocalTime end = LocalTime.parse(parts[1].trim());
+            if (!start.isBefore(end)) {
+                throw new InvalidBookingStateException("Time slot end must be after start");
+            }
+            long minutes = Duration.between(start, end).toMinutes();
+            if (minutes <= 0) {
+                throw new InvalidBookingStateException("Time slot duration must be greater than zero");
+            }
+            return new ParsedTimeSlot(start, end);
+        } catch (DateTimeParseException ex) {
+            throw new InvalidBookingStateException("Invalid time format in time slot: " + timeSlot);
+        }
+    }
+
+    private BigDecimal calculateQuotedAmount(BigDecimal hourlyRate, ParsedTimeSlot slot) {
+        long minutes = Duration.between(slot.startTime(), slot.endTime()).toMinutes();
         BigDecimal hours = BigDecimal.valueOf(minutes)
                 .divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
         return hourlyRate.multiply(hours);
     }
+
 
     private void transition(Booking booking, BookingStatus target) {
         if (!booking.getStatus().canTransitionTo(target)) {
@@ -364,6 +450,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void publishStatusChanged(Booking booking, BookingStatus oldStatus) {
+        auditLogService.logCurrentAction("BOOKING_STATUS_CHANGED", "BOOKING", booking.getId(),
+                java.util.Map.of("status", oldStatus.name()),
+                java.util.Map.of("status", booking.getStatus().name()));
         eventPublisher.publishEvent(new BookingStatusChangedEvent(
                 booking.getId(),
                 oldStatus,

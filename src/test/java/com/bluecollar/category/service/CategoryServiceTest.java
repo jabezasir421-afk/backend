@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -111,14 +110,14 @@ class CategoryServiceTest {
         PageRequest pageable = PageRequest.of(0, 10);
         Page<Category> page = new PageImpl<>(List.of(category), pageable, 1);
 
-        when(categoryRepository.findAll(pageable)).thenReturn(page);
+        when(categoryRepository.findByActiveTrue(pageable)).thenReturn(page);
         when(categoryMapper.toResponse(category)).thenReturn(response);
 
         Page<CategoryResponse> result = categoryService.getAllCategories(pageable);
 
         assertEquals(1, result.getTotalElements());
         assertEquals(response, result.getContent().getFirst());
-        verify(categoryRepository).findAll(pageable);
+        verify(categoryRepository).findByActiveTrue(pageable);
     }
 
     @Test
@@ -149,11 +148,12 @@ class CategoryServiceTest {
     void deleteCategoryShouldDeleteWhenCategoryExists() {
         UUID id = UUID.randomUUID();
 
-        when(categoryRepository.existsById(id)).thenReturn(true);
+        when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
 
         categoryService.deleteCategory(id);
 
-        verify(categoryRepository).existsById(id);
-        verify(categoryRepository).deleteById(id);
+        verify(categoryRepository).findById(id);
+        verify(categoryRepository).save(category);
+        assertFalse(category.getActive());
     }
 }

@@ -148,7 +148,9 @@ class SkillControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Skill deleted successfully"));
 
-        assertFalse(skillRepository.findById(skill.getId()).isPresent());
+        Skill deleted = skillRepository.findById(skill.getId()).orElseThrow();
+        assertFalse(deleted.getActive());
+        assertFalse(skillRepository.findByIdAndActiveTrue(skill.getId()).isPresent());
     }
 
     private Skill buildSkill(String name, String description) {

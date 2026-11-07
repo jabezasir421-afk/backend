@@ -2,6 +2,7 @@ package com.bluecollar.customer.service;
 
 import com.bluecollar.auth.entity.UserAccount;
 import com.bluecollar.auth.repository.UserAccountRepository;
+import com.bluecollar.common.exception.UnauthorizedException;
 import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
 import com.bluecollar.customer.dto.CustomerResponse;
@@ -11,6 +12,12 @@ import com.bluecollar.customer.entity.Customer;
 import com.bluecollar.customer.exception.CustomerNotFoundException;
 import com.bluecollar.customer.mapper.CustomerMapper;
 import com.bluecollar.customer.repository.CustomerRepository;
+import com.bluecollar.storage.entity.EntityType;
+import com.bluecollar.storage.entity.FileCategory;
+import com.bluecollar.storage.entity.StoredFile;
+import com.bluecollar.storage.exception.FileNotFoundException;
+import com.bluecollar.storage.exception.FileUploadException;
+import com.bluecollar.storage.repository.StoredFileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final UserAccountRepository userAccountRepository;
     private final CustomerMapper customerMapper;
+    private final StoredFileRepository storedFileRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -44,6 +52,29 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse updateMyProfilePhoto(UpdateProfilePhotoRequest request) {
         Customer customer = findCustomerByCurrentUser();
+        AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
+
+        if (request.fileId() == null) {
+            throw new FileUploadException("fileId is required");
+        }
+
+        StoredFile storedFile = storedFileRepository.findByIdAndActiveTrue(request.fileId())
+                .orElseThrow(() -> new FileNotFoundException(request.fileId()));
+
+        if (!storedFile.getOwnerUserId().equals(currentUser.userAccountId())) {
+            throw new UnauthorizedException("You do not have access to this file");
+        }
+
+        if (storedFile.getFileCategory() != FileCategory.PROFILE_PHOTO) {
+            throw new FileUploadException("File category must be PROFILE_PHOTO");
+        }
+
+        if (storedFile.getEntityType() != null
+                && storedFile.getEntityType() != EntityType.CUSTOMER
+                && storedFile.getEntityType() != EntityType.WORKER) {
+            throw new FileUploadException("Invalid entity type for customer profile photo");
+        }
+
         customer.setProfilePhotoFileId(request.fileId());
         return customerMapper.toResponse(customerRepository.save(customer));
     }

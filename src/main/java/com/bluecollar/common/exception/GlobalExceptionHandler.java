@@ -14,6 +14,8 @@ import com.bluecollar.category.exception.CategoryAlreadyExistsException;
 import com.bluecollar.category.exception.CategoryNotFoundException;
 import com.bluecollar.customer.exception.CustomerNotFoundException;
 import com.bluecollar.notification.exception.NotificationNotFoundException;
+import com.bluecollar.portfolio.exception.CertificateNotFoundException;
+import com.bluecollar.portfolio.exception.DuplicateIdentityDocumentException;
 import com.bluecollar.portfolio.exception.IdentityDocumentNotFoundException;
 import com.bluecollar.portfolio.exception.MaxPortfolioItemsExceededException;
 import com.bluecollar.portfolio.exception.PortfolioItemNotFoundException;
@@ -109,6 +111,22 @@ public class GlobalExceptionHandler {
             HttpServletRequest request
     ) {
         return buildErrorResponse(HttpStatus.NOT_FOUND, exception.getMessage(), request.getRequestURI(), List.of());
+    }
+
+    @ExceptionHandler(CertificateNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCertificateNotFound(
+            CertificateNotFoundException exception,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND, exception.getMessage(), request.getRequestURI(), List.of());
+    }
+
+    @ExceptionHandler(DuplicateIdentityDocumentException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateIdentityDocument(
+            DuplicateIdentityDocumentException exception,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(HttpStatus.CONFLICT, exception.getMessage(), request.getRequestURI(), List.of());
     }
 
     @ExceptionHandler(WorkerNotAvailableException.class)
@@ -285,6 +303,14 @@ public class GlobalExceptionHandler {
             HttpServletRequest request
     ) {
         return buildErrorResponse(HttpStatus.CONFLICT, exception.getMessage(), request.getRequestURI(), List.of());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(
+            IllegalArgumentException exception,
+            HttpServletRequest request
+    ) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI(), List.of());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

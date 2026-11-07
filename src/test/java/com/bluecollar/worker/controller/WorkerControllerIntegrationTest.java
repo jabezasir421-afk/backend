@@ -2,6 +2,7 @@ package com.bluecollar.worker.controller;
 
 import com.bluecollar.category.entity.Category;
 import com.bluecollar.category.repository.CategoryRepository;
+import com.bluecollar.portfolio.repository.WorkerIdentityDocumentRepository;
 import com.bluecollar.worker.entity.Gender;
 import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.repository.WorkerRepository;
@@ -13,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -46,13 +49,17 @@ class WorkerControllerIntegrationTest {
 
     private Category category;
 
+    @DynamicPropertySource
+    static void configureIsolatedDatabase(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", () ->
+                "jdbc:h2:mem:worker_controller_integration;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL");
+    }
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
-        workerRepository.deleteAll();
-        categoryRepository.deleteAll();
         category = categoryRepository.saveAndFlush(Category.builder()
                 .name("Plumbing")
                 .description("Pipe services")
@@ -176,7 +183,10 @@ class WorkerControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data.id").value(worker.getId().toString()))
-                .andExpect(jsonPath("$.data.phoneNumber").value("+1234567890"));
+                .andExpect(jsonPath("$.data.firstName").value(worker.getFirstName()))
+                .andExpect(jsonPath("$.data.phoneNumber").doesNotExist())
+                .andExpect(jsonPath("$.data.email").doesNotExist())
+                .andExpect(jsonPath("$.data.dateOfBirth").doesNotExist());
     }
 
     @Test
@@ -253,7 +263,9 @@ class WorkerControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Worker deleted successfully"));
 
-        assertFalse(workerRepository.findById(worker.getId()).isPresent());
+        Worker deleted = workerRepository.findById(worker.getId()).orElseThrow();
+        assertFalse(deleted.getActive());
+        assertFalse(deleted.getAvailable());
     }
 
     @Test

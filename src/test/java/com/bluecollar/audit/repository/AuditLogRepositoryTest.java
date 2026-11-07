@@ -1,6 +1,7 @@
 package com.bluecollar.audit.repository;
 
 import com.bluecollar.audit.entity.AuditLog;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,11 @@ class AuditLogRepositoryTest {
 
     @Autowired
     private AuditLogRepository auditLogRepository;
+
+    @BeforeEach
+    void setUp() {
+        auditLogRepository.deleteAll();
+    }
 
     @Test
     void saveAndFindByIdShouldPersistAuditLog() {

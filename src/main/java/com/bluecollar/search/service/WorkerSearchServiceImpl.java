@@ -1,6 +1,7 @@
 package com.bluecollar.search.service;
 
 import com.bluecollar.availability.service.AvailabilityService;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.search.dto.SearchFiltersApplied;
 import com.bluecollar.search.dto.WorkerSearchResponse;
 import com.bluecollar.search.dto.WorkerSearchResultResponse;
@@ -40,8 +41,8 @@ public class WorkerSearchServiceImpl implements WorkerSearchService {
 
     @Override
     @Cacheable(
-            value = "worker-search",
-            key = "T(java.util.Objects).hash(#city, #state, #categoryId, #skillIds, #matchAnySkill, #minRating, #available, #availableOn, #minExperience, #maxExperience, #minPrice, #maxPrice, #verified, #sort, #direction, #pageable.pageNumber, #pageable.pageSize)"
+            value = CacheConfig.WORKER_SEARCH_CACHE,
+            keyGenerator = "searchCacheKeyGenerator"
     )
     public WorkerSearchResponse searchWorkers(
             String city,
@@ -62,9 +63,37 @@ public class WorkerSearchServiceImpl implements WorkerSearchService {
             Pageable pageable
     ) {
         boolean verifiedFilter = verified == null || verified;
+
+        List<UUID> availableWorkerIds = null;
+        if (availableOn != null) {
+            Specification<Worker> candidateSpec = buildSpecification(
+                    city, state, categoryId, skillIds, matchAnySkill, minRating,
+                    available, minExperience, maxExperience, minPrice, maxPrice, verifiedFilter, null
+            );
+            List<Worker> candidateWorkers = workerRepository.findAll(candidateSpec);
+            availableWorkerIds = candidateWorkers.stream()
+                    .filter(worker -> availabilityService.isAvailableOnDate(worker.getId(), availableOn))
+                    .map(Worker::getId)
+                    .toList();
+
+            if (availableWorkerIds.isEmpty()) {
+                SearchFiltersApplied filters = new SearchFiltersApplied(
+                        city, categoryId, skillIds, minRating, available, availableOn,
+                        minExperience, maxExperience, minPrice, maxPrice
+                );
+                return new WorkerSearchResponse(
+                        List.of(),
+                        0,
+                        pageable.getPageNumber(),
+                        Math.min(pageable.getPageSize(), 50),
+                        filters
+                );
+            }
+        }
+
         Specification<Worker> spec = buildSpecification(
                 city, state, categoryId, skillIds, matchAnySkill, minRating,
-                available, minExperience, maxExperience, minPrice, maxPrice, verifiedFilter
+                available, minExperience, maxExperience, minPrice, maxPrice, verifiedFilter, availableWorkerIds
         );
 
         Pageable sortedPageable = PageRequest.of(
@@ -75,7 +104,6 @@ public class WorkerSearchServiceImpl implements WorkerSearchService {
 
         Page<Worker> page = workerRepository.findAll(spec, sortedPageable);
         List<WorkerSearchResultResponse> results = page.getContent().stream()
-                .filter(worker -> availableOn == null || availabilityService.isAvailableOnDate(worker.getId(), availableOn))
                 .map(this::toSearchResult)
                 .toList();
 
@@ -105,13 +133,23 @@ public class WorkerSearchServiceImpl implements WorkerSearchService {
             Integer maxExperience,
             BigDecimal minPrice,
             BigDecimal maxPrice,
-            boolean verified
+            boolean verified,
+            List<UUID> matchingWorkerIds
     ) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.isTrue(root.get("active")));
             if (verified) {
                 predicates.add(cb.isTrue(root.get("verified")));
+            }
+
+            Join<Worker, com.bluecollar.auth.entity.UserAccount> userAccountJoin = root.join("userAccount", jakarta.persistence.criteria.JoinType.LEFT);
+            predicates.add(cb.or(
+                    cb.isNull(root.get("userAccount")),
+                    cb.isTrue(userAccountJoin.get("active"))
+            ));
+            if (matchingWorkerIds != null) {
+                predicates.add(root.get("id").in(matchingWorkerIds));
             }
             if (categoryId != null) {
                 predicates.add(cb.equal(root.get("category").get("id"), categoryId));

@@ -12,6 +12,7 @@ import com.bluecollar.availability.repository.WorkerWorkingHoursRepository;
 import com.bluecollar.booking.entity.Booking;
 import com.bluecollar.booking.entity.BookingStatus;
 import com.bluecollar.booking.repository.BookingRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
 import com.bluecollar.worker.entity.OnlineStatus;
@@ -19,6 +20,7 @@ import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.exception.WorkerNotFoundException;
 import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,7 +55,6 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     @Transactional(readOnly = true)
     public WorkerAvailabilityConfigResponse getMyAvailability() {
         Worker worker = findWorkerByCurrentUser();
-        refreshStaleOnlineStatus(worker);
         List<WorkerWorkingHours> workingHours = workingHoursRepository.findByWorkerIdAndActiveTrueOrderByDayOfWeekAsc(worker.getId());
         AvailabilitySummaryResponse summary = availabilityMapper.toSummaryResponse(
                 worker,
@@ -68,6 +69,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AvailabilitySummaryResponse updateOnlineStatus(UpdateOnlineStatusRequest request) {
         Worker worker = findWorkerByCurrentUser();
         worker.setOnlineStatus(request.status());
@@ -79,6 +81,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AvailabilitySummaryResponse updateBookable(UpdateBookableRequest request) {
         Worker worker = findWorkerByCurrentUser();
         worker.setAvailable(request.bookable());
@@ -87,6 +90,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public List<WorkingHoursEntry> updateWorkingHours(UpdateWorkingHoursRequest request) {
         Worker worker = findWorkerByCurrentUser();
         validateWorkingHoursSchedule(request.schedule());
@@ -116,6 +120,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AvailabilitySummaryResponse updateVacationMode(VacationModeRequest request) {
         Worker worker = findWorkerByCurrentUser();
 
@@ -140,6 +145,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public ScheduleOverrideResponse addScheduleOverride(ScheduleOverrideRequest request) {
         Worker worker = findWorkerByCurrentUser();
         validateOverrideRequest(worker, request);
@@ -154,6 +160,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public void removeScheduleOverride(UUID overrideId) {
         Worker worker = findWorkerByCurrentUser();
         WorkerScheduleOverride override = scheduleOverrideRepository.findByIdAndWorkerId(overrideId, worker.getId())
@@ -174,7 +181,6 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     @Transactional(readOnly = true)
     public AvailabilitySummaryResponse getPublicAvailability(UUID workerId) {
         Worker worker = findActiveWorker(workerId);
-        refreshStaleOnlineStatus(worker);
         List<WorkerWorkingHours> workingHours = workingHoursRepository.findByWorkerIdAndActiveTrueOrderByDayOfWeekAsc(worker.getId());
         return availabilityMapper.toSummaryResponse(worker, resolveEffectiveOnlineStatus(worker), workingHours);
     }
@@ -248,6 +254,80 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         } catch (RuntimeException exception) {
             return false;
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isSlotAvailable(UUID workerId, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        return isSlotAvailable(workerId, date, startTime, endTime, null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isSlotAvailable(UUID workerId, LocalDate date, LocalTime startTime, LocalTime endTime, UUID excludeBookingId) {
+        if (date == null || startTime == null || endTime == null || !startTime.isBefore(endTime)) {
+            return false;
+        }
+
+        Worker worker = workerRepository.findById(workerId).orElse(null);
+        if (worker == null || !Boolean.TRUE.equals(worker.getActive()) || !Boolean.TRUE.equals(worker.getAvailable())) {
+            return false;
+        }
+
+        if (Boolean.TRUE.equals(worker.getVacationMode())
+                && worker.getVacationStart() != null
+                && worker.getVacationEnd() != null
+                && !date.isBefore(worker.getVacationStart())
+                && !date.isAfter(worker.getVacationEnd())) {
+            return false;
+        }
+
+        LocalTime windowStart;
+        LocalTime windowEnd;
+
+        WorkerScheduleOverride override = scheduleOverrideRepository
+                .findByWorkerIdAndOverrideDate(worker.getId(), date)
+                .orElse(null);
+
+        if (override != null) {
+            if (!Boolean.TRUE.equals(override.getAvailable())) {
+                return false;
+            }
+            if (override.getStartTime() == null || override.getEndTime() == null) {
+                return false;
+            }
+            windowStart = override.getStartTime();
+            windowEnd = override.getEndTime();
+        } else {
+            short dayOfWeek = (short) date.getDayOfWeek().getValue();
+            WorkerWorkingHours workingHours = workingHoursRepository
+                    .findByWorkerIdAndDayOfWeekAndActiveTrue(worker.getId(), dayOfWeek)
+                    .orElse(null);
+            if (workingHours == null) {
+                return false;
+            }
+            windowStart = workingHours.getStartTime();
+            windowEnd = workingHours.getEndTime();
+        }
+
+        if (startTime.isBefore(windowStart) || endTime.isAfter(windowEnd)) {
+            return false;
+        }
+
+        List<Booking> booked = bookingRepository
+                .findByWorkerIdAndScheduledDateAndStatusIn(worker.getId(), date, BLOCKING_STATUSES);
+
+        for (Booking existing : booked) {
+            if (excludeBookingId != null && existing.getId().equals(excludeBookingId)) {
+                continue;
+            }
+            TimeRange existingRange = toBookedRange(existing);
+            if (startTime.isBefore(existingRange.end()) && endTime.isAfter(existingRange.start())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private WorkerScheduleOverride createOverride(Worker worker, ScheduleOverrideRequest request) {
@@ -338,13 +418,6 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         return OnlineStatus.ONLINE;
     }
 
-    private void refreshStaleOnlineStatus(Worker worker) {
-        if (worker.getOnlineStatus() == OnlineStatus.ONLINE
-                && resolveEffectiveOnlineStatus(worker) == OnlineStatus.OFFLINE) {
-            worker.setOnlineStatus(OnlineStatus.OFFLINE);
-            workerRepository.save(worker);
-        }
-    }
 
     private Worker findWorkerByCurrentUser() {
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
@@ -359,6 +432,9 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     private TimeRange toBookedRange(Booking booking) {
+        if (booking.getStartTime() != null && booking.getEndTime() != null) {
+            return new TimeRange(booking.getStartTime(), booking.getEndTime());
+        }
         String[] parts = booking.getTimeSlot().split("-");
         return new TimeRange(LocalTime.parse(parts[0].trim()), LocalTime.parse(parts[1].trim()));
     }

@@ -42,6 +42,12 @@ public class EmailOutbox extends BaseEntity {
     @Column(name = "sent_at")
     private Instant sentAt;
 
+    @Column(name = "claimed_by", length = 100)
+    private String claimedBy;
+
+    @Column(name = "claimed_at")
+    private Instant claimedAt;
+
     @PrePersist
     protected void prePersistOutbox() {
         status = Objects.requireNonNullElse(status, OutboxStatus.PENDING);

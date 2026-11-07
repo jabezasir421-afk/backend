@@ -22,6 +22,24 @@ public interface AuditLogService {
             String correlationId
     );
 
+    void log(
+            UUID actorUserId,
+            String actorRole,
+            String action,
+            String entityType,
+            UUID entityId,
+            Map<String, Object> oldValue,
+            Map<String, Object> newValue
+    );
+
+    void logCurrentAction(
+            String action,
+            String entityType,
+            UUID entityId,
+            Map<String, Object> oldValue,
+            Map<String, Object> newValue
+    );
+
     Page<AuditLogResponse> search(
             String entityType,
             UUID entityId,

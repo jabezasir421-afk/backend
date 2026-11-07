@@ -19,7 +19,16 @@ spring:
     host: localhost
     port: 2525
 
+management:
+  health:
+    mail:
+      enabled: false
+
 bluecollar:
+  storage:
+    type: local
+    local:
+      base-path: target/test-files
   security:
     rate-limit:
       max-requests: 10000

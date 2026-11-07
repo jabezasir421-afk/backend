@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface AnalyticsWorkerRankingRepository extends JpaRepository<AnalyticsWorkerRanking, UUID> {
 
     List<AnalyticsWorkerRanking> findBySnapshotDateOrderByRankAsc(LocalDate snapshotDate);
+
+    void deleteBySnapshotDate(LocalDate snapshotDate);
 }

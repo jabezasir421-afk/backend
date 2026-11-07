@@ -67,6 +67,10 @@ class AuthServiceTest {
     private JwtService jwtService;
     @Mock
     private TokenHashService tokenHashService;
+    @Mock
+    private com.bluecollar.notification.service.NotificationService notificationService;
+    @Mock
+    private com.bluecollar.audit.service.AuditLogService auditLogService;
 
     @InjectMocks
     private AuthServiceImpl authService;
@@ -144,6 +148,7 @@ class AuthServiceTest {
         when(customerMapper.toEntity(userAccount, "John", "Doe")).thenReturn(customer);
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
         when(jwtService.generateAccessToken(userAccount)).thenReturn("access-token");
+        when(jwtService.generateEmailVerificationToken(any())).thenReturn("verify-token");
         when(jwtService.getAccessTokenExpirationMs()).thenReturn(900000L);
         when(jwtService.getRefreshTokenExpirationMs()).thenReturn(604800000L);
         when(tokenHashService.hash(anyString())).thenReturn("refresh-hash");
@@ -157,6 +162,7 @@ class AuthServiceTest {
         verify(userAccountRepository).save(any(UserAccount.class));
         verify(customerRepository).save(any(Customer.class));
         verify(refreshTokenRepository).save(any(RefreshToken.class));
+        verify(notificationService).sendEmail(eq("john@example.com"), anyString(), anyString());
     }
 
     @Test
@@ -210,6 +216,7 @@ class AuthServiceTest {
         when(userAccountRepository.save(any(UserAccount.class))).thenReturn(workerAccount);
         when(workerRepository.save(any(Worker.class))).thenReturn(worker);
         when(jwtService.generateAccessToken(workerAccount)).thenReturn("access-token");
+        when(jwtService.generateEmailVerificationToken(any())).thenReturn("verify-token");
         when(jwtService.getAccessTokenExpirationMs()).thenReturn(900000L);
         when(jwtService.getRefreshTokenExpirationMs()).thenReturn(604800000L);
         when(tokenHashService.hash(anyString())).thenReturn("refresh-hash");
@@ -221,6 +228,7 @@ class AuthServiceTest {
         assertEquals(UserRole.WORKER, result.role());
         assertEquals(workerId, result.profileId());
         verify(workerRepository).save(any(Worker.class));
+        verify(notificationService).sendEmail(eq("worker@example.com"), anyString(), anyString());
     }
 
     @Test
@@ -297,7 +305,7 @@ class AuthServiceTest {
             String token = invocation.getArgument(0);
             return token.equals("valid-refresh-token") ? "token-hash" : "new-refresh-hash";
         });
-        when(refreshTokenRepository.findByTokenHashAndRevokedFalse("token-hash")).thenReturn(Optional.of(refreshToken));
+        when(refreshTokenRepository.findByTokenHash("token-hash")).thenReturn(Optional.of(refreshToken));
         when(customerRepository.findByUserAccountId(userAccountId)).thenReturn(Optional.of(customer));
         when(jwtService.generateAccessToken(userAccount)).thenReturn("new-access-token");
         when(jwtService.getAccessTokenExpirationMs()).thenReturn(900000L);
@@ -322,7 +330,7 @@ class AuthServiceTest {
                 .build();
 
         when(tokenHashService.hash("expired-refresh-token")).thenReturn("token-hash");
-        when(refreshTokenRepository.findByTokenHashAndRevokedFalse("token-hash")).thenReturn(Optional.of(refreshToken));
+        when(refreshTokenRepository.findByTokenHash("token-hash")).thenReturn(Optional.of(refreshToken));
 
         assertThrows(InvalidTokenException.class, () -> authService.refreshToken(request));
     }
@@ -332,7 +340,7 @@ class AuthServiceTest {
         RefreshTokenRequest request = new RefreshTokenRequest("unknown-token");
 
         when(tokenHashService.hash("unknown-token")).thenReturn("unknown-hash");
-        when(refreshTokenRepository.findByTokenHashAndRevokedFalse("unknown-hash")).thenReturn(Optional.empty());
+        when(refreshTokenRepository.findByTokenHash("unknown-hash")).thenReturn(Optional.empty());
 
         assertThrows(InvalidTokenException.class, () -> authService.refreshToken(request));
     }

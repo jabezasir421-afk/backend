@@ -167,9 +167,11 @@ class BookingControllerIntegrationTest {
 
     @Test
     void createBookingShouldReturnCreated() throws Exception {
-        org.mockito.Mockito.when(availabilityService.isAvailableOnDate(
+        org.mockito.Mockito.when(availabilityService.isSlotAvailable(
                 org.mockito.Mockito.eq(worker.getId()),
-                org.mockito.Mockito.any(LocalDate.class))
+                org.mockito.Mockito.any(LocalDate.class),
+                org.mockito.Mockito.any(),
+                org.mockito.Mockito.any())
         ).thenReturn(true);
         String payload = """
                 {

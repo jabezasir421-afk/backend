@@ -38,6 +38,12 @@ class AdminUserServiceTest {
     @Mock
     private WorkerRepository workerRepository;
 
+    @Mock
+    private com.bluecollar.auth.repository.RefreshTokenRepository refreshTokenRepository;
+
+    @Mock
+    private com.bluecollar.audit.service.AuditLogService auditLogService;
+
     @InjectMocks
     private AdminUserServiceImpl adminUserService;
 
@@ -140,8 +146,32 @@ class AdminUserServiceTest {
         securityUtilsMock.when(SecurityUtils::getCurrentUser)
                 .thenReturn(new AuthenticatedUser(adminId, "other-admin@example.com", UserRole.ADMIN));
         when(userAccountRepository.findById(userId)).thenReturn(Optional.of(lastAdmin));
-        when(userAccountRepository.countByRole(UserRole.ADMIN)).thenReturn(1L);
+        when(userAccountRepository.countByRoleAndActiveTrue(UserRole.ADMIN)).thenReturn(1L);
 
         assertThrows(IllegalStateException.class, () -> adminUserService.changeRole(userId, UserRole.CUSTOMER));
+    }
+
+    @Test
+    void deactivateUserShouldThrowWhenDeactivatingLastActiveAdmin() {
+        userAccount.setRole(UserRole.ADMIN);
+        userAccount.setActive(true);
+        when(userAccountRepository.findById(userId)).thenReturn(Optional.of(userAccount));
+        when(userAccountRepository.countByRoleAndActiveTrue(UserRole.ADMIN)).thenReturn(1L);
+
+        assertThrows(IllegalStateException.class, () -> adminUserService.deactivateUser(userId));
+    }
+
+    @Test
+    void deactivateUserShouldSucceedWhenMultipleActiveAdminsExist() {
+        userAccount.setRole(UserRole.ADMIN);
+        userAccount.setActive(true);
+        when(userAccountRepository.findById(userId)).thenReturn(Optional.of(userAccount));
+        when(userAccountRepository.countByRoleAndActiveTrue(UserRole.ADMIN)).thenReturn(2L);
+        when(userAccountRepository.save(userAccount)).thenAnswer(invocation -> invocation.getArgument(0));
+
+        AdminUserResponse result = adminUserService.deactivateUser(userId);
+
+        assertFalse(result.active());
+        verify(userAccountRepository).save(userAccount);
     }
 }

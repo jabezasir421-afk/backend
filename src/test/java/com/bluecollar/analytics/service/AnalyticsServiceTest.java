@@ -2,24 +2,27 @@ package com.bluecollar.analytics.service;
 
 import com.bluecollar.analytics.dto.AnalyticsOverviewResponse;
 import com.bluecollar.analytics.dto.RatingDistributionResponse;
+import com.bluecollar.analytics.dto.TopCategoryResponse;
+import com.bluecollar.analytics.dto.TopWorkerResponse;
 import com.bluecollar.analytics.entity.AnalyticsDailySnapshot;
 import com.bluecollar.analytics.repository.AnalyticsCategoryRankingRepository;
 import com.bluecollar.analytics.repository.AnalyticsDailySnapshotRepository;
 import com.bluecollar.analytics.repository.AnalyticsWorkerRankingRepository;
 import com.bluecollar.booking.entity.BookingStatus;
 import com.bluecollar.booking.repository.BookingRepository;
+import com.bluecollar.booking.repository.CategoryBookingStatsProjection;
+import com.bluecollar.booking.repository.WorkerBookingStatsProjection;
 import com.bluecollar.category.repository.CategoryRepository;
 import com.bluecollar.customer.repository.CustomerRepository;
-import com.bluecollar.review.entity.ModerationStatus;
-import com.bluecollar.review.entity.Review;
 import com.bluecollar.review.repository.ReviewRepository;
 import com.bluecollar.worker.repository.WorkerRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -27,6 +30,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -64,18 +68,6 @@ class AnalyticsServiceTest {
     @InjectMocks
     private AnalyticsServiceImpl analyticsService;
 
-    private Review approvedReview;
-
-    @BeforeEach
-    void setUp() {
-        approvedReview = Review.builder()
-                .rating((short) 5)
-                .active(true)
-                .moderationStatus(ModerationStatus.APPROVED)
-                .build();
-        approvedReview.setCreatedAt(Instant.now());
-    }
-
     @Test
     void getOverviewShouldAggregatePlatformMetrics() {
         LocalDate today = LocalDate.now(ZoneOffset.UTC);
@@ -88,7 +80,7 @@ class AnalyticsServiceTest {
                 today.atStartOfDay().toInstant(ZoneOffset.UTC),
                 today.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC)
         )).thenReturn(3L);
-        when(reviewRepository.findAll()).thenReturn(List.of(approvedReview));
+        when(reviewRepository.findAverageRatingForActiveApprovedReviews()).thenReturn(5.0);
         when(bookingRepository.sumFinalAmountByStatus(BookingStatus.COMPLETED)).thenReturn(new BigDecimal("1500.50"));
 
         AnalyticsOverviewResponse result = analyticsService.getOverview();
@@ -105,13 +97,11 @@ class AnalyticsServiceTest {
 
     @Test
     void getRatingDistributionShouldReturnCountsAndAverage() {
-        Review fourStarReview = Review.builder()
-                .rating((short) 4)
-                .active(true)
-                .moderationStatus(ModerationStatus.APPROVED)
-                .build();
-
-        when(reviewRepository.findAll()).thenReturn(List.of(approvedReview, fourStarReview));
+        when(reviewRepository.countDistributionForActiveApprovedReviews()).thenReturn(List.of(
+                new Object[]{(short) 5, 1L},
+                new Object[]{(short) 4, 1L}
+        ));
+        when(reviewRepository.findAverageRatingForActiveApprovedReviews()).thenReturn(4.5);
 
         RatingDistributionResponse result = analyticsService.getRatingDistribution();
 
@@ -130,7 +120,7 @@ class AnalyticsServiceTest {
 
         when(snapshotRepository.findBySnapshotDate(date)).thenReturn(Optional.empty());
         when(workerRepository.count()).thenReturn(5L);
-        when(workerRepository.countByVerifiedTrue()).thenReturn(3L);
+        when(workerRepository.countByActiveTrue()).thenReturn(4L);
         when(customerRepository.count()).thenReturn(12L);
         when(customerRepository.countByActiveTrue()).thenReturn(10L);
         when(bookingRepository.countByCreatedAtBetween(start, end)).thenReturn(4L);
@@ -138,14 +128,93 @@ class AnalyticsServiceTest {
         when(bookingRepository.countByStatusAndCancelledAtBetween(BookingStatus.CANCELLED, start, end)).thenReturn(1L);
         when(bookingRepository.sumFinalAmountByStatusAndCompletedAtBetween(BookingStatus.COMPLETED, start, end))
                 .thenReturn(new BigDecimal("250.00"));
-        when(reviewRepository.findAll()).thenReturn(List.of(approvedReview));
-        when(categoryRepository.findAll()).thenReturn(List.of());
-        when(workerRepository.findAll()).thenReturn(List.of());
+        when(reviewRepository.findAverageRatingForActiveApprovedReviewsCreatedBetween(start, end)).thenReturn(5.0);
+        when(bookingRepository.findTopCategoriesForRanking(eq(BookingStatus.COMPLETED), any(Pageable.class))).thenReturn(List.of());
+        when(bookingRepository.findTopWorkersForRanking(eq(BookingStatus.COMPLETED), any(Pageable.class))).thenReturn(List.of());
+        when(categoryRepository.findByActiveTrue()).thenReturn(List.of());
+        when(workerRepository.findByActiveTrue(any(Pageable.class))).thenReturn(new PageImpl<>(List.of()));
 
         analyticsService.refreshSnapshot(date);
 
         verify(snapshotRepository).save(any(AnalyticsDailySnapshot.class));
+        verify(categoryRankingRepository).deleteBySnapshotDate(date);
         verify(categoryRankingRepository).saveAll(eq(List.of()));
+        verify(workerRankingRepository).deleteBySnapshotDate(date);
         verify(workerRankingRepository).saveAll(eq(List.of()));
+    }
+
+    @Test
+    void getTopCategoriesWithDateRangeShouldQueryBookingRepository() {
+        LocalDate from = LocalDate.of(2026, 6, 1);
+        LocalDate to = LocalDate.of(2026, 6, 30);
+        UUID catId = UUID.randomUUID();
+
+        CategoryBookingStatsProjection projection = new CategoryBookingStatsProjection() {
+            @Override
+            public UUID getCategoryId() {
+                return catId;
+            }
+
+            @Override
+            public String getCategoryName() {
+                return "Plumbing";
+            }
+
+            @Override
+            public long getBookingCount() {
+                return 15L;
+            }
+        };
+
+        when(bookingRepository.findTopCategoriesWithDateRange(eq(from), eq(to), any(Pageable.class)))
+                .thenReturn(List.of(projection));
+
+        List<TopCategoryResponse> result = analyticsService.getTopCategories(from, to, 10);
+
+        assertEquals(1, result.size());
+        assertEquals(catId, result.getFirst().categoryId());
+        assertEquals("Plumbing", result.getFirst().categoryName());
+        assertEquals(15, result.getFirst().bookingCount());
+        assertEquals((short) 1, result.getFirst().rank());
+    }
+
+    @Test
+    void getTopWorkersWithDateRangeShouldQueryBookingRepository() {
+        LocalDate from = LocalDate.of(2026, 6, 1);
+        LocalDate to = LocalDate.of(2026, 6, 30);
+        UUID workerId = UUID.randomUUID();
+
+        WorkerBookingStatsProjection projection = new WorkerBookingStatsProjection() {
+            @Override
+            public UUID getWorkerId() {
+                return workerId;
+            }
+
+            @Override
+            public String getFirstName() {
+                return "Bob";
+            }
+
+            @Override
+            public String getLastName() {
+                return "Builder";
+            }
+
+            @Override
+            public long getCompletedBookings() {
+                return 22L;
+            }
+        };
+
+        when(bookingRepository.findTopWorkersWithDateRange(eq(from), eq(to), any(Pageable.class)))
+                .thenReturn(List.of(projection));
+
+        List<TopWorkerResponse> result = analyticsService.getTopWorkers(from, to, 10);
+
+        assertEquals(1, result.size());
+        assertEquals(workerId, result.getFirst().workerId());
+        assertEquals("Bob Builder", result.getFirst().fullName());
+        assertEquals(22, result.getFirst().completedBookings());
+        assertEquals((short) 1, result.getFirst().rank());
     }
 }

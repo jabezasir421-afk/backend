@@ -3,6 +3,7 @@ package com.bluecollar.availability.service;
 import com.bluecollar.availability.dto.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,4 +32,8 @@ public interface AvailabilityService {
     List<AvailableSlotResponse> getPublicSlots(UUID workerId, LocalDate date);
 
     boolean isAvailableOnDate(UUID workerId, LocalDate date);
+
+    boolean isSlotAvailable(UUID workerId, LocalDate date, LocalTime startTime, LocalTime endTime);
+
+    boolean isSlotAvailable(UUID workerId, LocalDate date, LocalTime startTime, LocalTime endTime, UUID excludeBookingId);
 }

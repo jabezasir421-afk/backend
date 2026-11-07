@@ -1,11 +1,14 @@
 package com.bluecollar.review.service;
 
+import com.bluecollar.audit.service.AuditLogService;
 import com.bluecollar.auth.entity.UserAccount;
+import com.bluecollar.auth.entity.UserRole;
 import com.bluecollar.auth.repository.UserAccountRepository;
 import com.bluecollar.booking.entity.Booking;
 import com.bluecollar.booking.entity.BookingStatus;
 import com.bluecollar.booking.exception.BookingNotFoundException;
 import com.bluecollar.booking.repository.BookingRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.common.event.ReviewCreatedEvent;
 import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
@@ -26,6 +29,7 @@ import com.bluecollar.review.repository.ReviewRepository;
 import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,8 +59,10 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserAccountRepository userAccountRepository;
     private final ReviewMapper reviewMapper;
     private final ApplicationEventPublisher eventPublisher;
+    private final AuditLogService auditLogService;
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public ReviewResponse createReview(CreateReviewRequest request) {
         Customer customer = customerService.findCustomerByCurrentUser();
         Booking booking = bookingRepository.findById(request.bookingId())
@@ -128,7 +134,15 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional(readOnly = true)
     public ReviewResponse getReviewById(UUID id) {
-        return reviewMapper.toResponse(findActiveReview(id));
+        Review review = findActiveReview(id);
+        if (review.getModerationStatus() != ModerationStatus.APPROVED) {
+            boolean isAdmin = SecurityUtils.isAuthenticated()
+                    && SecurityUtils.getCurrentUser().role() == UserRole.ADMIN;
+            if (!isAdmin) {
+                throw new ReviewNotFoundException(id);
+            }
+        }
+        return reviewMapper.toResponse(review);
     }
 
     @Override
@@ -138,21 +152,25 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public void deactivateReview(UUID id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
         review.setActive(false);
         reviewRepository.save(review);
         recalculateWorkerRating(review.getWorker().getId());
+        auditLogService.logCurrentAction("REVIEW_DEACTIVATED", "REVIEW", review.getId(), Map.of("active", true), Map.of("active", false));
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public void activateReview(UUID id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
         review.setActive(true);
         reviewRepository.save(review);
         recalculateWorkerRating(review.getWorker().getId());
+        auditLogService.logCurrentAction("REVIEW_ACTIVATED", "REVIEW", review.getId(), Map.of("active", false), Map.of("active", true));
     }
 
     @Override
@@ -195,6 +213,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AdminReviewResponse approveReview(UUID id, ModerateReviewRequest request) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
@@ -205,10 +224,14 @@ public class ReviewServiceImpl implements ReviewService {
         review.setModerationNotes(request.notes());
         reviewRepository.save(review);
         recalculateWorkerRating(review.getWorker().getId());
+        auditLogService.logCurrentAction("REVIEW_APPROVED", "REVIEW", review.getId(),
+                Map.of("moderationStatus", "PENDING"),
+                Map.of("moderationStatus", "APPROVED"));
         return toAdminResponse(review);
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AdminReviewResponse rejectReview(UUID id, ModerateReviewRequest request) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
@@ -219,6 +242,9 @@ public class ReviewServiceImpl implements ReviewService {
         review.setModerationNotes(request.notes());
         reviewRepository.save(review);
         recalculateWorkerRating(review.getWorker().getId());
+        auditLogService.logCurrentAction("REVIEW_REJECTED", "REVIEW", review.getId(),
+                Map.of("moderationStatus", "PENDING"),
+                Map.of("moderationStatus", "HIDDEN"));
         return toAdminResponse(review);
     }
 

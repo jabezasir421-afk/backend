@@ -3,10 +3,12 @@ package com.bluecollar.worker.service;
 import com.bluecollar.category.entity.Category;
 import com.bluecollar.category.exception.CategoryNotFoundException;
 import com.bluecollar.category.repository.CategoryRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.skill.entity.Skill;
 import com.bluecollar.skill.exception.SkillNotFoundException;
 import com.bluecollar.skill.repository.SkillRepository;
 import com.bluecollar.worker.dto.CreateWorkerRequest;
+import com.bluecollar.worker.dto.PublicWorkerResponse;
 import com.bluecollar.worker.dto.UpdateWorkerRequest;
 import com.bluecollar.worker.dto.WorkerResponse;
 import com.bluecollar.worker.entity.Worker;
@@ -15,6 +17,7 @@ import com.bluecollar.worker.exception.WorkerNotFoundException;
 import com.bluecollar.worker.mapper.WorkerMapper;
 import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,7 @@ public class WorkerServiceImpl implements WorkerService {
     private final WorkerMapper workerMapper;
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public WorkerResponse createWorker(CreateWorkerRequest request) {
         validatePhoneNumberAvailable(request.phoneNumber());
         validateEmailAvailable(request.email());
@@ -56,11 +60,28 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<PublicWorkerResponse> getAllPublicWorkers(Pageable pageable) {
+        return workerRepository.findByActiveTrue(pageable)
+                .map(workerMapper::toPublicResponse);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public WorkerResponse getWorkerById(UUID id) {
         return workerMapper.toResponse(findWorker(id));
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public PublicWorkerResponse getPublicWorkerById(UUID id) {
+        Worker worker = workerRepository.findById(id)
+                .filter(w -> Boolean.TRUE.equals(w.getActive()))
+                .orElseThrow(() -> new WorkerNotFoundException(id));
+        return workerMapper.toPublicResponse(worker);
+    }
+
+    @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public WorkerResponse updateWorker(UUID id, UpdateWorkerRequest request) {
         Worker worker = findWorker(id);
         validatePhoneNumberAvailableForUpdate(worker, request.phoneNumber());
@@ -73,11 +94,12 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public void deleteWorker(UUID id) {
-        if (!workerRepository.existsById(id)) {
-            throw new WorkerNotFoundException(id);
-        }
-        workerRepository.deleteById(id);
+        Worker worker = findWorker(id);
+        worker.setActive(false);
+        worker.setAvailable(false);
+        workerRepository.save(worker);
     }
 
     private Worker findWorker(UUID id) {
@@ -86,8 +108,12 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     private Category findCategory(UUID id) {
-        return categoryRepository.findById(id)
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
+        if (!Boolean.TRUE.equals(category.getActive())) {
+            throw new IllegalArgumentException("Cannot assign inactive category: " + category.getName());
+        }
+        return category;
     }
 
     private Set<Skill> findSkills(Set<UUID> skillIds) {
@@ -99,6 +125,11 @@ public class WorkerServiceImpl implements WorkerService {
         List<Skill> skills = skillRepository.findAllById(requestedSkillIds);
         if (skills.size() != requestedSkillIds.size()) {
             throw new SkillNotFoundException(findMissingSkillId(requestedSkillIds, skills));
+        }
+        for (Skill skill : skills) {
+            if (!Boolean.TRUE.equals(skill.getActive())) {
+                throw new IllegalArgumentException("Cannot assign inactive skill: " + skill.getName());
+            }
         }
         return new LinkedHashSet<>(skills);
     }

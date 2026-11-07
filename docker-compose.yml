@@ -1,25 +1,51 @@
 version: '3.9'
+
 services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: bluecollar
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB:-bluecollar}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_change_in_production}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-bluecollar}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
-      DB_URL: jdbc:postgresql://postgres:5432/bluecollar
-      DB_USERNAME: postgres
-      DB_PASSWORD: postgres
-      JWT_SECRET: change-me-to-a-secure-secret-key-at-least-256-bits-long-for-production
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-bluecollar}
+      DB_USERNAME: ${POSTGRES_USER:-postgres}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres_change_in_production}
+      JWT_SECRET: ${JWT_SECRET:-please-set-a-strong-secret-key-at-least-256-bits-long-in-env}
+      STORAGE_PATH: /var/bluecollar/files
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@bluecollar.in}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@12345}
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
-      - "8080:8080"
+      - "${SERVER_PORT:-8080}:8080"
+    volumes:
+      - file-storage:/var/bluecollar/files
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
 volumes:
   postgres-data:
+    driver: local
+  file-storage:
+    driver: local

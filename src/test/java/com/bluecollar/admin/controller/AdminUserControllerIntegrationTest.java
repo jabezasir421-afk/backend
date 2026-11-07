@@ -148,6 +148,134 @@ class AdminUserControllerIntegrationTest {
     }
 
     @Test
+    void deactivateUserShouldReturnConflictForLastActiveAdmin() throws Exception {
+        UserAccount onlyAdmin = userAccountRepository.saveAndFlush(UserAccount.builder()
+                .email("only.admin@example.com")
+                .phoneNumber("+919876543299")
+                .passwordHash("hashed_password")
+                .role(UserRole.ADMIN)
+                .active(true)
+                .emailVerified(true)
+                .phoneVerified(false)
+                .build());
+
+        AuthenticatedUser adminPrincipal = new AuthenticatedUser(
+                onlyAdmin.getId(),
+                onlyAdmin.getEmail(),
+                UserRole.ADMIN
+        );
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                adminPrincipal,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+
+        mockMvc.perform(put("/api/v1/admin/users/{id}/deactivate", onlyAdmin.getId())
+                        .with(authentication(auth)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value("Cannot deactivate the last active administrator"));
+    }
+
+    @Test
+    void changeRoleShouldReturnConflictWhenDemotingLastActiveAdmin() throws Exception {
+        UserAccount onlyAdmin = userAccountRepository.saveAndFlush(UserAccount.builder()
+                .email("only.admin2@example.com")
+                .phoneNumber("+919876543298")
+                .passwordHash("hashed_password")
+                .role(UserRole.ADMIN)
+                .active(true)
+                .emailVerified(true)
+                .phoneVerified(false)
+                .build());
+
+        AuthenticatedUser adminPrincipal = new AuthenticatedUser(
+                UUID.randomUUID(),
+                "calling.admin@example.com",
+                UserRole.ADMIN
+        );
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                adminPrincipal,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+
+        mockMvc.perform(put("/api/v1/admin/users/{id}/role", onlyAdmin.getId())
+                        .param("role", "CUSTOMER")
+                        .with(authentication(auth)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value("Cannot demote the last active administrator"));
+    }
+
+    @Test
+    void changeRoleShouldReturnForbiddenWhenChangingOwnRole() throws Exception {
+        UserAccount adminAccount = userAccountRepository.saveAndFlush(UserAccount.builder()
+                .email("self.admin@example.com")
+                .phoneNumber("+919876543297")
+                .passwordHash("hashed_password")
+                .role(UserRole.ADMIN)
+                .active(true)
+                .emailVerified(true)
+                .phoneVerified(false)
+                .build());
+
+        AuthenticatedUser adminPrincipal = new AuthenticatedUser(
+                adminAccount.getId(),
+                adminAccount.getEmail(),
+                UserRole.ADMIN
+        );
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                adminPrincipal,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+
+        mockMvc.perform(put("/api/v1/admin/users/{id}/role", adminAccount.getId())
+                        .param("role", "CUSTOMER")
+                        .with(authentication(auth)))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("You cannot change your own role"));
+    }
+
+    @Test
+    void deactivateUserShouldSucceedWhenMultipleActiveAdminsExist() throws Exception {
+        UserAccount admin1 = userAccountRepository.saveAndFlush(UserAccount.builder()
+                .email("admin1@example.com")
+                .phoneNumber("+919876543281")
+                .passwordHash("hashed_password")
+                .role(UserRole.ADMIN)
+                .active(true)
+                .emailVerified(true)
+                .phoneVerified(false)
+                .build());
+
+        UserAccount admin2 = userAccountRepository.saveAndFlush(UserAccount.builder()
+                .email("admin2@example.com")
+                .phoneNumber("+919876543282")
+                .passwordHash("hashed_password")
+                .role(UserRole.ADMIN)
+                .active(true)
+                .emailVerified(true)
+                .phoneVerified(false)
+                .build());
+
+        AuthenticatedUser adminPrincipal = new AuthenticatedUser(
+                admin1.getId(),
+                admin1.getEmail(),
+                UserRole.ADMIN
+        );
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                adminPrincipal,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+
+        mockMvc.perform(put("/api/v1/admin/users/{id}/deactivate", admin2.getId())
+                        .with(authentication(auth)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.active").value(false));
+    }
+
+    @Test
     void listUsersShouldReturnForbiddenForUnauthenticatedUser() throws Exception {
         mockMvc.perform(get("/api/v1/admin/users"))
                 .andExpect(status().isForbidden());

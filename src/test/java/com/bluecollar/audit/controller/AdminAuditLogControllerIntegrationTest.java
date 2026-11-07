@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -125,5 +125,30 @@ class AdminAuditLogControllerIntegrationTest {
     void searchAuditLogsShouldReturnForbiddenForNonAdminUser() throws Exception {
         mockMvc.perform(get("/api/v1/admin/audit-logs"))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void auditLogsCannotBeEditedOrModifiedThroughApi() throws Exception {
+        mockMvc.perform(put("/api/v1/admin/audit-logs/{id}", entityId)
+                        .contentType("application/json")
+                        .content("{\"action\":\"TAMPERED\"}"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void auditLogsCannotBeDeletedThroughApi() throws Exception {
+        mockMvc.perform(delete("/api/v1/admin/audit-logs/{id}", entityId))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void auditLogsCannotBeCreatedDirectlyThroughApi() throws Exception {
+        mockMvc.perform(post("/api/v1/admin/audit-logs")
+                        .contentType("application/json")
+                        .content("{\"action\":\"FAKE\"}"))
+                .andExpect(status().isMethodNotAllowed());
     }
 }

@@ -7,6 +7,8 @@ import com.bluecollar.analytics.repository.AnalyticsWorkerRankingRepository;
 import com.bluecollar.audit.repository.AuditLogRepository;
 import com.bluecollar.auth.repository.RefreshTokenRepository;
 import com.bluecollar.auth.repository.UserAccountRepository;
+import com.bluecollar.availability.repository.WorkerScheduleOverrideRepository;
+import com.bluecollar.availability.repository.WorkerWorkingHoursRepository;
 import com.bluecollar.booking.repository.BookingRepository;
 import com.bluecollar.category.repository.CategoryRepository;
 import com.bluecollar.customer.repository.CustomerRepository;
@@ -40,6 +42,8 @@ public class TestDbCleanup {
     private final AuditLogRepository auditLogRepository;
     private final AddressRepository addressRepository;
     private final CustomerRepository customerRepository;
+    private final WorkerWorkingHoursRepository workerWorkingHoursRepository;
+    private final WorkerScheduleOverrideRepository workerScheduleOverrideRepository;
     private final WorkerRepository workerRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final AnalyticsCategoryRankingRepository analyticsCategoryRankingRepository;
@@ -62,6 +66,8 @@ public class TestDbCleanup {
         auditLogRepository.deleteAll();
         addressRepository.deleteAll();
         customerRepository.deleteAll();
+        workerWorkingHoursRepository.deleteAll();
+        workerScheduleOverrideRepository.deleteAll();
         workerRepository.deleteAll();
         refreshTokenRepository.deleteAll();
         analyticsCategoryRankingRepository.deleteAll();

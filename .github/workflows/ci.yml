@@ -1,18 +1,66 @@
-name: CI
+name: CI / CD Pipeline
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, 'hardening/**', 'release/**']
   pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
 
 jobs:
-  build:
+  build-and-verify:
+    name: Build, Quality Checks & PostgreSQL Integration Tests
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: bluecollar_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: testpassword
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d bluecollar_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout Source Code
+        uses: actions/checkout@v5
+
+      - name: Setup Java 21 LTS (Temurin)
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '25'
-      - name: Build and test
-        run: ./mvnw -B test
+          java-version: '21'
+          cache: maven
+
+      - name: Verify repository layout
+        run: |
+          test -f pom.xml
+          test -x mvnw || chmod +x mvnw
+
+      - name: Checkstyle Static Analysis
+        run: ./mvnw -B checkstyle:check
+
+      - name: SpotBugs Security & Bug Analysis
+        run: ./mvnw -B compile spotbugs:check
+
+      - name: Full Verification & PostgreSQL Integration Tests
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          DB_URL: jdbc:postgresql://localhost:5433/bluecollar_test
+          DB_USERNAME: postgres
+          DB_PASSWORD: testpassword
+        run: ./mvnw -B clean verify
+
+      - name: Verify JaCoCo Code Coverage Report
+        run: test -f target/site/jacoco/index.html
+
+      - name: Package Docker Image (Smoke Test)
+        run: docker build -t bluecollar-backend:ci .

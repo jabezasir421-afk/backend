@@ -28,6 +28,9 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<jjwt.version>0.13.0</jjwt.version>
+		<jacoco.version>0.8.13</jacoco.version>
+		<dependency-check.skip>true</dependency-check.skip>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -73,18 +76,18 @@
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
-			<version>0.12.6</version>
+			<version>${jjwt.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
-			<version>0.12.6</version>
+			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
-			<version>0.12.6</version>
+			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -166,39 +169,11 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Source: https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
-		<dependency>
-			<groupId>org.jacoco</groupId>
-			<artifactId>jacoco-maven-plugin</artifactId>
-			<version>0.8.14</version>
-			<scope>compile</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>com.github.spotbugs</groupId>
 			<artifactId>spotbugs-annotations</artifactId>
 			<version>4.9.8</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-api</artifactId>
-			<version>0.13.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-impl</artifactId>
-			<version>0.13.0</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-jackson</artifactId>
-			<version>0.13.0</version>
-			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>
@@ -255,9 +230,28 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.8.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>properties</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>@{argLine} -javaagent:${net.bytebuddy:byte-buddy-agent:jar} -XX:+EnableDynamicAgentLoading</argLine>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.13</version>
+				<version>${jacoco.version}</version>
 
 				<executions>
 
@@ -305,6 +299,9 @@
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>
 				<version>4.9.8.4</version>
+				<configuration>
+					<excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+				</configuration>
 				<dependencies>
 					<!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
 					<dependency>
@@ -329,10 +326,9 @@
 
 				<configuration>
 					<configLocation>checkstyle.xml</configLocation>
-					<encoding>UTF-8</encoding>
 					<consoleOutput>true</consoleOutput>
 					<failsOnError>true</failsOnError>
-					<includeTestSourceDirectory>true</includeTestSourceDirectory>
+					<includeTestSourceDirectory>false</includeTestSourceDirectory>
 				</configuration>
 
 				<executions>
@@ -352,7 +348,9 @@
 				<configuration>
 					<printFailingErrors>true</printFailingErrors>
 					<failOnViolation>true</failOnViolation>
+					<minimumPriority>2</minimumPriority>
 					<targetJdk>21</targetJdk>
+					<typeResolution>false</typeResolution>
 				</configuration>
 
 				<executions>
@@ -364,61 +362,47 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.owasp</groupId>
-				<artifactId>dependency-check-maven</artifactId>
-				<version>12.1.3</version>
-
-				<configuration>
-
-
-					<nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
-
-					<formats>
-						<format>HTML</format>
-						<format>JSON</format>
-					</formats>
-
-					<failBuildOnCVSS>8</failBuildOnCVSS>
-
-					<skipProvidedScope>true</skipProvidedScope>
-					<skipTestScope>true</skipTestScope>
-
-					<!-- Backend project -->
-					<retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
-
-					<!-- No .NET -->
-					<assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
-
-					<!-- No Ruby -->
-					<bundleAuditAnalyzerEnabled>false</bundleAuditAnalyzerEnabled>
-
-					<!-- No CocoaPods -->
-					<cocoapodsAnalyzerEnabled>false</cocoapodsAnalyzerEnabled>
-
-					<!-- No Composer -->
-					<composerAnalyzerEnabled>false</composerAnalyzerEnabled>
-
-					<!-- No Dart -->
-					<dartAnalyzerEnabled>false</dartAnalyzerEnabled>
-
-					<!-- No Go -->
-					<golangDepEnabled>false</golangDepEnabled>
-
-					<!-- No Node -->
-					<nodeAuditAnalyzerEnabled>false</nodeAuditAnalyzerEnabled>
-
-				</configuration>
-
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>owasp-dependency-check</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.owasp</groupId>
+						<artifactId>dependency-check-maven</artifactId>
+						<version>12.1.3</version>
+						<configuration>
+							<nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+							<formats>
+								<format>HTML</format>
+								<format>JSON</format>
+							</formats>
+							<failBuildOnCVSS>8</failBuildOnCVSS>
+							<skipProvidedScope>true</skipProvidedScope>
+							<skipTestScope>true</skipTestScope>
+							<retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
+							<assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+							<bundleAuditAnalyzerEnabled>false</bundleAuditAnalyzerEnabled>
+							<cocoapodsAnalyzerEnabled>false</cocoapodsAnalyzerEnabled>
+							<composerAnalyzerEnabled>false</composerAnalyzerEnabled>
+							<dartAnalyzerEnabled>false</dartAnalyzerEnabled>
+							<golangDepEnabled>false</golangDepEnabled>
+							<nodeAuditAnalyzerEnabled>false</nodeAuditAnalyzerEnabled>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

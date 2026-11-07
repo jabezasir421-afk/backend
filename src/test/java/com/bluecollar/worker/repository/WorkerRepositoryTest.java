@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -30,9 +32,14 @@ class WorkerRepositoryTest {
 
     private Category category;
 
+    @DynamicPropertySource
+    static void configureIsolatedDatabase(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", () ->
+                "jdbc:h2:mem:worker_repository_test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL");
+    }
+
     @BeforeEach
     void setUp() {
-        workerRepository.deleteAll();
         category = categoryRepository.saveAndFlush(Category.builder()
                 .name("Plumbing")
                 .description("Pipe services")

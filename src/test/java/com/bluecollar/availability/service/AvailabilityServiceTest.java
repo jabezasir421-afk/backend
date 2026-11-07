@@ -10,6 +10,8 @@ import com.bluecollar.availability.exception.InvalidScheduleException;
 import com.bluecollar.availability.mapper.AvailabilityMapper;
 import com.bluecollar.availability.repository.WorkerScheduleOverrideRepository;
 import com.bluecollar.availability.repository.WorkerWorkingHoursRepository;
+import com.bluecollar.booking.entity.Booking;
+import com.bluecollar.booking.entity.BookingStatus;
 import com.bluecollar.booking.repository.BookingRepository;
 import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
@@ -322,5 +324,158 @@ class AvailabilityServiceTest {
                 .thenReturn(List.of());
 
         assertTrue(availabilityService.isAvailableOnDate(workerId, date));
+    }
+
+    @Test
+    void isSlotAvailableShouldReturnTrueWhenWithinWorkingHoursAndNoConflict() {
+        LocalDate date = LocalDate.now().plusDays(1);
+        short dayOfWeek = (short) date.getDayOfWeek().getValue();
+        WorkerWorkingHours workingHours = WorkerWorkingHours.builder()
+                .worker(worker)
+                .dayOfWeek(dayOfWeek)
+                .startTime(LocalTime.of(9, 0))
+                .endTime(LocalTime.of(17, 0))
+                .build();
+
+        when(workerRepository.findById(workerId)).thenReturn(Optional.of(worker));
+        when(scheduleOverrideRepository.findByWorkerIdAndOverrideDate(workerId, date)).thenReturn(Optional.empty());
+        when(workingHoursRepository.findByWorkerIdAndDayOfWeekAndActiveTrue(workerId, dayOfWeek))
+                .thenReturn(Optional.of(workingHours));
+        when(bookingRepository.findByWorkerIdAndScheduledDateAndStatusIn(eq(workerId), eq(date), any()))
+                .thenReturn(List.of());
+
+        boolean available = availabilityService.isSlotAvailable(workerId, date, LocalTime.of(10, 0), LocalTime.of(12, 0));
+        assertTrue(available);
+    }
+
+    @Test
+    void isSlotAvailableShouldAcceptAdjacentBookings() {
+        LocalDate date = LocalDate.now().plusDays(1);
+        short dayOfWeek = (short) date.getDayOfWeek().getValue();
+        WorkerWorkingHours workingHours = WorkerWorkingHours.builder()
+                .worker(worker)
+                .dayOfWeek(dayOfWeek)
+                .startTime(LocalTime.of(9, 0))
+                .endTime(LocalTime.of(17, 0))
+                .build();
+
+        Booking existingBooking = Booking.builder()
+                .worker(worker)
+                .scheduledDate(date)
+                .timeSlot("10:00-12:00")
+                .startTime(LocalTime.of(10, 0))
+                .endTime(LocalTime.of(12, 0))
+                .status(BookingStatus.ACCEPTED)
+                .build();
+        existingBooking.setId(UUID.randomUUID());
+
+        when(workerRepository.findById(workerId)).thenReturn(Optional.of(worker));
+        when(scheduleOverrideRepository.findByWorkerIdAndOverrideDate(workerId, date)).thenReturn(Optional.empty());
+        when(workingHoursRepository.findByWorkerIdAndDayOfWeekAndActiveTrue(workerId, dayOfWeek))
+                .thenReturn(Optional.of(workingHours));
+        when(bookingRepository.findByWorkerIdAndScheduledDateAndStatusIn(eq(workerId), eq(date), any()))
+                .thenReturn(List.of(existingBooking));
+
+        // Slot 12:00-14:00 is immediately adjacent after existing 10:00-12:00
+        boolean availableAfter = availabilityService.isSlotAvailable(workerId, date, LocalTime.of(12, 0), LocalTime.of(14, 0));
+        assertTrue(availableAfter, "Adjacent slot immediately following existing booking must be accepted");
+
+        // Slot 09:00-10:00 is immediately adjacent before existing 10:00-12:00
+        boolean availableBefore = availabilityService.isSlotAvailable(workerId, date, LocalTime.of(9, 0), LocalTime.of(10, 0));
+        assertTrue(availableBefore, "Adjacent slot immediately preceding existing booking must be accepted");
+    }
+
+    @Test
+    void isSlotAvailableShouldRejectOverlappingBookings() {
+        LocalDate date = LocalDate.now().plusDays(1);
+        short dayOfWeek = (short) date.getDayOfWeek().getValue();
+        WorkerWorkingHours workingHours = WorkerWorkingHours.builder()
+                .worker(worker)
+                .dayOfWeek(dayOfWeek)
+                .startTime(LocalTime.of(9, 0))
+                .endTime(LocalTime.of(17, 0))
+                .build();
+
+        Booking existingBooking = Booking.builder()
+                .worker(worker)
+                .scheduledDate(date)
+                .timeSlot("10:00-12:00")
+                .startTime(LocalTime.of(10, 0))
+                .endTime(LocalTime.of(12, 0))
+                .status(BookingStatus.PENDING)
+                .build();
+        existingBooking.setId(UUID.randomUUID());
+
+        when(workerRepository.findById(workerId)).thenReturn(Optional.of(worker));
+        when(scheduleOverrideRepository.findByWorkerIdAndOverrideDate(workerId, date)).thenReturn(Optional.empty());
+        when(workingHoursRepository.findByWorkerIdAndDayOfWeekAndActiveTrue(workerId, dayOfWeek))
+                .thenReturn(Optional.of(workingHours));
+        when(bookingRepository.findByWorkerIdAndScheduledDateAndStatusIn(eq(workerId), eq(date), any()))
+                .thenReturn(List.of(existingBooking));
+
+        // Overlap: 11:00-13:00 (newStart < existingEnd && newEnd > existingStart)
+        assertFalse(availabilityService.isSlotAvailable(workerId, date, LocalTime.of(11, 0), LocalTime.of(13, 0)));
+        // Overlap: 09:30-10:30
+        assertFalse(availabilityService.isSlotAvailable(workerId, date, LocalTime.of(9, 30), LocalTime.of(10, 30)));
+        // Overlap: 10:30-11:30 (strictly inside)
+        assertFalse(availabilityService.isSlotAvailable(workerId, date, LocalTime.of(10, 30), LocalTime.of(11, 30)));
+        // Overlap: 09:00-13:00 (strictly engulfing)
+        assertFalse(availabilityService.isSlotAvailable(workerId, date, LocalTime.of(9, 0), LocalTime.of(13, 0)));
+    }
+
+    @Test
+    void isSlotAvailableShouldExcludeSpecifiedBookingIdWhenRescheduling() {
+        LocalDate date = LocalDate.now().plusDays(1);
+        short dayOfWeek = (short) date.getDayOfWeek().getValue();
+        WorkerWorkingHours workingHours = WorkerWorkingHours.builder()
+                .worker(worker)
+                .dayOfWeek(dayOfWeek)
+                .startTime(LocalTime.of(9, 0))
+                .endTime(LocalTime.of(17, 0))
+                .build();
+
+        UUID bookingId = UUID.randomUUID();
+        Booking myBooking = Booking.builder()
+                .worker(worker)
+                .scheduledDate(date)
+                .timeSlot("10:00-12:00")
+                .startTime(LocalTime.of(10, 0))
+                .endTime(LocalTime.of(12, 0))
+                .status(BookingStatus.PENDING)
+                .build();
+        myBooking.setId(bookingId);
+
+        when(workerRepository.findById(workerId)).thenReturn(Optional.of(worker));
+        when(scheduleOverrideRepository.findByWorkerIdAndOverrideDate(workerId, date)).thenReturn(Optional.empty());
+        when(workingHoursRepository.findByWorkerIdAndDayOfWeekAndActiveTrue(workerId, dayOfWeek))
+                .thenReturn(Optional.of(workingHours));
+        when(bookingRepository.findByWorkerIdAndScheduledDateAndStatusIn(eq(workerId), eq(date), any()))
+                .thenReturn(List.of(myBooking));
+
+        // Rescheduling my own booking to a slightly shifted slot 10:30-12:30 excluding my own booking ID
+        boolean available = availabilityService.isSlotAvailable(workerId, date, LocalTime.of(10, 30), LocalTime.of(12, 30), bookingId);
+        assertTrue(available, "Own booking should be excluded during rescheduling check");
+    }
+
+    @Test
+    void isSlotAvailableShouldReturnFalseWhenOutsideWorkingHours() {
+        LocalDate date = LocalDate.now().plusDays(1);
+        short dayOfWeek = (short) date.getDayOfWeek().getValue();
+        WorkerWorkingHours workingHours = WorkerWorkingHours.builder()
+                .worker(worker)
+                .dayOfWeek(dayOfWeek)
+                .startTime(LocalTime.of(9, 0))
+                .endTime(LocalTime.of(17, 0))
+                .build();
+
+        when(workerRepository.findById(workerId)).thenReturn(Optional.of(worker));
+        when(scheduleOverrideRepository.findByWorkerIdAndOverrideDate(workerId, date)).thenReturn(Optional.empty());
+        when(workingHoursRepository.findByWorkerIdAndDayOfWeekAndActiveTrue(workerId, dayOfWeek))
+                .thenReturn(Optional.of(workingHours));
+
+        // 08:00 is before 09:00
+        assertFalse(availabilityService.isSlotAvailable(workerId, date, LocalTime.of(8, 0), LocalTime.of(10, 0)));
+        // 18:00 is after 17:00
+        assertFalse(availabilityService.isSlotAvailable(workerId, date, LocalTime.of(16, 0), LocalTime.of(18, 0)));
     }
 }

@@ -9,6 +9,7 @@ import com.bluecollar.address.exception.MaxAddressesExceededException;
 import com.bluecollar.address.mapper.AddressMapper;
 import com.bluecollar.address.repository.AddressRepository;
 import com.bluecollar.customer.entity.Customer;
+import com.bluecollar.customer.repository.CustomerRepository;
 import com.bluecollar.customer.service.CustomerServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,21 +26,25 @@ public class AddressServiceImpl implements AddressService {
     private static final int MAX_ACTIVE_ADDRESSES = 10;
 
     private final AddressRepository addressRepository;
+    private final CustomerRepository customerRepository;
     private final CustomerServiceImpl customerService;
     private final AddressMapper addressMapper;
 
     @Override
     public AddressResponse createAddress(CreateAddressRequest request) {
         Customer customer = customerService.findCustomerByCurrentUser();
-        validateAddressLimit(customer.getId());
+        customerRepository.findByIdWithLock(customer.getId());
+        synchronized (customer.getId().toString().intern()) {
+            validateAddressLimit(customer.getId());
 
-        Address address = addressMapper.toEntity(request, customer);
-        if (shouldBeDefault(customer.getId(), request.isDefault())) {
-            clearDefaultAddresses(customer.getId());
-            address.setIsDefault(true);
+            Address address = addressMapper.toEntity(request, customer);
+            if (shouldBeDefault(customer.getId(), request.isDefault())) {
+                clearDefaultAddresses(customer.getId());
+                address.setIsDefault(true);
+            }
+
+            return addressMapper.toResponse(addressRepository.save(address));
         }
-
-        return addressMapper.toResponse(addressRepository.save(address));
     }
 
     @Override
@@ -91,6 +96,7 @@ public class AddressServiceImpl implements AddressService {
     private Address findOwnedAddress(UUID id) {
         Customer customer = customerService.findCustomerByCurrentUser();
         return addressRepository.findByIdAndCustomerId(id, customer.getId())
+                .filter(a -> Boolean.TRUE.equals(a.getActive()))
                 .orElseThrow(() -> new AddressNotFoundException(id));
     }
 

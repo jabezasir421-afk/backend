@@ -74,6 +74,8 @@ class BookingServiceTest {
     private AvailabilityService availabilityService;
     @Mock
     private ApplicationEventPublisher eventPublisher;
+    @Mock
+    private com.bluecollar.audit.service.AuditLogService auditLogService;
 
     @InjectMocks
     private BookingServiceImpl bookingService;
@@ -186,7 +188,7 @@ class BookingServiceTest {
         when(workerRepository.findById(workerId)).thenReturn(Optional.of(worker));
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
         when(addressService.findActiveAddressForCustomer(addressId, customerId)).thenReturn(address);
-        when(availabilityService.isAvailableOnDate(workerId, request.scheduledDate())).thenReturn(true);
+        when(availabilityService.isSlotAvailable(eq(workerId), eq(request.scheduledDate()), any(), any())).thenReturn(true);
         when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
         when(bookingMapper.toResponse(booking)).thenReturn(bookingResponse);
 
@@ -284,7 +286,7 @@ class BookingServiceTest {
         when(workerRepository.findById(workerId)).thenReturn(Optional.of(worker));
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
         when(addressService.findActiveAddressForCustomer(addressId, customerId)).thenReturn(address);
-        when(availabilityService.isAvailableOnDate(workerId, request.scheduledDate())).thenReturn(false);
+        when(availabilityService.isSlotAvailable(eq(workerId), eq(request.scheduledDate()), any(), any())).thenReturn(false);
 
         assertThrows(InvalidBookingStateException.class, () -> bookingService.createBooking(request));
     }
