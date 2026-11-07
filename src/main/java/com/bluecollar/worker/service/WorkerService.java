@@ -1,6 +1,7 @@
 package com.bluecollar.worker.service;
 
 import com.bluecollar.worker.dto.CreateWorkerRequest;
+import com.bluecollar.worker.dto.PublicWorkerResponse;
 import com.bluecollar.worker.dto.UpdateWorkerRequest;
 import com.bluecollar.worker.dto.WorkerResponse;
 import org.springframework.data.domain.Page;
@@ -21,9 +22,19 @@ public interface WorkerService {
     Page<WorkerResponse> getAllWorkers(Pageable pageable);
 
     /**
+     * Returns all active public workers without PII.
+     */
+    Page<PublicWorkerResponse> getAllPublicWorkers(Pageable pageable);
+
+    /**
      * Returns a worker by its unique identifier.
      */
     WorkerResponse getWorkerById(UUID id);
+
+    /**
+     * Returns a public worker profile without PII.
+     */
+    PublicWorkerResponse getPublicWorkerById(UUID id);
 
     /**
      * Updates a worker when it exists and unique fields do not conflict.

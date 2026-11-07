@@ -113,6 +113,12 @@ public class WorkerSearchServiceImpl implements WorkerSearchService {
             if (verified) {
                 predicates.add(cb.isTrue(root.get("verified")));
             }
+
+            Join<Worker, com.bluecollar.auth.entity.UserAccount> userAccountJoin = root.join("userAccount", jakarta.persistence.criteria.JoinType.LEFT);
+            predicates.add(cb.or(
+                    cb.isNull(root.get("userAccount")),
+                    cb.isTrue(userAccountJoin.get("active"))
+            ));
             if (categoryId != null) {
                 predicates.add(cb.equal(root.get("category").get("id"), categoryId));
             }

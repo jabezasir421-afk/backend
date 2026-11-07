@@ -44,6 +44,9 @@ class CustomerServiceTest {
     @Mock
     private CustomerMapper customerMapper;
 
+    @Mock
+    private com.bluecollar.storage.repository.StoredFileRepository storedFileRepository;
+
     @InjectMocks
     private CustomerServiceImpl customerService;
 

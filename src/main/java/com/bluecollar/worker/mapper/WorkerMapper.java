@@ -4,6 +4,7 @@ import com.bluecollar.category.entity.Category;
 import com.bluecollar.skill.dto.SkillResponse;
 import com.bluecollar.skill.entity.Skill;
 import com.bluecollar.worker.dto.CreateWorkerRequest;
+import com.bluecollar.worker.dto.PublicWorkerResponse;
 import com.bluecollar.worker.dto.UpdateWorkerRequest;
 import com.bluecollar.worker.dto.WorkerResponse;
 import com.bluecollar.worker.entity.Worker;
@@ -45,6 +46,28 @@ public class WorkerMapper {
                 worker.getEmail(),
                 worker.getGender(),
                 worker.getDateOfBirth(),
+                worker.getExperienceYears(),
+                worker.getBio(),
+                worker.getHourlyRate(),
+                worker.getAvailable(),
+                worker.getVerified(),
+                worker.getActive(),
+                worker.getCategory().getId(),
+                worker.getCategory().getName(),
+                toSkillResponses(worker.getSkills()),
+                worker.getAverageRating(),
+                worker.getReviewCount(),
+                worker.getCreatedAt(),
+                worker.getUpdatedAt()
+        );
+    }
+
+    public PublicWorkerResponse toPublicResponse(Worker worker) {
+        return new PublicWorkerResponse(
+                worker.getId(),
+                worker.getFirstName(),
+                worker.getLastName(),
+                worker.getGender(),
                 worker.getExperienceYears(),
                 worker.getBio(),
                 worker.getHourlyRate(),

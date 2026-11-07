@@ -44,6 +44,12 @@ class StoredFileServiceTest {
     @Mock
     private StorageProperties storageProperties;
 
+    @Mock
+    private com.bluecollar.customer.repository.CustomerRepository customerRepository;
+
+    @Mock
+    private com.bluecollar.worker.repository.WorkerRepository workerRepository;
+
     @InjectMocks
     private StoredFileServiceImpl storedFileService;
 

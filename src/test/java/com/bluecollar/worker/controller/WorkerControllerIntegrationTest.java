@@ -176,7 +176,10 @@ class WorkerControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data.id").value(worker.getId().toString()))
-                .andExpect(jsonPath("$.data.phoneNumber").value("+1234567890"));
+                .andExpect(jsonPath("$.data.firstName").value(worker.getFirstName()))
+                .andExpect(jsonPath("$.data.phoneNumber").doesNotExist())
+                .andExpect(jsonPath("$.data.email").doesNotExist())
+                .andExpect(jsonPath("$.data.dateOfBirth").doesNotExist());
     }
 
     @Test

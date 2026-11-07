@@ -7,6 +7,7 @@ import com.bluecollar.skill.entity.Skill;
 import com.bluecollar.skill.exception.SkillNotFoundException;
 import com.bluecollar.skill.repository.SkillRepository;
 import com.bluecollar.worker.dto.CreateWorkerRequest;
+import com.bluecollar.worker.dto.PublicWorkerResponse;
 import com.bluecollar.worker.dto.UpdateWorkerRequest;
 import com.bluecollar.worker.dto.WorkerResponse;
 import com.bluecollar.worker.entity.Worker;
@@ -56,8 +57,24 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<PublicWorkerResponse> getAllPublicWorkers(Pageable pageable) {
+        return workerRepository.findByActiveTrue(pageable)
+                .map(workerMapper::toPublicResponse);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public WorkerResponse getWorkerById(UUID id) {
         return workerMapper.toResponse(findWorker(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PublicWorkerResponse getPublicWorkerById(UUID id) {
+        Worker worker = workerRepository.findById(id)
+                .filter(w -> Boolean.TRUE.equals(w.getActive()))
+                .orElseThrow(() -> new WorkerNotFoundException(id));
+        return workerMapper.toPublicResponse(worker);
     }
 
     @Override

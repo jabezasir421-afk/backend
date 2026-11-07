@@ -4,6 +4,8 @@ import com.bluecollar.auth.entity.UserRole;
 import com.bluecollar.common.exception.UnauthorizedException;
 import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
+import com.bluecollar.customer.entity.Customer;
+import com.bluecollar.customer.repository.CustomerRepository;
 import com.bluecollar.storage.config.StorageProperties;
 import com.bluecollar.storage.dto.FileDownloadInfo;
 import com.bluecollar.storage.dto.StoredFileResponse;
@@ -14,6 +16,8 @@ import com.bluecollar.storage.exception.FileNotFoundException;
 import com.bluecollar.storage.exception.FileUploadException;
 import com.bluecollar.storage.mapper.StoredFileMapper;
 import com.bluecollar.storage.repository.StoredFileRepository;
+import com.bluecollar.worker.entity.Worker;
+import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +57,8 @@ public class StoredFileServiceImpl implements StoredFileService {
     private final FileStorageService fileStorageService;
     private final StoredFileMapper storedFileMapper;
     private final StorageProperties storageProperties;
+    private final CustomerRepository customerRepository;
+    private final WorkerRepository workerRepository;
 
     @Override
     public StoredFileResponse upload(
@@ -62,6 +68,10 @@ public class StoredFileServiceImpl implements StoredFileService {
             UUID entityId
     ) {
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
+
+        if (currentUser.role() == UserRole.CUSTOMER && fileCategory != FileCategory.PROFILE_PHOTO) {
+            throw new UnauthorizedException("Customers can only upload profile photos");
+        }
 
         byte[] content;
         try {
@@ -73,13 +83,24 @@ public class StoredFileServiceImpl implements StoredFileService {
         validateUpload(file, fileCategory, content);
         validateFileCategory(fileCategory, entityType, entityId);
 
-        EntityType resolvedEntityType = entityType == null ? mapDefaultEntityType(fileCategory) : entityType;
+        EntityType resolvedEntityType = entityType == null ? mapDefaultEntityType(fileCategory, currentUser) : entityType;
         validateCategoryEntityMatch(fileCategory, resolvedEntityType);
 
-        // CRITICAL SECURITY: Resource-specific endpoints MUST validate that entityId belongs to authenticated user.
-        // This upload endpoint trusts that the calling resource endpoint (e.g., POST /workers/me/portfolio/certificates)
-        // verified ownership before calling upload(). UUID possession alone does NOT grant file association rights.
-        // If calling endpoint fails to validate ownership, arbitrary entityId values could be associated with files.
+        if (resolvedEntityType == EntityType.CUSTOMER && entityId != null) {
+            Customer customer = customerRepository.findByUserAccountId(currentUser.userAccountId())
+                    .orElseThrow(() -> new UnauthorizedException("Customer profile not found"));
+            if (!customer.getId().equals(entityId)) {
+                throw new UnauthorizedException("Cannot upload file for another customer");
+            }
+        }
+
+        if (resolvedEntityType == EntityType.WORKER && entityId != null && currentUser.role() == UserRole.WORKER) {
+            Worker worker = workerRepository.findByUserAccountId(currentUser.userAccountId())
+                    .orElseThrow(() -> new UnauthorizedException("Worker profile not found"));
+            if (!worker.getId().equals(entityId)) {
+                throw new UnauthorizedException("Cannot upload file for another worker");
+            }
+        }
 
         String storageKey = buildStorageKey(currentUser.userAccountId(), fileCategory, file.getOriginalFilename());
         String checksum = storeWithChecksum(storageKey, content, file.getContentType());
@@ -162,16 +183,8 @@ public class StoredFileServiceImpl implements StoredFileService {
             return;
         }
 
-        switch (storedFile.getFileCategory()) {
-            case IDENTITY_DOC:
-            case CERTIFICATE:
-                throw new UnauthorizedException("You do not have access to this file");
-            case PROFILE_PHOTO:
-            case PORTFOLIO_IMAGE:
-                if (!storedFile.getOwnerUserId().equals(currentUser.userAccountId())) {
-                    throw new UnauthorizedException("You do not have access to this file");
-                }
-                break;
+        if (!storedFile.getOwnerUserId().equals(currentUser.userAccountId())) {
+            throw new UnauthorizedException("You do not have access to this file");
         }
     }
 
@@ -252,7 +265,7 @@ public class StoredFileServiceImpl implements StoredFileService {
 
     private void validateCategoryEntityMatch(FileCategory fileCategory, EntityType entityType) {
         boolean valid = switch (fileCategory) {
-            case PROFILE_PHOTO -> entityType == EntityType.WORKER;
+            case PROFILE_PHOTO -> entityType == EntityType.WORKER || entityType == EntityType.CUSTOMER;
             case PORTFOLIO_IMAGE -> entityType == EntityType.PORTFOLIO;
             case CERTIFICATE -> entityType == EntityType.CERTIFICATE;
             case IDENTITY_DOC -> entityType == EntityType.IDENTITY_DOC;
@@ -321,9 +334,11 @@ public class StoredFileServiceImpl implements StoredFileService {
         return fileCategory == FileCategory.PROFILE_PHOTO || fileCategory == FileCategory.PORTFOLIO_IMAGE;
     }
 
-    private EntityType mapDefaultEntityType(FileCategory fileCategory) {
+    private EntityType mapDefaultEntityType(FileCategory fileCategory, AuthenticatedUser currentUser) {
         return switch (fileCategory) {
-            case PROFILE_PHOTO -> EntityType.WORKER;
+            case PROFILE_PHOTO -> currentUser != null && currentUser.role() == UserRole.CUSTOMER
+                    ? EntityType.CUSTOMER
+                    : EntityType.WORKER;
             case PORTFOLIO_IMAGE -> EntityType.PORTFOLIO;
             case CERTIFICATE -> EntityType.CERTIFICATE;
             case IDENTITY_DOC -> EntityType.IDENTITY_DOC;

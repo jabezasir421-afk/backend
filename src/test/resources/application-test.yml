@@ -20,6 +20,10 @@ spring:
     port: 2525
 
 bluecollar:
+  storage:
+    type: local
+    local:
+      base-path: target/test-files
   security:
     rate-limit:
       max-requests: 10000

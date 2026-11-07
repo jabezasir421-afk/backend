@@ -1,6 +1,8 @@
 package com.bluecollar.worker.repository;
 
 import com.bluecollar.worker.entity.Worker;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -18,6 +20,8 @@ public interface WorkerRepository extends JpaRepository<Worker, UUID>, JpaSpecif
     boolean existsByEmailIgnoreCase(String email);
 
     Optional<Worker> findByUserAccountId(UUID userAccountId);
+
+    Page<Worker> findByActiveTrue(Pageable pageable);
 
     long countByActiveTrue();
 

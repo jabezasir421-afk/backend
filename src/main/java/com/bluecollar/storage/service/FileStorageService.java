@@ -13,4 +13,8 @@ public interface FileStorageService {
     boolean exists(String key);
 
     InputStream getInputStream(String key);
+
+    default boolean validateSignedUrl(String key, long expires, String signature) {
+        return true;
+    }
 }

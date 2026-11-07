@@ -2,6 +2,7 @@ package com.bluecollar.worker.controller;
 
 import com.bluecollar.common.dto.ApiResponse;
 import com.bluecollar.worker.dto.CreateWorkerRequest;
+import com.bluecollar.worker.dto.PublicWorkerResponse;
 import com.bluecollar.worker.dto.UpdateWorkerRequest;
 import com.bluecollar.worker.dto.WorkerResponse;
 import com.bluecollar.worker.service.WorkerService;
@@ -48,23 +49,23 @@ public class WorkerController {
     @GetMapping
     @Operation(
             summary = "List all workers",
-            description = "Retrieve a paginated list of all worker profiles",
+            description = "Retrieve a paginated list of all worker profiles (excluding PII)",
             security = {}
     )
-    public ResponseEntity<ApiResponse<Page<WorkerResponse>>> getAllWorkers(
+    public ResponseEntity<ApiResponse<Page<PublicWorkerResponse>>> getAllWorkers(
             @PageableDefault(sort = "createdAt") Pageable pageable
     ) {
-        return ResponseEntity.ok(ApiResponse.success(workerService.getAllWorkers(pageable), "Workers fetched successfully"));
+        return ResponseEntity.ok(ApiResponse.success(workerService.getAllPublicWorkers(pageable), "Workers fetched successfully"));
     }
 
     @GetMapping("/{id}")
     @Operation(
             summary = "Get worker by ID",
-            description = "Retrieve a specific worker's profile and availability information",
+            description = "Retrieve a specific worker's profile and availability information (excluding PII)",
             security = {}
     )
-    public ResponseEntity<ApiResponse<WorkerResponse>> getWorkerById(@PathVariable UUID id) {
-        return ResponseEntity.ok(ApiResponse.success(workerService.getWorkerById(id), "Worker fetched successfully"));
+    public ResponseEntity<ApiResponse<PublicWorkerResponse>> getWorkerById(@PathVariable UUID id) {
+        return ResponseEntity.ok(ApiResponse.success(workerService.getPublicWorkerById(id), "Worker fetched successfully"));
     }
 
     @PutMapping("/{id}")
