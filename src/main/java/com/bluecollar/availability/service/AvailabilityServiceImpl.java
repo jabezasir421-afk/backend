@@ -250,6 +250,80 @@ public class AvailabilityServiceImpl implements AvailabilityService {
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isSlotAvailable(UUID workerId, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        return isSlotAvailable(workerId, date, startTime, endTime, null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isSlotAvailable(UUID workerId, LocalDate date, LocalTime startTime, LocalTime endTime, UUID excludeBookingId) {
+        if (date == null || startTime == null || endTime == null || !startTime.isBefore(endTime)) {
+            return false;
+        }
+
+        Worker worker = workerRepository.findById(workerId).orElse(null);
+        if (worker == null || !Boolean.TRUE.equals(worker.getActive()) || !Boolean.TRUE.equals(worker.getAvailable())) {
+            return false;
+        }
+
+        if (Boolean.TRUE.equals(worker.getVacationMode())
+                && worker.getVacationStart() != null
+                && worker.getVacationEnd() != null
+                && !date.isBefore(worker.getVacationStart())
+                && !date.isAfter(worker.getVacationEnd())) {
+            return false;
+        }
+
+        LocalTime windowStart;
+        LocalTime windowEnd;
+
+        WorkerScheduleOverride override = scheduleOverrideRepository
+                .findByWorkerIdAndOverrideDate(worker.getId(), date)
+                .orElse(null);
+
+        if (override != null) {
+            if (!Boolean.TRUE.equals(override.getAvailable())) {
+                return false;
+            }
+            if (override.getStartTime() == null || override.getEndTime() == null) {
+                return false;
+            }
+            windowStart = override.getStartTime();
+            windowEnd = override.getEndTime();
+        } else {
+            short dayOfWeek = (short) date.getDayOfWeek().getValue();
+            WorkerWorkingHours workingHours = workingHoursRepository
+                    .findByWorkerIdAndDayOfWeekAndActiveTrue(worker.getId(), dayOfWeek)
+                    .orElse(null);
+            if (workingHours == null) {
+                return false;
+            }
+            windowStart = workingHours.getStartTime();
+            windowEnd = workingHours.getEndTime();
+        }
+
+        if (startTime.isBefore(windowStart) || endTime.isAfter(windowEnd)) {
+            return false;
+        }
+
+        List<Booking> booked = bookingRepository
+                .findByWorkerIdAndScheduledDateAndStatusIn(worker.getId(), date, BLOCKING_STATUSES);
+
+        for (Booking existing : booked) {
+            if (excludeBookingId != null && existing.getId().equals(excludeBookingId)) {
+                continue;
+            }
+            TimeRange existingRange = toBookedRange(existing);
+            if (startTime.isBefore(existingRange.end()) && endTime.isAfter(existingRange.start())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private WorkerScheduleOverride createOverride(Worker worker, ScheduleOverrideRequest request) {
         if (scheduleOverrideRepository.countByWorkerId(worker.getId()) >= MAX_OVERRIDES) {
             throw new InvalidScheduleException("Maximum of " + MAX_OVERRIDES + " schedule overrides allowed");
@@ -359,6 +433,9 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     private TimeRange toBookedRange(Booking booking) {
+        if (booking.getStartTime() != null && booking.getEndTime() != null) {
+            return new TimeRange(booking.getStartTime(), booking.getEndTime());
+        }
         String[] parts = booking.getTimeSlot().split("-");
         return new TimeRange(LocalTime.parse(parts[0].trim()), LocalTime.parse(parts[1].trim()));
     }

@@ -35,6 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.*;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -43,6 +45,11 @@ import java.util.UUID;
 public class BookingServiceImpl implements BookingService {
 
     private static final Duration CANCELLATION_CUTOFF = Duration.ofHours(2);
+    private static final List<BookingStatus> BLOCKING_STATUSES = List.of(
+            BookingStatus.PENDING,
+            BookingStatus.ACCEPTED,
+            BookingStatus.IN_PROGRESS
+    );
 
     private final BookingRepository bookingRepository;
     private final CustomerServiceImpl customerService;
@@ -57,14 +64,27 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponse createBooking(CreateBookingRequest request) {
         Customer customer = customerService.findCustomerByCurrentUser();
-        Worker worker = findAvailableWorker(request.workerId());
+        Worker worker = findWorkerWithLock(request.workerId());
         Category category = findCategory(request.categoryId());
         Address address = addressService.findActiveAddressForCustomer(request.addressId(), customer.getId());
 
         validateWorkerCategory(worker, category);
         validateWorkerHourlyRate(worker);
-        if (!availabilityService.isAvailableOnDate(worker.getId(), request.scheduledDate())) {
-            throw new InvalidBookingStateException("Worker is not available on the selected date");
+
+        ParsedTimeSlot slot = parseTimeSlot(request.timeSlot());
+
+        if (!availabilityService.isSlotAvailable(worker.getId(), request.scheduledDate(), slot.startTime(), slot.endTime())) {
+            throw new InvalidBookingStateException("Worker is not available for the requested time slot");
+        }
+
+        if (bookingRepository.existsOverlappingBooking(
+                worker.getId(),
+                request.scheduledDate(),
+                slot.startTime(),
+                slot.endTime(),
+                BLOCKING_STATUSES,
+                null)) {
+            throw new InvalidBookingStateException("Worker has an existing booking that overlaps with the requested time slot");
         }
 
         Booking booking = Booking.builder()
@@ -75,8 +95,10 @@ public class BookingServiceImpl implements BookingService {
                 .status(BookingStatus.PENDING)
                 .scheduledDate(request.scheduledDate())
                 .timeSlot(request.timeSlot().trim())
+                .startTime(slot.startTime())
+                .endTime(slot.endTime())
                 .description(request.description().trim())
-                .quotedAmount(calculateQuotedAmount(worker.getHourlyRate(), request.timeSlot()))
+                .quotedAmount(calculateQuotedAmount(worker.getHourlyRate(), slot))
                 .addressLine1(address.getLine1())
                 .addressCity(address.getCity())
                 .addressState(address.getState())
@@ -211,16 +233,32 @@ public class BookingServiceImpl implements BookingService {
             throw new InvalidBookingStateException("Bookings can only be rescheduled in PENDING status");
         }
 
-        if (!availabilityService.isAvailableOnDate(booking.getWorker().getId(), request.scheduledDate())) {
-            throw new InvalidBookingStateException("Worker is not available on the selected date");
+        Worker worker = findWorkerWithLock(booking.getWorker().getId());
+
+        ParsedTimeSlot slot = parseTimeSlot(request.timeSlot());
+
+        if (!availabilityService.isSlotAvailable(worker.getId(), request.scheduledDate(), slot.startTime(), slot.endTime(), booking.getId())) {
+            throw new InvalidBookingStateException("Worker is not available for the requested time slot");
+        }
+
+        if (bookingRepository.existsOverlappingBooking(
+                worker.getId(),
+                request.scheduledDate(),
+                slot.startTime(),
+                slot.endTime(),
+                BLOCKING_STATUSES,
+                booking.getId())) {
+            throw new InvalidBookingStateException("Worker has an existing booking that overlaps with the requested time slot");
         }
 
         booking.setScheduledDate(request.scheduledDate());
         booking.setTimeSlot(request.timeSlot().trim());
+        booking.setStartTime(slot.startTime());
+        booking.setEndTime(slot.endTime());
         if (request.description() != null) {
             booking.setDescription(request.description().trim());
         }
-        booking.setQuotedAmount(calculateQuotedAmount(booking.getWorker().getHourlyRate(), request.timeSlot()));
+        booking.setQuotedAmount(calculateQuotedAmount(worker.getHourlyRate(), slot));
 
         Booking saved = bookingRepository.save(booking);
         return bookingMapper.toResponse(saved);
@@ -256,8 +294,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private Worker findAvailableWorker(UUID workerId) {
-        Worker worker = workerRepository.findById(workerId)
-                .orElseThrow(() -> new WorkerNotFoundException(workerId));
+        return findWorkerWithLock(workerId);
+    }
+
+    private Worker findWorkerWithLock(UUID workerId) {
+        Worker worker = workerRepository.findByIdWithLock(workerId)
+                .orElseGet(() -> workerRepository.findById(workerId)
+                        .orElseThrow(() -> new WorkerNotFoundException(workerId)));
 
         if (!Boolean.TRUE.equals(worker.getActive())
                 || !Boolean.TRUE.equals(worker.getVerified())
@@ -284,17 +327,41 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    private BigDecimal calculateQuotedAmount(BigDecimal hourlyRate, String timeSlot) {
-        String[] parts = timeSlot.trim().split("-");
-        LocalTime start = LocalTime.parse(parts[0]);
-        LocalTime end = LocalTime.parse(parts[1]);
-        long minutes = Duration.between(start, end).toMinutes();
-        if (minutes <= 0) {
-            throw new InvalidBookingStateException("Time slot end must be after start");
+    private record ParsedTimeSlot(LocalTime startTime, LocalTime endTime) {}
+
+    private ParsedTimeSlot parseTimeSlot(String timeSlot) {
+        if (timeSlot == null || !timeSlot.contains("-")) {
+            throw new InvalidBookingStateException("Time slot format must be HH:MM-HH:MM");
         }
+        String[] parts = timeSlot.trim().split("-");
+        if (parts.length != 2) {
+            throw new InvalidBookingStateException("Time slot format must be HH:MM-HH:MM");
+        }
+        try {
+            LocalTime start = LocalTime.parse(parts[0].trim());
+            LocalTime end = LocalTime.parse(parts[1].trim());
+            if (!start.isBefore(end)) {
+                throw new InvalidBookingStateException("Time slot end must be after start");
+            }
+            long minutes = Duration.between(start, end).toMinutes();
+            if (minutes <= 0) {
+                throw new InvalidBookingStateException("Time slot duration must be greater than zero");
+            }
+            return new ParsedTimeSlot(start, end);
+        } catch (DateTimeParseException ex) {
+            throw new InvalidBookingStateException("Invalid time format in time slot: " + timeSlot);
+        }
+    }
+
+    private BigDecimal calculateQuotedAmount(BigDecimal hourlyRate, ParsedTimeSlot slot) {
+        long minutes = Duration.between(slot.startTime(), slot.endTime()).toMinutes();
         BigDecimal hours = BigDecimal.valueOf(minutes)
                 .divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
         return hourlyRate.multiply(hours);
+    }
+
+    private BigDecimal calculateQuotedAmount(BigDecimal hourlyRate, String timeSlot) {
+        return calculateQuotedAmount(hourlyRate, parseTimeSlot(timeSlot));
     }
 
     private void transition(Booking booking, BookingStatus target) {

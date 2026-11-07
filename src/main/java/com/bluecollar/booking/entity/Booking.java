@@ -12,6 +12,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "booking")
@@ -47,6 +48,12 @@ public class Booking extends BaseEntity {
 
     @Column(name = "time_slot", nullable = false, length = 20)
     private String timeSlot;
+
+    @Column(name = "start_time")
+    private LocalTime startTime;
+
+    @Column(name = "end_time")
+    private LocalTime endTime;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
@@ -86,7 +93,20 @@ public class Booking extends BaseEntity {
     private String addressPincode;
 
     @PrePersist
-    void prePersistBooking() {
-        status = status == null ? BookingStatus.PENDING : status;
+    @PreUpdate
+    void syncTimesAndDefaults() {
+        if (status == null) {
+            status = BookingStatus.PENDING;
+        }
+        if ((startTime == null || endTime == null) && timeSlot != null && timeSlot.contains("-")) {
+            String[] parts = timeSlot.split("-");
+            if (parts.length == 2) {
+                try {
+                    startTime = LocalTime.parse(parts[0].trim());
+                    endTime = LocalTime.parse(parts[1].trim());
+                } catch (Exception ignored) {
+                }
+            }
+        }
     }
 }

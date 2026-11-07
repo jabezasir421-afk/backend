@@ -25,9 +25,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
@@ -265,5 +268,46 @@ class BookingRepositoryTest {
         BigDecimal sum = bookingRepository.sumFinalAmountByStatus(BookingStatus.COMPLETED);
 
         assertTrue(sum.compareTo(BigDecimal.ZERO) == 0);
+    }
+
+    // ─── existsOverlappingBooking ──────────────────────────────────────────────
+
+    @Test
+    void existsOverlappingBookingShouldDetectOverlapsCorrectly() {
+        Booking booking = saveBooking(BookingStatus.PENDING);
+        LocalDate date = booking.getScheduledDate();
+        List<BookingStatus> blocking = List.of(BookingStatus.PENDING, BookingStatus.ACCEPTED, BookingStatus.IN_PROGRESS);
+
+        // Booking is 10:00 - 12:00
+        // Overlap: 11:00-13:00 (newStart < existingEnd && newEnd > existingStart)
+        assertTrue(bookingRepository.existsOverlappingBooking(worker.getId(), date, LocalTime.of(11, 0), LocalTime.of(13, 0), blocking, null));
+        // Overlap: 09:30-10:30
+        assertTrue(bookingRepository.existsOverlappingBooking(worker.getId(), date, LocalTime.of(9, 30), LocalTime.of(10, 30), blocking, null));
+        // Overlap: 10:30-11:30 (subset)
+        assertTrue(bookingRepository.existsOverlappingBooking(worker.getId(), date, LocalTime.of(10, 30), LocalTime.of(11, 30), blocking, null));
+        // Overlap: 09:00-13:00 (superset)
+        assertTrue(bookingRepository.existsOverlappingBooking(worker.getId(), date, LocalTime.of(9, 0), LocalTime.of(13, 0), blocking, null));
+
+        // Adjacent: 12:00-14:00 (newStart == existingEnd) -> NO overlap
+        assertFalse(bookingRepository.existsOverlappingBooking(worker.getId(), date, LocalTime.of(12, 0), LocalTime.of(14, 0), blocking, null));
+        // Adjacent: 08:00-10:00 (newEnd == existingStart) -> NO overlap
+        assertFalse(bookingRepository.existsOverlappingBooking(worker.getId(), date, LocalTime.of(8, 0), LocalTime.of(10, 0), blocking, null));
+        // Disjoint: 13:00-15:00 -> NO overlap
+        assertFalse(bookingRepository.existsOverlappingBooking(worker.getId(), date, LocalTime.of(13, 0), LocalTime.of(15, 0), blocking, null));
+
+        // Exclude current booking ID -> NO overlap
+        assertFalse(bookingRepository.existsOverlappingBooking(worker.getId(), date, LocalTime.of(10, 0), LocalTime.of(12, 0), blocking, booking.getId()));
+
+        // Different non-blocking status -> NO overlap
+        booking.setStatus(BookingStatus.CANCELLED);
+        bookingRepository.saveAndFlush(booking);
+        assertFalse(bookingRepository.existsOverlappingBooking(worker.getId(), date, LocalTime.of(10, 0), LocalTime.of(12, 0), blocking, null));
+    }
+
+    @Test
+    void workerFindByIdWithLockShouldReturnWorker() {
+        Optional<Worker> locked = workerRepository.findByIdWithLock(worker.getId());
+        assertTrue(locked.isPresent());
+        assertEquals(worker.getId(), locked.get().getId());
     }
 }

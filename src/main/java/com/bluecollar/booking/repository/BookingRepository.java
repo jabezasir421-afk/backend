@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,6 +62,23 @@ public interface BookingRepository extends JpaRepository<Booking, UUID> {
             UUID workerId,
             LocalDate scheduledDate,
             java.util.Collection<BookingStatus> statuses
+    );
+
+    @Query("""
+            SELECT COUNT(b) > 0 FROM Booking b
+            WHERE b.worker.id = :workerId
+              AND b.scheduledDate = :scheduledDate
+              AND b.status IN :statuses
+              AND (:excludeBookingId IS NULL OR b.id <> :excludeBookingId)
+              AND (b.startTime < :endTime AND b.endTime > :startTime)
+            """)
+    boolean existsOverlappingBooking(
+            @Param("workerId") UUID workerId,
+            @Param("scheduledDate") LocalDate scheduledDate,
+            @Param("startTime") LocalTime startTime,
+            @Param("endTime") LocalTime endTime,
+            @Param("statuses") java.util.Collection<BookingStatus> statuses,
+            @Param("excludeBookingId") UUID excludeBookingId
     );
 
     long countByCreatedAtBetween(Instant from, Instant to);
