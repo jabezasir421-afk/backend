@@ -38,6 +38,9 @@ class AdminUserServiceTest {
     @Mock
     private WorkerRepository workerRepository;
 
+    @Mock
+    private com.bluecollar.auth.repository.RefreshTokenRepository refreshTokenRepository;
+
     @InjectMocks
     private AdminUserServiceImpl adminUserService;
 

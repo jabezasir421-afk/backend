@@ -22,6 +22,8 @@ public interface NotificationService {
             UUID referenceId
     );
 
+    void sendEmail(String recipientEmail, String subject, String bodyHtml);
+
     Page<NotificationResponse> getMyNotifications(Pageable pageable);
 
     long getUnreadCount();

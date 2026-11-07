@@ -65,6 +65,17 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void sendEmail(String recipientEmail, String subject, String bodyHtml) {
+        EmailOutbox outbox = EmailOutbox.builder()
+                .recipientEmail(recipientEmail)
+                .subject(subject)
+                .bodyHtml(bodyHtml)
+                .status(OutboxStatus.PENDING)
+                .build();
+        emailOutboxRepository.save(outbox);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Page<NotificationResponse> getMyNotifications(Pageable pageable) {
         UUID userId = SecurityUtils.getCurrentUser().userAccountId();

@@ -48,36 +48,43 @@ public class JwtService {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + jwtProperties.getAccessTokenExpirationMs());
 
+        long pwdChangedAt = userAccount.getPasswordChangedAt() != null
+                ? userAccount.getPasswordChangedAt().toEpochMilli()
+                : 0L;
+
         return Jwts.builder()
                 .subject(userAccount.getId().toString())
                 .claim("email", userAccount.getEmail())
                 .claim("role", userAccount.getRole().name())
+                .claim("pwd_changed_at", pwdChangedAt)
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(secretKey)
                 .compact();
     }
 
-    public AuthenticatedUser parseAccessToken(String token) {
+    public Claims parseClaims(String token) {
         try {
-            Claims claims = Jwts.parser()
+            return Jwts.parser()
                     .verifyWith(secretKey)
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-
-            return new AuthenticatedUser(
-                    UUID.fromString(claims.getSubject()),
-                    claims.get("email", String.class),
-                    com.bluecollar.auth.entity.UserRole.valueOf(
-                            claims.get("role", String.class))
-            );
-
         } catch (ExpiredJwtException exception) {
             throw new TokenExpiredException();
         } catch (Exception exception) {
             throw new InvalidTokenException("Invalid access token");
         }
+    }
+
+    public AuthenticatedUser parseAccessToken(String token) {
+        Claims claims = parseClaims(token);
+        return new AuthenticatedUser(
+                UUID.fromString(claims.getSubject()),
+                claims.get("email", String.class),
+                com.bluecollar.auth.entity.UserRole.valueOf(
+                        claims.get("role", String.class))
+        );
     }
 
     public long getAccessTokenExpirationMs() {

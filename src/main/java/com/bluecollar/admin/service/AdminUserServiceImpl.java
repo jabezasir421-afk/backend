@@ -24,6 +24,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     private final UserAccountRepository userAccountRepository;
     private final CustomerRepository customerRepository;
     private final WorkerRepository workerRepository;
+    private final com.bluecollar.auth.repository.RefreshTokenRepository refreshTokenRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -49,6 +50,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     public AdminUserResponse deactivateUser(UUID id) {
         UserAccount user = findUser(id);
         user.setActive(false);
+        refreshTokenRepository.revokeAllByUserAccountId(user.getId(), java.time.Instant.now());
         return toResponse(userAccountRepository.save(user));
     }
 

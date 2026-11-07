@@ -28,6 +28,9 @@ import com.bluecollar.skill.repository.SkillRepository;
 import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.exception.WorkerAlreadyExistsException;
 import com.bluecollar.worker.repository.WorkerRepository;
+import com.bluecollar.notification.entity.NotificationChannel;
+import com.bluecollar.notification.entity.NotificationType;
+import com.bluecollar.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -54,6 +58,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final TokenHashService tokenHashService;
+    private final NotificationService notificationService;
 
     @Override
     public AuthResponse registerCustomer(RegisterCustomerRequest request) {
@@ -69,6 +74,8 @@ public class AuthServiceImpl implements AuthService {
         Customer customer = customerRepository.save(
                 customerMapper.toEntity(userAccount, request.firstName(), request.lastName())
         );
+
+        sendVerificationEmail(userAccount);
 
         return buildAuthResponse(userAccount, customer.getId());
     }
@@ -104,13 +111,16 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         Worker savedWorker = workerRepository.save(worker);
+
+        sendVerificationEmail(userAccount);
+
         return buildAuthResponse(userAccount, savedWorker.getId());
     }
 
     @Override
     public AuthResponse login(LoginRequest request) {
         UserAccount userAccount = findByIdentifier(request.identifier())
-                .filter(account -> account.getActive())
+                .filter(account -> Boolean.TRUE.equals(account.getActive()))
                 .filter(account -> passwordEncoder.matches(request.password(), account.getPasswordHash()))
                 .orElseThrow(InvalidCredentialsException::new);
 
@@ -124,12 +134,26 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse refreshToken(RefreshTokenRequest request) {
         String tokenHash = tokenHashService.hash(request.refreshToken());
-        RefreshToken refreshToken = refreshTokenRepository.findByTokenHashAndRevokedFalse(tokenHash)
-                .filter(token -> token.getExpiresAt().isAfter(Instant.now()))
-                .orElseThrow(() -> new InvalidTokenException("Invalid or expired refresh token"));
+        Optional<RefreshToken> tokenOpt = refreshTokenRepository.findByTokenHash(tokenHash);
+
+        if (tokenOpt.isEmpty()) {
+            throw new InvalidTokenException("Invalid or expired refresh token");
+        }
+
+        RefreshToken refreshToken = tokenOpt.get();
+
+        // Replay protection: if token is already revoked, an attacker or compromised client reused it!
+        if (Boolean.TRUE.equals(refreshToken.getRevoked())) {
+            refreshTokenRepository.revokeAllByUserAccountId(refreshToken.getUserAccount().getId(), Instant.now());
+            throw new InvalidTokenException("Refresh token has already been revoked. All sessions revoked for security.");
+        }
+
+        if (refreshToken.getExpiresAt().isBefore(Instant.now())) {
+            throw new InvalidTokenException("Invalid or expired refresh token");
+        }
 
         UserAccount userAccount = refreshToken.getUserAccount();
-        if (!userAccount.getActive()) {
+        if (!Boolean.TRUE.equals(userAccount.getActive())) {
             throw new InvalidCredentialsException();
         }
 
@@ -260,24 +284,71 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void forgotPassword(ForgotPasswordRequest request) {
-        userAccountRepository.findByEmailIgnoreCase(normalizeEmail(request.email()))
-                .orElseThrow(() -> new UserNotFoundException("User with email " + request.email() + " not found"));
+        String email = normalizeEmail(request.email());
+        userAccountRepository.findByEmailIgnoreCase(email)
+                .ifPresent(userAccount -> {
+                    if (Boolean.TRUE.equals(userAccount.getActive())) {
+                        String resetToken = jwtService.generatePasswordResetToken(userAccount.getId());
+                        userAccount.setPasswordResetTokenHash(tokenHashService.hash(resetToken));
+                        userAccount.setPasswordResetTokenExpiresAt(Instant.now().plusSeconds(3600));
+                        userAccountRepository.saveAndFlush(userAccount);
+
+                        notificationService.sendEmail(
+                                userAccount.getEmail(),
+                                "Password Reset Request",
+                                "<p>You requested a password reset. Use this token: <code>" + resetToken + "</code></p>"
+                        );
+                    }
+                });
     }
 
     @Override
     public void resetPassword(ResetPasswordRequest request) {
+        Claims claims;
         try {
-            Claims claims = jwtService.validatePasswordResetToken(request.token());
-            UUID userAccountId = UUID.fromString(claims.getSubject());
-
-            UserAccount userAccount = userAccountRepository.findById(userAccountId)
-                    .orElseThrow(() -> new UserNotFoundException("User account not found"));
-
-            userAccount.setPasswordHash(passwordEncoder.encode(request.newPassword()));
-            userAccountRepository.save(userAccount);
+            claims = jwtService.validatePasswordResetToken(request.token());
         } catch (JwtException ex) {
             throw new InvalidTokenException("Invalid or expired password reset token");
         }
+
+        UUID userAccountId = UUID.fromString(claims.getSubject());
+        UserAccount userAccount = userAccountRepository.findById(userAccountId)
+                .orElseThrow(() -> new InvalidTokenException("Invalid password reset token"));
+
+        if (!Boolean.TRUE.equals(userAccount.getActive())) {
+            throw new InvalidTokenException("Account is disabled");
+        }
+
+        String presentedTokenHash = tokenHashService.hash(request.token());
+        if (userAccount.getPasswordResetTokenHash() == null
+                || !userAccount.getPasswordResetTokenHash().equals(presentedTokenHash)) {
+            throw new InvalidTokenException("Password reset token has already been used or is invalid");
+        }
+
+        if (userAccount.getPasswordResetTokenExpiresAt() != null
+                && userAccount.getPasswordResetTokenExpiresAt().isBefore(Instant.now())) {
+            throw new InvalidTokenException("Password reset token has expired");
+        }
+
+        userAccount.setPasswordHash(passwordEncoder.encode(request.newPassword()));
+        userAccount.setPasswordResetTokenHash(null);
+        userAccount.setPasswordResetTokenExpiresAt(null);
+
+        Instant now = Instant.now();
+        userAccount.setPasswordChangedAt(now);
+        userAccountRepository.saveAndFlush(userAccount);
+
+        refreshTokenRepository.revokeAllByUserAccountId(userAccount.getId(), now);
+
+        notificationService.notifyUser(
+                userAccount.getId(),
+                NotificationType.ACCOUNT_PASSWORD_CHANGED,
+                NotificationChannel.BOTH,
+                "Password Changed",
+                "Your password has been changed successfully.",
+                "USER",
+                userAccount.getId()
+        );
     }
 
     @Override
@@ -291,32 +362,58 @@ public class AuthServiceImpl implements AuthService {
         }
 
         userAccount.setPasswordHash(passwordEncoder.encode(request.newPassword()));
-        userAccountRepository.save(userAccount);
+
+        Instant now = Instant.now();
+        userAccount.setPasswordChangedAt(now);
+        userAccountRepository.saveAndFlush(userAccount);
+
+        refreshTokenRepository.revokeAllByUserAccountId(userAccount.getId(), now);
+
+        notificationService.notifyUser(
+                userAccount.getId(),
+                NotificationType.ACCOUNT_PASSWORD_CHANGED,
+                NotificationChannel.BOTH,
+                "Password Changed",
+                "Your password has been changed successfully.",
+                "USER",
+                userAccount.getId()
+        );
     }
 
     @Override
     public void verifyEmail(VerifyEmailRequest request) {
+        Claims claims;
         try {
-            Claims claims = jwtService.validateEmailVerificationToken(request.token());
-            UUID userAccountId = UUID.fromString(claims.getSubject());
-
-            UserAccount userAccount = userAccountRepository.findById(userAccountId)
-                    .orElseThrow(() -> new UserNotFoundException("User account not found"));
-
-            userAccount.setEmailVerified(true);
-            userAccountRepository.save(userAccount);
+            claims = jwtService.validateEmailVerificationToken(request.token());
         } catch (JwtException ex) {
             throw new InvalidTokenException("Invalid or expired email verification token");
         }
+
+        UUID userAccountId = UUID.fromString(claims.getSubject());
+        UserAccount userAccount = userAccountRepository.findById(userAccountId)
+                .orElseThrow(() -> new InvalidTokenException("Invalid email verification token"));
+
+        userAccount.setEmailVerified(true);
+        userAccountRepository.save(userAccount);
     }
 
     @Override
     public void resendVerificationEmail(ResendVerificationEmailRequest request) {
         userAccountRepository.findByEmailIgnoreCase(normalizeEmail(request.email()))
                 .ifPresent(userAccount -> {
-                    if (!userAccount.getEmailVerified()) {
-                        String token = jwtService.generateEmailVerificationToken(userAccount.getId());
+                    if (!Boolean.TRUE.equals(userAccount.getEmailVerified())
+                            && Boolean.TRUE.equals(userAccount.getActive())) {
+                        sendVerificationEmail(userAccount);
                     }
                 });
+    }
+
+    private void sendVerificationEmail(UserAccount userAccount) {
+        String token = jwtService.generateEmailVerificationToken(userAccount.getId());
+        notificationService.sendEmail(
+                userAccount.getEmail(),
+                "Verify your email address",
+                "<p>Welcome to BlueCollar! Please verify your email using this token: <code>" + token + "</code></p>"
+        );
     }
 }
