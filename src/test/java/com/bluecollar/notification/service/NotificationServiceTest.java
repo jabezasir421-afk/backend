@@ -27,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.time.Instant;
 import java.util.List;
@@ -52,6 +53,8 @@ class NotificationServiceTest {
     private UserAccountRepository userAccountRepository;
     @Mock
     private NotificationProperties notificationProperties;
+    @Mock
+    private SimpMessagingTemplate messagingTemplate;
 
     @InjectMocks
     private NotificationServiceImpl notificationService;
@@ -170,8 +173,6 @@ class NotificationServiceTest {
 
     @Test
     void markAllAsReadShouldMarkAllNotificationsAsRead() {
-        Instant readAt = Instant.now();
-
         notificationService.markAllAsRead();
 
         verify(notificationRepository).markAllRead(eq(userId), any(Instant.class));
@@ -190,14 +191,14 @@ class NotificationServiceTest {
     }
 
     @Test
-    void getPreferencesShouldCreateDefaultPreferencesWhenNoneExist() {
+    void getPreferencesShouldReturnDefaultPreferencesWithoutSavingInReadOnlyTransaction() {
         when(preferenceRepository.findByUserAccountId(userId)).thenReturn(Optional.empty());
-        when(preferenceRepository.save(any(NotificationPreference.class))).thenReturn(preference);
 
         NotificationPreferenceResponse result = notificationService.getPreferences();
 
         assertEquals(true, result.inAppEnabled());
-        verify(preferenceRepository).save(any(NotificationPreference.class));
+        assertEquals(true, result.emailBookingUpdates());
+        verify(preferenceRepository, never()).save(any());
     }
 
     @Test
@@ -220,10 +221,9 @@ class NotificationServiceTest {
     }
 
     @Test
-    void notifyUserShouldSaveNotificationWhenInAppEnabled() {
+    void notifyUserShouldSaveNotificationAndPublishToStompWhenInAppEnabled() {
         NotificationProperties.Email emailProperties = new NotificationProperties.Email();
         emailProperties.setEnabled(false);
-        when(notificationProperties.getEmail()).thenReturn(emailProperties);
 
         when(preferenceRepository.findByUserAccountId(userId)).thenReturn(Optional.of(preference));
         when(notificationRepository.save(any(Notification.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -240,6 +240,8 @@ class NotificationServiceTest {
 
         verify(notificationRepository).save(any(Notification.class));
         verify(emailOutboxRepository, never()).save(any());
+        verify(messagingTemplate).convertAndSendToUser(eq(userId.toString()), eq("/queue/notifications"), any(NotificationResponse.class));
+        verify(messagingTemplate).convertAndSend(eq("/topic/notifications/" + userId), any(NotificationResponse.class));
     }
 
     @Test
@@ -258,6 +260,7 @@ class NotificationServiceTest {
         );
 
         verify(notificationRepository, never()).save(any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
     }
 
     @Test
@@ -274,7 +277,6 @@ class NotificationServiceTest {
                 .build();
 
         when(preferenceRepository.findByUserAccountId(userId)).thenReturn(Optional.of(preference));
-        when(notificationRepository.save(any(Notification.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(userAccountRepository.findById(userId)).thenReturn(Optional.of(userAccount));
         when(emailOutboxRepository.save(any(EmailOutbox.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -288,7 +290,73 @@ class NotificationServiceTest {
                 referenceId
         );
 
-        verify(notificationRepository).save(any(Notification.class));
+        verify(notificationRepository, never()).save(any());
         verify(emailOutboxRepository).save(any(EmailOutbox.class));
+    }
+
+    @Test
+    void notifyUserShouldSendEmailWhenInAppDisabledAndChannelIsBoth() {
+        // Preference: inAppEnabled = false, emailBookingUpdates = true
+        preference.setInAppEnabled(false);
+        preference.setEmailBookingUpdates(true);
+
+        NotificationProperties.Email emailProperties = new NotificationProperties.Email();
+        emailProperties.setEnabled(true);
+        when(notificationProperties.getEmail()).thenReturn(emailProperties);
+
+        UserAccount userAccount = UserAccount.builder()
+                .email("user@example.com")
+                .phoneNumber("9876543210")
+                .passwordHash("hash")
+                .role(UserRole.CUSTOMER)
+                .build();
+
+        when(preferenceRepository.findByUserAccountId(userId)).thenReturn(Optional.of(preference));
+        when(userAccountRepository.findById(userId)).thenReturn(Optional.of(userAccount));
+        when(emailOutboxRepository.save(any(EmailOutbox.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        notificationService.notifyUser(
+                userId,
+                NotificationType.BOOKING_CREATED,
+                NotificationChannel.BOTH,
+                "New booking request",
+                "You have received a new booking request.",
+                "BOOKING",
+                referenceId
+        );
+
+        // In-app should be skipped, but email MUST be sent!
+        verify(notificationRepository, never()).save(any());
+        verify(messagingTemplate, never()).convertAndSend(anyString(), any(Object.class));
+        verify(emailOutboxRepository).save(any(EmailOutbox.class));
+    }
+
+    @Test
+    void notifyUserShouldSaveInAppWhenEmailDisabledAndChannelIsBoth() {
+        // Preference: inAppEnabled = true, emailBookingUpdates = false
+        preference.setInAppEnabled(true);
+        preference.setEmailBookingUpdates(false);
+
+        NotificationProperties.Email emailProperties = new NotificationProperties.Email();
+        emailProperties.setEnabled(true);
+        when(notificationProperties.getEmail()).thenReturn(emailProperties);
+
+        when(preferenceRepository.findByUserAccountId(userId)).thenReturn(Optional.of(preference));
+        when(notificationRepository.save(any(Notification.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        notificationService.notifyUser(
+                userId,
+                NotificationType.BOOKING_CREATED,
+                NotificationChannel.BOTH,
+                "New booking request",
+                "You have received a new booking request.",
+                "BOOKING",
+                referenceId
+        );
+
+        // In-app should be saved and published, but email MUST NOT be queued!
+        verify(notificationRepository).save(any(Notification.class));
+        verify(messagingTemplate).convertAndSendToUser(eq(userId.toString()), eq("/queue/notifications"), any(NotificationResponse.class));
+        verify(emailOutboxRepository, never()).save(any());
     }
 }
