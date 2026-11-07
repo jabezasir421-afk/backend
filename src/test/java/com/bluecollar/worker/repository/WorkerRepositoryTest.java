@@ -2,6 +2,7 @@ package com.bluecollar.worker.repository;
 
 import com.bluecollar.category.entity.Category;
 import com.bluecollar.category.repository.CategoryRepository;
+import com.bluecollar.portfolio.repository.WorkerIdentityDocumentRepository;
 import com.bluecollar.worker.entity.Gender;
 import com.bluecollar.worker.entity.Worker;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,10 +29,14 @@ class WorkerRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private WorkerIdentityDocumentRepository identityDocumentRepository;
+
     private Category category;
 
     @BeforeEach
     void setUp() {
+        identityDocumentRepository.deleteAll();
         workerRepository.deleteAll();
         category = categoryRepository.saveAndFlush(Category.builder()
                 .name("Plumbing")

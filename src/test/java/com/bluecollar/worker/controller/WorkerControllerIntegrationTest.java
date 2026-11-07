@@ -2,6 +2,7 @@ package com.bluecollar.worker.controller;
 
 import com.bluecollar.category.entity.Category;
 import com.bluecollar.category.repository.CategoryRepository;
+import com.bluecollar.portfolio.repository.WorkerIdentityDocumentRepository;
 import com.bluecollar.worker.entity.Gender;
 import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.repository.WorkerRepository;
@@ -42,6 +43,9 @@ class WorkerControllerIntegrationTest {
     private WorkerRepository workerRepository;
 
     @Autowired
+    private WorkerIdentityDocumentRepository identityDocumentRepository;
+
+    @Autowired
     private CategoryRepository categoryRepository;
 
     private Category category;
@@ -51,6 +55,7 @@ class WorkerControllerIntegrationTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
+        identityDocumentRepository.deleteAll();
         workerRepository.deleteAll();
         categoryRepository.deleteAll();
         category = categoryRepository.saveAndFlush(Category.builder()
