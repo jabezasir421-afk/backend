@@ -61,3 +61,6 @@ jobs:
 
       - name: Verify JaCoCo Code Coverage Report
         run: test -f target/site/jacoco/index.html
+
+      - name: Package Docker Image (Smoke Test)
+        run: docker build -t bluecollar-backend:ci .
