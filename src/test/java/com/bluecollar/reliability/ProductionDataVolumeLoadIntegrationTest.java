@@ -10,6 +10,7 @@ import com.bluecollar.skill.entity.Skill;
 import com.bluecollar.skill.repository.SkillRepository;
 import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.repository.WorkerRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,15 @@ public class ProductionDataVolumeLoadIntegrationTest {
                 .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
         testDbCleanup.cleanCoreDomain();
+        skillRepository.deleteAll();
+    }
+
+    @AfterEach
+    void tearDown() {
+        // This load test is intentionally non-transactional because requests run on
+        // worker threads. Remove its committed fixtures before the next test class.
+        testDbCleanup.cleanCoreDomain();
+        skillRepository.deleteAll();
     }
 
     @Test
