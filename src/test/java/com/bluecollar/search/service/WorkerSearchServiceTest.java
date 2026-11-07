@@ -137,8 +137,9 @@ class WorkerSearchServiceTest {
         Pageable pageable = PageRequest.of(0, 20);
         Page<Worker> page = new PageImpl<>(List.of(worker), pageable, 1);
 
-        when(workerRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
+        when(workerRepository.findAll(any(Specification.class))).thenReturn(List.of(worker));
         when(availabilityService.isAvailableOnDate(workerId, availableOn)).thenReturn(true);
+        when(workerRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
 
         WorkerSearchResponse response = workerSearchService.searchWorkers(
                 null, null, null, null, false, null, null, availableOn,
@@ -146,6 +147,7 @@ class WorkerSearchServiceTest {
         );
 
         assertEquals(1, response.results().size());
+        assertEquals(1, response.totalElements());
         verify(availabilityService).isAvailableOnDate(workerId, availableOn);
     }
 
@@ -153,9 +155,8 @@ class WorkerSearchServiceTest {
     void searchWorkersShouldExcludeWorkersUnavailableOnDate() {
         LocalDate availableOn = LocalDate.now().plusDays(3);
         Pageable pageable = PageRequest.of(0, 20);
-        Page<Worker> page = new PageImpl<>(List.of(worker), pageable, 1);
 
-        when(workerRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
+        when(workerRepository.findAll(any(Specification.class))).thenReturn(List.of(worker));
         when(availabilityService.isAvailableOnDate(workerId, availableOn)).thenReturn(false);
 
         WorkerSearchResponse response = workerSearchService.searchWorkers(
@@ -164,6 +165,7 @@ class WorkerSearchServiceTest {
         );
 
         assertTrue(response.results().isEmpty());
+        assertEquals(0, response.totalElements());
         verify(availabilityService).isAvailableOnDate(workerId, availableOn);
     }
 

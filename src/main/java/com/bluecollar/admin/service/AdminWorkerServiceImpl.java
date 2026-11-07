@@ -7,6 +7,7 @@ import com.bluecollar.audit.service.AuditLogService;
 import com.bluecollar.auth.entity.UserAccount;
 import com.bluecollar.auth.entity.UserRole;
 import com.bluecollar.auth.repository.UserAccountRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
 import com.bluecollar.common.service.DocumentEncryptionService;
@@ -22,6 +23,7 @@ import com.bluecollar.worker.exception.WorkerNotFoundException;
 import com.bluecollar.worker.mapper.WorkerMapper;
 import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,7 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
     private final AuditLogService auditLogService;
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public WorkerResponse verifyWorker(UUID id) {
         Worker worker = findWorker(id);
         if (!Boolean.TRUE.equals(worker.getActive())) {
@@ -83,6 +86,7 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public WorkerResponse unverifyWorker(UUID id) {
         Worker worker = findWorker(id);
         worker.setVerified(false);
@@ -93,6 +97,7 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public WorkerResponse deactivateWorker(UUID id) {
         Worker worker = findWorker(id);
         worker.setActive(false);
@@ -104,6 +109,7 @@ public class AdminWorkerServiceImpl implements AdminWorkerService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public WorkerResponse linkUserAccount(UUID workerId, LinkWorkerUserRequest request) {
         Worker worker = findWorker(workerId);
         if (worker.getUserAccount() != null) {

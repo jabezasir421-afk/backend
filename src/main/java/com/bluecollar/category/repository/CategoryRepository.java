@@ -16,5 +16,7 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
 
     Page<Category> findByActiveTrue(Pageable pageable);
 
+    java.util.List<Category> findByActiveTrue();
+
     Optional<Category> findByIdAndActiveTrue(UUID id);
 }

@@ -8,6 +8,7 @@ import com.bluecollar.booking.entity.Booking;
 import com.bluecollar.booking.entity.BookingStatus;
 import com.bluecollar.booking.exception.BookingNotFoundException;
 import com.bluecollar.booking.repository.BookingRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.common.event.ReviewCreatedEvent;
 import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
@@ -28,6 +29,7 @@ import com.bluecollar.review.repository.ReviewRepository;
 import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -60,6 +62,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final AuditLogService auditLogService;
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public ReviewResponse createReview(CreateReviewRequest request) {
         Customer customer = customerService.findCustomerByCurrentUser();
         Booking booking = bookingRepository.findById(request.bookingId())
@@ -149,6 +152,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public void deactivateReview(UUID id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
@@ -159,6 +163,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public void activateReview(UUID id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
@@ -208,6 +213,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AdminReviewResponse approveReview(UUID id, ModerateReviewRequest request) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));
@@ -225,6 +231,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AdminReviewResponse rejectReview(UUID id, ModerateReviewRequest request) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ReviewNotFoundException(id));

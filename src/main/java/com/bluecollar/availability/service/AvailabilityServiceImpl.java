@@ -12,6 +12,7 @@ import com.bluecollar.availability.repository.WorkerWorkingHoursRepository;
 import com.bluecollar.booking.entity.Booking;
 import com.bluecollar.booking.entity.BookingStatus;
 import com.bluecollar.booking.repository.BookingRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
 import com.bluecollar.worker.entity.OnlineStatus;
@@ -19,6 +20,7 @@ import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.exception.WorkerNotFoundException;
 import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +70,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AvailabilitySummaryResponse updateOnlineStatus(UpdateOnlineStatusRequest request) {
         Worker worker = findWorkerByCurrentUser();
         worker.setOnlineStatus(request.status());
@@ -79,6 +82,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AvailabilitySummaryResponse updateBookable(UpdateBookableRequest request) {
         Worker worker = findWorkerByCurrentUser();
         worker.setAvailable(request.bookable());
@@ -87,6 +91,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public List<WorkingHoursEntry> updateWorkingHours(UpdateWorkingHoursRequest request) {
         Worker worker = findWorkerByCurrentUser();
         validateWorkingHoursSchedule(request.schedule());
@@ -116,6 +121,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AvailabilitySummaryResponse updateVacationMode(VacationModeRequest request) {
         Worker worker = findWorkerByCurrentUser();
 
@@ -140,6 +146,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public ScheduleOverrideResponse addScheduleOverride(ScheduleOverrideRequest request) {
         Worker worker = findWorkerByCurrentUser();
         validateOverrideRequest(worker, request);
@@ -154,6 +161,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public void removeScheduleOverride(UUID overrideId) {
         Worker worker = findWorkerByCurrentUser();
         WorkerScheduleOverride override = scheduleOverrideRepository.findByIdAndWorkerId(overrideId, worker.getId())

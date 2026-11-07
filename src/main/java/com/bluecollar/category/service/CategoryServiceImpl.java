@@ -9,8 +9,10 @@ import com.bluecollar.category.exception.CategoryAlreadyExistsException;
 import com.bluecollar.category.exception.CategoryNotFoundException;
 import com.bluecollar.category.mapper.CategoryMapper;
 import com.bluecollar.category.repository.CategoryRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.common.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
+    @CacheEvict(value = {CacheConfig.CATEGORIES_CACHE, CacheConfig.WORKER_SEARCH_CACHE}, allEntries = true)
     public CategoryResponse createCategory(CreateCategoryRequest request) {
         validateNameAvailable(request.name());
 
@@ -57,6 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = {CacheConfig.CATEGORIES_CACHE, CacheConfig.WORKER_SEARCH_CACHE}, allEntries = true)
     public CategoryResponse updateCategory(UUID id, UpdateCategoryRequest request) {
         Category category = findCategory(id);
         validateNameAvailableForUpdate(category, request.name());
@@ -66,6 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = {CacheConfig.CATEGORIES_CACHE, CacheConfig.WORKER_SEARCH_CACHE}, allEntries = true)
     public void deleteCategory(UUID id) {
         Category category = findCategory(id);
         category.setActive(false);

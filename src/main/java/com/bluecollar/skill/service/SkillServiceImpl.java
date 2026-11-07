@@ -1,6 +1,7 @@
 package com.bluecollar.skill.service;
 
 import com.bluecollar.auth.entity.UserRole;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.common.security.SecurityUtils;
 import com.bluecollar.skill.dto.CreateSkillRequest;
 import com.bluecollar.skill.dto.SkillResponse;
@@ -11,6 +12,7 @@ import com.bluecollar.skill.exception.SkillNotFoundException;
 import com.bluecollar.skill.mapper.SkillMapper;
 import com.bluecollar.skill.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class SkillServiceImpl implements SkillService {
     private final SkillMapper skillMapper;
 
     @Override
+    @CacheEvict(value = {CacheConfig.SKILLS_CACHE, CacheConfig.WORKER_SEARCH_CACHE}, allEntries = true)
     public SkillResponse createSkill(CreateSkillRequest request) {
         validateNameAvailable(request.name());
 
@@ -57,6 +60,7 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
+    @CacheEvict(value = {CacheConfig.SKILLS_CACHE, CacheConfig.WORKER_SEARCH_CACHE}, allEntries = true)
     public SkillResponse updateSkill(UUID id, UpdateSkillRequest request) {
         Skill skill = findSkill(id);
         validateNameAvailableForUpdate(skill, request.name());
@@ -66,6 +70,7 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
+    @CacheEvict(value = {CacheConfig.SKILLS_CACHE, CacheConfig.WORKER_SEARCH_CACHE}, allEntries = true)
     public void deleteSkill(UUID id) {
         Skill skill = findSkill(id);
         skill.setActive(false);

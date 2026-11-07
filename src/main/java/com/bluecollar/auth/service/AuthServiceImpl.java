@@ -18,6 +18,7 @@ import com.bluecollar.auth.security.TokenHashService;
 import com.bluecollar.category.entity.Category;
 import com.bluecollar.category.exception.CategoryNotFoundException;
 import com.bluecollar.category.repository.CategoryRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.common.security.AuthenticatedUser;
 import com.bluecollar.common.security.SecurityUtils;
 import com.bluecollar.customer.entity.Customer;
@@ -33,6 +34,7 @@ import com.bluecollar.notification.entity.NotificationChannel;
 import com.bluecollar.notification.entity.NotificationType;
 import com.bluecollar.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,6 +85,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public AuthResponse registerWorker(RegisterWorkerRequest request) {
         validateUserUniqueness(request.email(), request.phoneNumber());
         validateWorkerContactAvailable(request.phoneNumber(), request.email());

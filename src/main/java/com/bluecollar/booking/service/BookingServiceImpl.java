@@ -16,6 +16,7 @@ import com.bluecollar.booking.repository.BookingRepository;
 import com.bluecollar.category.entity.Category;
 import com.bluecollar.category.exception.CategoryNotFoundException;
 import com.bluecollar.category.repository.CategoryRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.common.event.BookingCreatedEvent;
 import com.bluecollar.common.event.BookingStatusChangedEvent;
 import com.bluecollar.common.exception.UnauthorizedException;
@@ -27,6 +28,7 @@ import com.bluecollar.worker.entity.Worker;
 import com.bluecollar.worker.exception.WorkerNotFoundException;
 import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,6 +66,7 @@ public class BookingServiceImpl implements BookingService {
     private final AuditLogService auditLogService;
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse createBooking(CreateBookingRequest request) {
         Customer customer = customerService.findCustomerByCurrentUser();
         Worker worker = findWorkerWithLock(request.workerId());
@@ -165,6 +168,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse acceptBooking(UUID id) {
         Booking booking = findBookingForWorker(id);
         BookingStatus oldStatus = booking.getStatus();
@@ -176,6 +180,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse startBooking(UUID id) {
         Booking booking = findBookingForWorker(id);
         BookingStatus oldStatus = booking.getStatus();
@@ -186,6 +191,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse rejectBooking(UUID id, RejectBookingRequest request) {
         Booking booking = findBookingForWorker(id);
         BookingStatus oldStatus = booking.getStatus();
@@ -200,6 +206,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse cancelBooking(UUID id, CancelBookingRequest request) {
         Booking booking = findBooking(id);
         AuthenticatedUser currentUser = SecurityUtils.getCurrentUser();
@@ -221,6 +228,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse completeBooking(UUID id, CompleteBookingRequest request) {
         Booking booking = findBookingForWorker(id);
         BookingStatus oldStatus = booking.getStatus();
@@ -233,6 +241,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public BookingResponse rescheduleBooking(UUID id, RescheduleBookingRequest request) {
         Booking booking = findBookingForCustomer(id);
 

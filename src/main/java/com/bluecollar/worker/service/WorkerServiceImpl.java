@@ -3,6 +3,7 @@ package com.bluecollar.worker.service;
 import com.bluecollar.category.entity.Category;
 import com.bluecollar.category.exception.CategoryNotFoundException;
 import com.bluecollar.category.repository.CategoryRepository;
+import com.bluecollar.common.config.CacheConfig;
 import com.bluecollar.skill.entity.Skill;
 import com.bluecollar.skill.exception.SkillNotFoundException;
 import com.bluecollar.skill.repository.SkillRepository;
@@ -16,6 +17,7 @@ import com.bluecollar.worker.exception.WorkerNotFoundException;
 import com.bluecollar.worker.mapper.WorkerMapper;
 import com.bluecollar.worker.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,7 @@ public class WorkerServiceImpl implements WorkerService {
     private final WorkerMapper workerMapper;
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public WorkerResponse createWorker(CreateWorkerRequest request) {
         validatePhoneNumberAvailable(request.phoneNumber());
         validateEmailAvailable(request.email());
@@ -78,6 +81,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public WorkerResponse updateWorker(UUID id, UpdateWorkerRequest request) {
         Worker worker = findWorker(id);
         validatePhoneNumberAvailableForUpdate(worker, request.phoneNumber());
@@ -90,6 +94,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfig.WORKER_SEARCH_CACHE, allEntries = true)
     public void deleteWorker(UUID id) {
         Worker worker = findWorker(id);
         worker.setActive(false);
