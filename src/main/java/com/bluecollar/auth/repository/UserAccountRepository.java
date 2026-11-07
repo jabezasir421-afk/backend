@@ -23,6 +23,8 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, UUID> 
 
     long countByRole(UserRole role);
 
+    long countByRoleAndActiveTrue(UserRole role);
+
     @Query("""
             SELECT u FROM UserAccount u
             WHERE (:role IS NULL OR u.role = :role)

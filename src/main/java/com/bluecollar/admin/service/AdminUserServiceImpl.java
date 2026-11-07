@@ -49,6 +49,12 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public AdminUserResponse deactivateUser(UUID id) {
         UserAccount user = findUser(id);
+        if (user.getRole() == UserRole.ADMIN && Boolean.TRUE.equals(user.getActive())) {
+            long activeAdminCount = userAccountRepository.countByRoleAndActiveTrue(UserRole.ADMIN);
+            if (activeAdminCount <= 1) {
+                throw new IllegalStateException("Cannot deactivate the last active administrator");
+            }
+        }
         user.setActive(false);
         refreshTokenRepository.revokeAllByUserAccountId(user.getId(), java.time.Instant.now());
         return toResponse(userAccountRepository.save(user));
@@ -62,8 +68,9 @@ public class AdminUserServiceImpl implements AdminUserService {
             throw new UnauthorizedException("You cannot change your own role");
         }
         if (user.getRole() == UserRole.ADMIN && role != UserRole.ADMIN
-                && userAccountRepository.countByRole(UserRole.ADMIN) <= 1) {
-            throw new IllegalStateException("Cannot demote the last admin");
+                && Boolean.TRUE.equals(user.getActive())
+                && userAccountRepository.countByRoleAndActiveTrue(UserRole.ADMIN) <= 1) {
+            throw new IllegalStateException("Cannot demote the last active administrator");
         }
         user.setRole(role);
         return toResponse(userAccountRepository.save(user));
