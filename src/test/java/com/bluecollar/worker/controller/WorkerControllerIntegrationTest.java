@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -43,21 +45,21 @@ class WorkerControllerIntegrationTest {
     private WorkerRepository workerRepository;
 
     @Autowired
-    private WorkerIdentityDocumentRepository identityDocumentRepository;
-
-    @Autowired
     private CategoryRepository categoryRepository;
 
     private Category category;
+
+    @DynamicPropertySource
+    static void configureIsolatedDatabase(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", () ->
+                "jdbc:h2:mem:worker_controller_integration;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL");
+    }
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
-        identityDocumentRepository.deleteAll();
-        workerRepository.deleteAll();
-        categoryRepository.deleteAll();
         category = categoryRepository.saveAndFlush(Category.builder()
                 .name("Plumbing")
                 .description("Pipe services")
